@@ -174,7 +174,7 @@ class AbsoluteTrajectoryDeviations:
                 for tstamps in self.trajectory.tstamps
             ]
             lap_deviations = self.apply_index(index=index, inplace=False).set_sorting(Sorting.SPATIAL)
-            lap_deviations.name += f" Lap {i+1}"
+            lap_deviations.name = f" Lap {i+1}"
             lap_list.append(lap_deviations)
         return lap_list
 
