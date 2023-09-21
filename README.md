@@ -104,8 +104,6 @@ This section shows how to use trajectopy to evaluate two trajectories. The examp
 ```python
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute
 from trajectopy_core.alignment.util import align_trajectories
-from trajectopy_core.evaluation.matching import match_trajectories
-from trajectopy_core.plotting.deviation_plot import plot_compact_hist
 from trajectopy_core.settings.alignment_settings import AlignmentSettings
 from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
 from trajectopy_core.trajectory import Trajectory
@@ -124,18 +122,15 @@ alignment = align_trajectories(
 )
 est_traj_aligned = est_traj.apply_alignment(alignment)
 
-# compute ATE
 ate_result = compare_trajectories_absolute(traj_ref=gt_traj, traj_test=est_traj_aligned)
+
 ```
 
 ### RPE
 
 ```python
 from trajectopy_core.evaluation.comparison import compare_trajectories_relative
-from trajectopy_core.evaluation.matching import match_trajectories
-from trajectopy_core.plotting.deviation_plot import plot_rpe
 from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
-from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
 from trajectopy_core.trajectory import Trajectory
 
 gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
@@ -144,9 +139,10 @@ est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
 # compute RPE
 settings = RelativeComparisonSettings()  # Default settings
 rpe_result = compare_trajectories_relative(traj_ref=gt_traj, traj_test=est_traj, settings=settings)
+
 ```
 
-### Plotting
+### Trajectory Plotting
 
 ```python
 from matplotlib import pyplot as plt
