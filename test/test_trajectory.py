@@ -6,8 +6,8 @@ from typing import Any
 import numpy as np
 from pointset import PointSet
 
-from trajectopy.core.trajectory import Trajectory
-from trajectopy.core.util.rotationset import RotationSet
+from trajectopy_core.trajectory import Trajectory
+from trajectopy_core.util.rotationset import RotationSet
 
 
 class TestTrajectory(unittest.TestCase):

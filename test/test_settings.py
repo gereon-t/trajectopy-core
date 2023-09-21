@@ -1,19 +1,19 @@
 import unittest
 from pathlib import Path
 
-from trajectopy.core.settings.alignment_settings import (
+from trajectopy_core.settings.alignment_settings import (
     AlignmentEstimationSettings,
     AlignmentPreprocessing,
     AlignmentSettings,
     AlignmentStochastics,
 )
-from trajectopy.core.settings.approximation_settings import ApproximationSettings
-from trajectopy.core.settings.comparison_settings import RelativeComparisonSettings
-from trajectopy.core.settings.core import Settings
-from trajectopy.core.settings.matching_settings import MatchingSettings
-from trajectopy.core.settings.plot_settings import PlotSettings
-from trajectopy.core.settings.processing_settings import ProcessingSettings
-from trajectopy.core.settings.sorting_settings import SortingSettings
+from trajectopy_core.settings.approximation_settings import ApproximationSettings
+from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
+from trajectopy_core.settings.core import Settings
+from trajectopy_core.settings.matching_settings import MatchingSettings
+from trajectopy_core.settings.plot_settings import PlotSettings
+from trajectopy_core.settings.processing_settings import ProcessingSettings
+from trajectopy_core.settings.sorting_settings import SortingSettings
 
 
 class TestSettings(unittest.TestCase):

@@ -4,16 +4,16 @@ from test.util import random_number
 
 import numpy as np
 
-from trajectopy.core.alignment.parameters import AlignmentParameters, Parameter
-from trajectopy.core.alignment.result import AlignmentResult
-from trajectopy.core.evaluation.abs_traj_dev import AbsoluteTrajectoryDeviations
-from trajectopy.core.evaluation.comparison import compare_trajectories_absolute, compare_trajectories_relative
-from trajectopy.core.evaluation.matching import match_trajectories
-from trajectopy.core.evaluation.rel_traj_dev import RelativeTrajectoryDeviations
-from trajectopy.core.settings.comparison_settings import RelativeComparisonSettings
-from trajectopy.core.settings.matching_settings import MatchingMethod, MatchingSettings
-from trajectopy.core.trajectory import Trajectory
-from trajectopy.core.util.definitions import Unit
+from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
+from trajectopy_core.alignment.result import AlignmentResult
+from trajectopy_core.evaluation.abs_traj_dev import AbsoluteTrajectoryDeviations
+from trajectopy_core.evaluation.comparison import compare_trajectories_absolute, compare_trajectories_relative
+from trajectopy_core.evaluation.matching import match_trajectories
+from trajectopy_core.evaluation.rel_traj_dev import RelativeTrajectoryDeviations
+from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
+from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
+from trajectopy_core.trajectory import Trajectory
+from trajectopy_core.util.definitions import Unit
 
 
 def compare_trajectories_abs(traj_ref: Trajectory, traj_test: Trajectory) -> AbsoluteTrajectoryDeviations:

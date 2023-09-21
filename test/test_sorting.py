@@ -3,9 +3,9 @@ from test.testdata import noisy_trajectory as test_trajectory
 
 import numpy as np
 
-from trajectopy.core.approximation.mls_approximation import mls_iterative
-from trajectopy.core.settings.sorting_settings import SortingSettings
-from trajectopy.core.util.spatialsorter import SpatialSorter
+from trajectopy_core.approximation.mls_approximation import mls_iterative
+from trajectopy_core.settings.sorting_settings import SortingSettings
+from trajectopy_core.util.spatialsorter import SpatialSorter
 
 
 class TestSorting(unittest.TestCase):

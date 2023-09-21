@@ -1,0 +1,13 @@
+always_show_zero: true
+c_bar_step_divisor: 4
+grid_mp: 4.0
+heatmap_spacing: 1.0
+hist_as_stairs: false
+rms_window_width: 1.0
+scatter_no_axis: true
+scatter_rotate: false
+scatter_sigma_factor: 3.0
+show_directed_devs: true
+show_mean_line: true
+smoothing_window_size: 1.0
+unit_is_mm: false

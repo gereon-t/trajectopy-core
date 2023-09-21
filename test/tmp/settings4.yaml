@@ -1,0 +1,4 @@
+fe_int_size: 0.15
+fe_min_obs: 25
+rot_approx_technique: window
+rot_approx_win_size: 0.15

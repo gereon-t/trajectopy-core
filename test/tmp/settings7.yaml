@@ -1,0 +1,52 @@
+alignment:
+  estimation_of:
+    helmert: true
+    lever_x: true
+    lever_y: true
+    lever_z: true
+    leverarm: false
+    rot_x: true
+    rot_y: true
+    rot_z: true
+    scale: false
+    sensor_rotation: false
+    time_shift: false
+    trans_x: true
+    trans_y: true
+    trans_z: true
+    use_x_speed: true
+    use_y_speed: true
+    use_z_speed: true
+  preprocessing:
+    min_speed: 0.0
+    time_end: 0.0
+    time_start: 0.0
+  stochastics:
+    error_probability: 0.05
+    var_roll_pitch: 0.00030461741978670857
+    var_speed_to: 1.0
+    var_xy_from: 1.0
+    var_xy_to: 1.0
+    var_yaw: 0.00030461741978670857
+    var_z_from: 1.0
+    var_z_to: 1.0
+approximation:
+  fe_int_size: 0.15
+  fe_min_obs: 25
+  rot_approx_technique: window
+  rot_approx_win_size: 0.15
+matching:
+  max_distance: 0.01
+  max_time_diff: 0.01
+  method: INTERPOLATION
+rel_comparison:
+  pair_distance_step: 100.0
+  pair_distance_unit: METER
+  pair_max_distance: 800.0
+  pair_min_distance: 100.0
+  use_all_pose_pairs: true
+sorting:
+  discard_missing: true
+  k_nearest: 4
+  movement_threshold: 0.005
+  voxel_size: 0.05

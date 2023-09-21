@@ -4,15 +4,19 @@ from typing import Tuple
 
 import numpy as np
 
-from trajectopy.core.alignment.parameters import AlignmentParameters, Parameter
-from trajectopy.core.alignment.result import AlignmentResult
-from trajectopy.core.alignment.rotation_alignment import align_rotations
-from trajectopy.core.alignment.util import align_trajectories
-from trajectopy.core.settings.alignment_settings import AlignmentEstimationSettings, AlignmentSettings, AlignmentStochastics
-from trajectopy.core.settings.matching_settings import MatchingSettings
-from trajectopy.core.trajectory import Trajectory
-from trajectopy.core.util.definitions import Unit
-from trajectopy.core.util.rotationset import RotationSet
+from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
+from trajectopy_core.alignment.result import AlignmentResult
+from trajectopy_core.alignment.rotation_alignment import align_rotations
+from trajectopy_core.alignment.util import align_trajectories
+from trajectopy_core.settings.alignment_settings import (
+    AlignmentEstimationSettings,
+    AlignmentSettings,
+    AlignmentStochastics,
+)
+from trajectopy_core.settings.matching_settings import MatchingSettings
+from trajectopy_core.trajectory import Trajectory
+from trajectopy_core.util.definitions import Unit
+from trajectopy_core.util.rotationset import RotationSet
 
 
 def generate_transformation(

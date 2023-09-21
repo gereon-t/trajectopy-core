@@ -1,0 +1,17 @@
+helmert: true
+lever_x: true
+lever_y: true
+lever_z: true
+leverarm: false
+rot_x: true
+rot_y: true
+rot_z: true
+scale: false
+sensor_rotation: false
+time_shift: false
+trans_x: true
+trans_y: true
+trans_z: true
+use_x_speed: true
+use_y_speed: true
+use_z_speed: true
