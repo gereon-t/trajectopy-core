@@ -2,7 +2,7 @@
     <h1>Trajectopy - Trajectory Evaluation in Python</h1>
     <a href="https://github.com/gereon-t/trajectopy/releases"><img src="https://img.shields.io/github/v/release/gereon-t/trajectopy?label=version" /></a>
     <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.8.2+-blue.svg" /></a>
-    <a href="https://github.com/gereon-t/trajectopy/blob/main/LICENSE"><img src="https://img.shields.io/github/license/gereon-t/trajectopy" /></a>
+    <a href="https://github.com/gereon-t/trajectopy-core/blob/main/LICENSE"><img src="https://img.shields.io/github/license/gereon-t/trajectopy-core" /></a>
     <a href="https://github.com/gereon-t/trajectopy"><img src=".images/coverage.svg" /></a>
     <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
     <br />
