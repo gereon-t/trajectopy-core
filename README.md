@@ -344,19 +344,3 @@ lines.marker: .
 savefig.dpi: 1500
 savefig.format: pdf
 ```
-
-### Plot Settings
-
-| Setting | Description |
-|---|---|
-| Position Unit | Either meter or millimeter. Affects deviation plots only |
-| Stair Histogram | If set to true, deviation histograms are not filled and only a stair is visible. (see also matplotlib documentation) |
-| Smoothing Window Width | For better visibility in the deviation plots, the deviations are smoothed with a sliding window of a certain width. Smoothing can be turned off by setting a width of 0.0 or -1.0. The unit is either meters or seconds depending on the sorting of the trajectory.|
-| Show Mean Line | Toggles the visibility of a red mean line in deviation plots. |
-| Show Directed Deviations (Along / Cross / Vertical)| Absolute position deviations can be separated into along-track, horizontal cross-track and vertical cross-track direction. For this, either the trajectory orientations or positions are used. If turned off, the deviations will be separated into x,y,z which depend on the definition of the world coordinate frame.|
-| Grid Megapixels | For every scatter plot, the trajectory data is divided into a grid with a certain number of pixels that can be set with this setting. This prevents slow plotting with large trajectories. |
-| RMS Window Width | Similar to the Smoothing Window Width, this parameter sets the width of a sliding window used to smooth the RMS values that are mapped onto the trajectory in scatter plots. Smoothing can be turned off by setting a width of 0.0 or -1.0. The unit is either meters or seconds depending on the sorting of the trajectory.|
-| Show Zero-Crossing in Colorbars | Each scatter plot of deviations includes a colorbar, which can be toggled to show the zero-crossing explicitly. |
-| Colorbar Step Divisor, Clip Colorbar at X Sigma | The colorbar limits are determined by either the minimum or maximum values, or by the X-sigma range ("Clip-Colorbar at X Sigma" Setting) around the mean deviation, depending on which limit is more restrictive. Starting at the lower bound, the colorbar ticks are placed at positions each separated by the total colorbar range divided by the colorbar step divisor. |
-| Do Not Plot Axis | Toggles the visibility of axes in scatter plots |
-| Rotate Scatter Plots to Main Axis | When set to true, the scatter plot trajectories will be rotated to align their main axis of extension (determined through principal component analysis) with the x-axis. This can be beneficial for elongated trajectories. |
