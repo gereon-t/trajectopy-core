@@ -98,7 +98,7 @@ poetry install
 
 This section shows how to use trajectopy to evaluate two trajectories. The example data can be found in the example_data folder. The full code can be found in the example_scripts folder.
 
-### ATE
+### Absolute Trajectory Error (ATE)
 
     
 ```python
@@ -130,7 +130,7 @@ Plotted ATE result:
 
 ![](.images/ate.png)
 
-### RPE
+### Relative Pose Error (RPE)
 
 ```python
 from trajectopy_core.evaluation.comparison import compare_trajectories_relative
