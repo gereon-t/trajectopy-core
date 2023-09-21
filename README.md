@@ -170,7 +170,6 @@ plt.show()
 
 ## Importing Trajectories
 
-Trajectories can be imported using the "Add" button below the trajectory table or by dragging files into the area of the trajectory table.
 Trajectory files must be ASCII files with a csv-like layout, by default, trajectopy filters for the ".traj" extension. The default column structure that can be read without any configuration is the following:
 
 | time | position x | position y | position z | quaternion x | quaternion y | quaternion z | quaternion w |
