@@ -1,8 +1,0 @@
-error_probability: 0.05
-var_roll_pitch: 0.00030461741978670857
-var_speed_to: 1.0
-var_xy_from: 1.0
-var_xy_to: 1.0
-var_yaw: 0.00030461741978670857
-var_z_from: 1.0
-var_z_to: 1.0

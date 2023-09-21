@@ -1,4 +1,0 @@
-discard_missing: true
-k_nearest: 4
-movement_threshold: 0.005
-voxel_size: 0.05
