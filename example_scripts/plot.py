@@ -1,4 +1,5 @@
 from matplotlib import pyplot as plt
+
 from trajectopy_core.plotting.trajectory_plot import plot_trajectories
 from trajectopy_core.trajectory import Trajectory
 

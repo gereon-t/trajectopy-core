@@ -6,12 +6,12 @@ mail@gtombrink.de
 """
 import logging
 import os
+import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Tuple, Union
-import uuid
 
 import numpy as np
 
@@ -34,6 +34,7 @@ def bool_to_str(input_bool: bool) -> str:
 
 def generate_id() -> str:
     return str(uuid.uuid4())
+
 
 @dataclass
 class Entry(ABC):

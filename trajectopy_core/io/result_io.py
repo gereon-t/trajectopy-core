@@ -7,8 +7,8 @@ mail@gtombrink.de
 import logging
 from typing import Union
 
-from trajectopy_core.util.entries import AbsoluteDeviationEntry, AlignmentEntry, RelativeDeviationEntry
 from trajectopy_core.io.header import HeaderData
+from trajectopy_core.util.entries import AbsoluteDeviationEntry, AlignmentEntry, RelativeDeviationEntry
 
 logger = logging.getLogger("root")
 

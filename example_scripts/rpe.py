@@ -1,8 +1,10 @@
 import logging
+
 from matplotlib import pyplot as plt
 from rich.console import Console
-from rich.table import Table
 from rich.logging import RichHandler
+from rich.table import Table
+
 from trajectopy_core.evaluation.comparison import compare_trajectories_relative
 from trajectopy_core.evaluation.matching import match_trajectories
 from trajectopy_core.plotting.deviation_plot import plot_rpe

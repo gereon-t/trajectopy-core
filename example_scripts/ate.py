@@ -1,10 +1,12 @@
 import logging
+
 from matplotlib import pyplot as plt
 from rich.console import Console
-from rich.table import Table
 from rich.logging import RichHandler
-from trajectopy_core.evaluation.comparison import compare_trajectories_absolute
+from rich.table import Table
+
 from trajectopy_core.alignment.util import align_trajectories
+from trajectopy_core.evaluation.comparison import compare_trajectories_absolute
 from trajectopy_core.evaluation.matching import match_trajectories
 from trajectopy_core.plotting.deviation_plot import plot_compact_hist
 from trajectopy_core.settings.alignment_settings import AlignmentSettings
