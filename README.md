@@ -15,7 +15,7 @@
 
 #### Trajectopy is a toolbox for empirical trajectory evaluation. 
 
-This is the core implementation of Trajectopy without any PyQt dependencies. If you want to use a Graphical User Interface, please see [https://github.com/gereon-t/trajectopy](https://github.com/gereon-t/trajectopy).
+This is the core implementation of Trajectopy without any PyQt dependencies. For advanced functionality and an intuitive graphical user interface, see [https://github.com/gereon-t/trajectopy](https://github.com/gereon-t/trajectopy).
     
 </div>
 
