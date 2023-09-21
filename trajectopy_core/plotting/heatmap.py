@@ -42,7 +42,7 @@ def heatmap(data, row_labels, col_labels, ax=None, cbar_kw=None, cbarlabel="", *
         cbar_kw = {}
 
     # Plot the heatmap
-    im = ax.imshow(data, **kwargs)
+    im = ax.imshow(data, aspect="auto", **kwargs)
 
     # Create colorbar
     cbar = ax.figure.colorbar(im, ax=ax, **cbar_kw)
