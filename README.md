@@ -101,64 +101,64 @@ This section shows how to use trajectopy to evaluate two trajectories. The examp
 ### ATE
 
     
-    ```python
-    from trajectopy_core.evaluation.comparison import compare_trajectories_absolute
-    from trajectopy_core.alignment.util import align_trajectories
-    from trajectopy_core.evaluation.matching import match_trajectories
-    from trajectopy_core.plotting.deviation_plot import plot_compact_hist
-    from trajectopy_core.settings.alignment_settings import AlignmentSettings
-    from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
-    from trajectopy_core.trajectory import Trajectory
+```python
+from trajectopy_core.evaluation.comparison import compare_trajectories_absolute
+from trajectopy_core.alignment.util import align_trajectories
+from trajectopy_core.evaluation.matching import match_trajectories
+from trajectopy_core.plotting.deviation_plot import plot_compact_hist
+from trajectopy_core.settings.alignment_settings import AlignmentSettings
+from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
+from trajectopy_core.trajectory import Trajectory
 
-    gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
-    est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
+gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
+est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
 
 
-    # align
-    alignment_settings = AlignmentSettings()  # Default settings
-    alignment = align_trajectories(
-        traj_from=est_traj,
-        traj_to=gt_traj,
-        alignment_settings=alignment_settings,
-        matching_settings=MatchingSettings(method=MatchingMethod.NEAREST_TEMPORAL),
-    )
-    est_traj_aligned = est_traj.apply_alignment(alignment)
+# align
+alignment_settings = AlignmentSettings()  # Default settings
+alignment = align_trajectories(
+    traj_from=est_traj,
+    traj_to=gt_traj,
+    alignment_settings=alignment_settings,
+    matching_settings=MatchingSettings(method=MatchingMethod.NEAREST_TEMPORAL),
+)
+est_traj_aligned = est_traj.apply_alignment(alignment)
 
-    # compute ATE
-    ate_result = compare_trajectories_absolute(traj_ref=gt_traj, traj_test=est_traj_aligned)
-    ```
+# compute ATE
+ate_result = compare_trajectories_absolute(traj_ref=gt_traj, traj_test=est_traj_aligned)
+```
 
 ### RPE
 
-    ```python
-    from trajectopy_core.evaluation.comparison import compare_trajectories_relative
-    from trajectopy_core.evaluation.matching import match_trajectories
-    from trajectopy_core.plotting.deviation_plot import plot_rpe
-    from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
-    from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
-    from trajectopy_core.trajectory import Trajectory
+```python
+from trajectopy_core.evaluation.comparison import compare_trajectories_relative
+from trajectopy_core.evaluation.matching import match_trajectories
+from trajectopy_core.plotting.deviation_plot import plot_rpe
+from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
+from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
+from trajectopy_core.trajectory import Trajectory
 
-    gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
-    est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
+gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
+est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
 
-    # compute RPE
-    settings = RelativeComparisonSettings()  # Default settings
-    rpe_result = compare_trajectories_relative(traj_ref=gt_traj, traj_test=est_traj, settings=settings)
-    ```
+# compute RPE
+settings = RelativeComparisonSettings()  # Default settings
+rpe_result = compare_trajectories_relative(traj_ref=gt_traj, traj_test=est_traj, settings=settings)
+```
 
 ### Plotting
 
-    ```python
-    from matplotlib import pyplot as plt
-    from trajectopy_core.plotting.trajectory_plot import plot_trajectories
-    from trajectopy_core.trajectory import Trajectory
+```python
+from matplotlib import pyplot as plt
+from trajectopy_core.plotting.trajectory_plot import plot_trajectories
+from trajectopy_core.trajectory import Trajectory
 
-    gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
-    est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
+gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
+est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
 
-    plot_trajectories([gt_traj, est_traj], dim=2)
-    plt.show()
-    ```
+plot_trajectories([gt_traj, est_traj], dim=2)
+plt.show()
+```
 
 
 
@@ -195,7 +195,7 @@ Below you can find a table of all allowed header entries and their meaning.
 
 ## Aligning Trajectories
 
-The trajectories to be compared could be defined in different coordinate systems and/or refer to different positions on the same platform due to different mounting positions. There may also be a small synchronization offset. To solve this problem, trajectopy provides functionality to align two trajectories using least squares adjustment theory. This allows estimation of up to 11 parameters, all of which can be turned on or off individually to tailor the alignment to the sensor modalities. The alignment settings can be found in the right-click trajectory settings.
+The trajectories to be compared could be defined in different coordinate systems and/or refer to different positions on the same platform due to different mounting positions. There may also be a small synchronization offset. To solve this problem, trajectopy provides functionality to align two trajectories using least squares adjustment theory. This allows estimation of up to 11 parameters, all of which can be turned on or off individually to tailor the alignment to the sensor modalities.
 
 ### Alignment Settings
 
