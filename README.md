@@ -1,14 +1,14 @@
 <div align="center">
     <h1>Trajectopy - Trajectory Evaluation in Python</h1>
-    <a href="https://github.com/gereon-t/trajectopy/releases"><img src="https://img.shields.io/github/v/release/gereon-t/trajectopy?label=version" /></a>
+    <a href="https://github.com/gereon-t/trajectopy-core/releases"><img src="https://img.shields.io/github/v/release/gereon-t/trajectopy-core?label=version" /></a>
     <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.8.2+-blue.svg" /></a>
     <a href="https://github.com/gereon-t/trajectopy-core/blob/main/LICENSE"><img src="https://img.shields.io/github/license/gereon-t/trajectopy-core" /></a>
-    <a href="https://github.com/gereon-t/trajectopy"><img src=".images/coverage.svg" /></a>
+    <a href="https://github.com/gereon-t/trajectopy-core"><img src=".images/coverage.svg" /></a>
     <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
     <br />
-    <a href="https://github.com/gereon-t/trajectopy"><img src="https://img.shields.io/badge/Windows-0078D6?st&logo=windows&logoColor=white" /></a>
-    <a href="https://github.com/gereon-t/trajectopy"><img src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black" /></a>
-    <a href="https://github.com/gereon-t/trajectopy"><img src="https://img.shields.io/badge/mac%20os-000000?&logo=apple&logoColor=white" /></a>
+    <a href="https://github.com/gereon-t/trajectopy-core"><img src="https://img.shields.io/badge/Windows-0078D6?st&logo=windows&logoColor=white" /></a>
+    <a href="https://github.com/gereon-t/trajectopy-core"><img src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black" /></a>
+    <a href="https://github.com/gereon-t/trajectopy-core"><img src="https://img.shields.io/badge/mac%20os-000000?&logo=apple&logoColor=white" /></a>
     <br />
     <a href="https://www.gug.uni-bonn.de/en/"><img src=.images/uni-bonn.svg height="50"/></a>
     <a href="https://www.gug.uni-bonn.de/en/"><img src=.images/igg.png height="50"/></a>
@@ -126,6 +126,10 @@ ate_result = compare_trajectories_absolute(traj_ref=gt_traj, traj_test=est_traj_
 
 ```
 
+Plotted ATE result:
+
+![](.images/ate.png)
+
 ### RPE
 
 ```python
@@ -142,6 +146,10 @@ rpe_result = compare_trajectories_relative(traj_ref=gt_traj, traj_test=est_traj,
 
 ```
 
+Plotted RPE result:
+
+![](.images/rpe.png)
+
 ### Trajectory Plotting
 
 ```python
@@ -155,6 +163,8 @@ est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
 plot_trajectories([gt_traj, est_traj], dim=2)
 plt.show()
 ```
+
+![](.images/plot.png)
 
 
 
