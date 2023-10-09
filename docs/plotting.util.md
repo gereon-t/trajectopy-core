@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/plotting/util.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\util.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `plotting.util`
 Trajectopy - Trajectory Evaluation in Python 
@@ -10,7 +10,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/plotting/util.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\util.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `vertical_subplots`
 
@@ -31,7 +31,7 @@ Creates a vertical array of subplots containing data provided in vals
 
 ---
 
-<a href="../trajectopy_core/plotting/util.py#L114"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\util.py#L114"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `scatter_plotter`
 
@@ -56,7 +56,7 @@ Scatter plotter function that plots 2d data with data mapped onto it using color
 
 ---
 
-<a href="../trajectopy_core/plotting/util.py#L175"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\util.py#L175"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `norm_hist`
 
@@ -69,7 +69,7 @@ Plots a histogram
 
 ---
 
-<a href="../trajectopy_core/plotting/util.py#L188"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\util.py#L188"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `stair_hist`
 

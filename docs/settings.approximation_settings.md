@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/settings/approximation_settings.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\settings\approximation_settings.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `settings.approximation_settings`
 Trajectopy - Trajectory Evaluation in Python 
@@ -14,12 +14,12 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/settings/approximation_settings.py#L20"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\settings\approximation_settings.py#L20"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `ApproximationSettings`
 Dataclass defining approximation configuration 
 
-<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -41,7 +41,7 @@ __init__(
 
 ---
 
-<a href="../trajectopy_core/settings/approximation_settings.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\settings\approximation_settings.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_config_dict`
 
@@ -55,7 +55,7 @@ from_config_dict(config_dict: Dict)
 
 ---
 
-<a href="../trajectopy_core/settings/approximation_settings.py#L45"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\settings\approximation_settings.py#L45"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_dict`
 

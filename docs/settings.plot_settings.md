@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/settings/plot_settings.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\settings\plot_settings.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `settings.plot_settings`
 Trajectopy - Trajectory Evaluation in Python 
@@ -11,12 +11,12 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/settings/plot_settings.py#L17"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\settings\plot_settings.py#L17"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `PlotSettings`
 Dataclass defining plot configuration 
 
-<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -63,7 +63,7 @@ __init__(
 
 ---
 
-<a href="../trajectopy_core/settings/plot_settings.py#L47"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\settings\plot_settings.py#L47"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_config_dict`
 
@@ -77,7 +77,7 @@ from_config_dict(config_dict: dict)
 
 ---
 
-<a href="../trajectopy_core/settings/plot_settings.py#L55"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\settings\plot_settings.py#L55"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_file`
 
@@ -91,7 +91,7 @@ from_file(file: str)
 
 ---
 
-<a href="../trajectopy_core/settings/plot_settings.py#L59"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\settings\plot_settings.py#L59"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `reset`
 
@@ -105,7 +105,7 @@ reset()
 
 ---
 
-<a href="../trajectopy_core/settings/plot_settings.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\settings\plot_settings.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_file`
 

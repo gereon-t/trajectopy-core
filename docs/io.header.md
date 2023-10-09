@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/io/header.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `io.header`
 Trajectopy - Trajectory Evaluation in Python 
@@ -17,7 +17,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/io/header.py#L44"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L44"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `default_line_handler`
 
@@ -32,7 +32,7 @@ default_line_handler(line: str) → str
 
 ---
 
-<a href="../trajectopy_core/io/header.py#L48"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L48"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `integer_line_handler`
 
@@ -47,7 +47,7 @@ integer_line_handler(line: str) → int
 
 ---
 
-<a href="../trajectopy_core/io/header.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `float_line_handler`
 
@@ -62,7 +62,7 @@ float_line_handler(line: str) → float
 
 ---
 
-<a href="../trajectopy_core/io/header.py#L56"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L56"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `delimiter_line_handler`
 
@@ -75,12 +75,12 @@ This function extracts the delimiter from the file header. All characters betwee
 
 ---
 
-<a href="../trajectopy_core/io/header.py#L75"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L75"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `HeaderData`
 Class to store the header data of a trajectopy file. 
 
-<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -241,7 +241,7 @@ __init__(data: Dict[str, Union[str, int, float]]) → None
 
 ---
 
-<a href="../trajectopy_core/io/header.py#L153"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L153"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_file`
 

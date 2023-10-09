@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/util/rotationset.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\rotationset.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `util.rotationset`
 Trajectopy - Trajectory Evaluation in Python 
@@ -11,7 +11,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/util/rotationset.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\rotationset.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `RotationSet`
 Class representing rotations 
@@ -31,7 +31,7 @@ Returns minimum rotation angle(s)
 
 ---
 
-<a href="../trajectopy_core/util/rotationset.py#L39"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\rotationset.py#L39"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `copy`
 
@@ -45,7 +45,7 @@ copy() → RotationSet
 
 ---
 
-<a href="../trajectopy_core/util/rotationset.py#L25"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\rotationset.py#L25"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_euler`
 
@@ -59,7 +59,7 @@ from_euler(seq: str, angles: ndarray, degrees: bool = False) → RotationSet
 
 ---
 
-<a href="../trajectopy_core/util/rotationset.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\rotationset.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_quat`
 

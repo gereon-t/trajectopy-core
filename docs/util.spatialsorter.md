@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/util/spatialsorter.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `util.spatialsorter`
 Trajectopy - Trajectory Evaluation in Python 
@@ -13,7 +13,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/util/spatialsorter.py#L251"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L251"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `reconstruct_spatial_sorting`
 
@@ -40,7 +40,7 @@ Given a set of points inside a numpy array, this method reconstruct the spatial 
 
 ---
 
-<a href="../trajectopy_core/util/spatialsorter.py#L308"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L308"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `begin_with`
 
@@ -66,7 +66,7 @@ Reorganizes list so that 'begin' is the first value in the list
 
 ---
 
-<a href="../trajectopy_core/util/spatialsorter.py#L326"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L326"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `compute_mst`
 
@@ -91,7 +91,7 @@ Function that computes a Minimum-Spanning-Tree using the matplotlib implementati
 
 ---
 
-<a href="../trajectopy_core/util/spatialsorter.py#L401"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L401"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `detect_laps_by_length`
 
@@ -104,7 +104,7 @@ Detect laps by detecting jumps in unsorted trajectory lengths
 
 ---
 
-<a href="../trajectopy_core/util/spatialsorter.py#L416"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L416"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `complete_lap_dist`
 
@@ -117,7 +117,7 @@ Function to determine if lap is complete A lap is considered as complete, if the
 
 ---
 
-<a href="../trajectopy_core/util/spatialsorter.py#L433"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L433"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `infer_sort_index`
 
@@ -130,10 +130,12 @@ Infers the sort index from the sorting and timestamps
 
 ---
 
-<a href="../trajectopy_core/util/spatialsorter.py#L23"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L23"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Sorting`
-An enumeration. 
+
+
+
 
 
 
@@ -141,7 +143,7 @@ An enumeration.
 
 ---
 
-<a href="../trajectopy_core/util/spatialsorter.py#L34"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L34"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `SpatialSorter`
 Class representing a spatial sorter. 
@@ -154,7 +156,7 @@ A sorter object should sort input data and provide at least the following interf
 - idx_sort: Index to establish the sorting starting from unordered raw data 
 - function_of: Parameterization of the sorted data 
 
-<a href="../trajectopy_core/util/spatialsorter.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -222,7 +224,7 @@ Returns the number of laps
 
 ---
 
-<a href="../trajectopy_core/util/spatialsorter.py#L137"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L137"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `reconstruct`
 
@@ -244,7 +246,7 @@ This method also takes care of inserting missing points or assuring that the dir
 
 ---
 
-<a href="../trajectopy_core/util/spatialsorter.py#L176"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\spatialsorter.py#L176"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `sort`
 

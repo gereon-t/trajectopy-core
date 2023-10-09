@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/alignment/parameters.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `alignment.parameters`
 Trajectopy - Trajectory Evaluation in Python 
@@ -14,7 +14,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L20"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L20"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `AlignmentParametersError`
 
@@ -27,7 +27,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L24"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L24"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Parameter`
 Class representing a Parameter 
@@ -36,7 +36,7 @@ A parameter holds a stochastic value with some variance. It can be enabled and d
 
 If a parameter is disabled, its value value is equal to the default value. The default value of a parameter should be chosen in a way so that the parameter has no effect on computations. For example, a default scale value of 1 will not affect any computations this scale parameter is involved in. The same holds true for a rotation or translation of 0. The disabling of parameters is meant to be used to exclude parameter from being estimated during least-squares adjustment. 
 
-<a href="../trajectopy_core/alignment/parameters.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -76,7 +76,7 @@ __init__(
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L113"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L113"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `disable`
 
@@ -90,7 +90,7 @@ disable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L110"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L110"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `enable`
 
@@ -105,14 +105,14 @@ enable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L117"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L117"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `ParameterSet`
 Abstract class representing a set of parameters 
 
 This class groups related parameters. For example, 3 parameters for a 3d translation. 
 
-<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -193,7 +193,7 @@ __init__(enabled: bool = True, covariance_matrix: ndarray = <factory>) → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `disable`
 
@@ -207,7 +207,7 @@ disable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `enable`
 
@@ -221,7 +221,7 @@ enable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_covariance_matrix`
 
@@ -235,7 +235,7 @@ get_covariance_matrix(enabled_only: bool = True) → ndarray
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `set_covariance_matrix`
 
@@ -249,7 +249,7 @@ set_covariance_matrix(cov_matrix: ndarray) → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L223"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L223"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_dict`
 
@@ -263,7 +263,7 @@ to_dict(enabled_only: bool = True) → Dict[str, List[float]]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L216"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L216"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_name_list`
 
@@ -277,7 +277,7 @@ to_name_list(enabled_only: bool = True, lower_case: bool = True) → List[str]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L213"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L213"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_string_list`
 
@@ -291,7 +291,7 @@ to_string_list(enabled_only: bool = True) → List[str]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L166"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L166"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `validate_covariance`
 
@@ -304,12 +304,12 @@ Checks dimensions of covariance matrix and sets variances accordingly
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L314"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L314"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `HelmertTransformation`
 Parameter set for a similarity transformation 
 
-<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -432,7 +432,7 @@ __init__(
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L354"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L354"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `apply_to`
 
@@ -446,7 +446,7 @@ apply_to(xyz: ndarray) → ndarray
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `disable`
 
@@ -460,7 +460,7 @@ disable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `enable`
 
@@ -474,7 +474,7 @@ enable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_covariance_matrix`
 
@@ -488,7 +488,7 @@ get_covariance_matrix(enabled_only: bool = True) → ndarray
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `set_covariance_matrix`
 
@@ -502,7 +502,7 @@ set_covariance_matrix(cov_matrix: ndarray) → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L223"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L223"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_dict`
 
@@ -516,7 +516,7 @@ to_dict(enabled_only: bool = True) → Dict[str, List[float]]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L216"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L216"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_name_list`
 
@@ -530,7 +530,7 @@ to_name_list(enabled_only: bool = True, lower_case: bool = True) → List[str]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L213"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L213"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_string_list`
 
@@ -544,7 +544,7 @@ to_string_list(enabled_only: bool = True) → List[str]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L166"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L166"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `validate_covariance`
 
@@ -557,12 +557,12 @@ Checks dimensions of covariance matrix and sets variances accordingly
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L358"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L358"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Leverarm`
 Parameter set for a leverarm 
 
-<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -649,7 +649,7 @@ __init__(
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L372"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L372"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `apply_to`
 
@@ -674,7 +674,7 @@ Applies the leverarm to a set of positions using orientations
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `disable`
 
@@ -688,7 +688,7 @@ disable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `enable`
 
@@ -702,7 +702,7 @@ enable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_covariance_matrix`
 
@@ -716,7 +716,7 @@ get_covariance_matrix(enabled_only: bool = True) → ndarray
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `set_covariance_matrix`
 
@@ -730,7 +730,7 @@ set_covariance_matrix(cov_matrix: ndarray) → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L223"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L223"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_dict`
 
@@ -744,7 +744,7 @@ to_dict(enabled_only: bool = True) → Dict[str, List[float]]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L216"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L216"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_name_list`
 
@@ -758,7 +758,7 @@ to_name_list(enabled_only: bool = True, lower_case: bool = True) → List[str]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L213"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L213"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_string_list`
 
@@ -772,7 +772,7 @@ to_string_list(enabled_only: bool = True) → List[str]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L166"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L166"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `validate_covariance`
 
@@ -785,12 +785,12 @@ Checks dimensions of covariance matrix and sets variances accordingly
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L395"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L395"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `AlignmentParameters`
 Parameter set for spatio-temporal alignment 
 
-<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -909,7 +909,7 @@ __init__(
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L469"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L469"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `apply_settings`
 
@@ -921,7 +921,7 @@ Applies the estimation settings to the parameters by enabling or disabling them
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `disable`
 
@@ -935,7 +935,7 @@ disable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `enable`
 
@@ -949,7 +949,7 @@ enable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L532"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L532"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_file`
 
@@ -973,7 +973,7 @@ Reads the alignment parameters from a file
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L453"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L453"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_settings`
 
@@ -987,7 +987,7 @@ from_settings(settings: AlignmentEstimationSettings) → AlignmentParameters
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_covariance_matrix`
 
@@ -1001,7 +1001,7 @@ get_covariance_matrix(enabled_only: bool = True) → ndarray
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L439"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L439"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `params_labels`
 
@@ -1015,7 +1015,7 @@ params_labels(enabled_only: bool = True, lower_case: bool = True) → List[str]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `set_covariance_matrix`
 
@@ -1029,7 +1029,7 @@ set_covariance_matrix(cov_matrix: ndarray) → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L529"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L529"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_dataframe`
 
@@ -1043,7 +1043,7 @@ to_dataframe() → DataFrame
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L223"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L223"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_dict`
 
@@ -1057,7 +1057,7 @@ to_dict(enabled_only: bool = True) → Dict[str, List[float]]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L501"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L501"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_file`
 
@@ -1092,7 +1092,7 @@ Besides the parameters, the covariance matrix is written to the file. The covari
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L216"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L216"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_name_list`
 
@@ -1106,7 +1106,7 @@ to_name_list(enabled_only: bool = True, lower_case: bool = True) → List[str]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L213"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L213"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_string_list`
 
@@ -1120,7 +1120,7 @@ to_string_list(enabled_only: bool = True) → List[str]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L166"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L166"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `validate_covariance`
 
@@ -1133,12 +1133,12 @@ Checks dimensions of covariance matrix and sets variances accordingly
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L550"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L550"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `SensorRotationParameters`
 Parameter set for sensor b-frame rotation 
 
-<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -1249,7 +1249,7 @@ __init__(
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `disable`
 
@@ -1263,7 +1263,7 @@ disable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `enable`
 
@@ -1277,7 +1277,7 @@ enable() → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L596"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L596"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_file`
 
@@ -1291,7 +1291,7 @@ from_file(filename: str) → SensorRotationParameters
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_covariance_matrix`
 
@@ -1305,7 +1305,7 @@ get_covariance_matrix(enabled_only: bool = True) → ndarray
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `set_covariance_matrix`
 
@@ -1319,7 +1319,7 @@ set_covariance_matrix(cov_matrix: ndarray) → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L223"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L223"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_dict`
 
@@ -1333,7 +1333,7 @@ to_dict(enabled_only: bool = True) → Dict[str, List[float]]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L608"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L608"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_file`
 
@@ -1347,7 +1347,7 @@ to_file(filename: str) → None
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L216"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L216"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_name_list`
 
@@ -1361,7 +1361,7 @@ to_name_list(enabled_only: bool = True, lower_case: bool = True) → List[str]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L213"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L213"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_string_list`
 
@@ -1375,7 +1375,7 @@ to_string_list(enabled_only: bool = True) → List[str]
 
 ---
 
-<a href="../trajectopy_core/alignment/parameters.py#L166"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\parameters.py#L166"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `validate_covariance`
 

@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/evaluation/abs_traj_dev.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\abs_traj_dev.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `evaluation.abs_traj_dev`
 Trajectopy - Trajectory Evaluation in Python 
@@ -11,14 +11,14 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/evaluation/abs_traj_dev.py#L23"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\abs_traj_dev.py#L23"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `AbsoluteTrajectoryDeviations`
 This class represents a set of absolute trajectory deviations 
 
 Absolute trajectory deviations describe absolute pose deviations between two trajectories. The deviations are calculated by comparing pairs of positions and orientations in the test and reference trajectory. 
 
-<a href="../trajectopy_core/evaluation/abs_traj_dev.py#L32"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\abs_traj_dev.py#L32"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -307,7 +307,7 @@ Returns z deviations
 
 ---
 
-<a href="../trajectopy_core/evaluation/abs_traj_dev.py#L150"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\abs_traj_dev.py#L150"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `apply_index`
 
@@ -324,7 +324,7 @@ apply_index(
 
 ---
 
-<a href="../trajectopy_core/evaluation/abs_traj_dev.py#L160"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\abs_traj_dev.py#L160"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `divide_into_laps`
 
@@ -336,7 +336,7 @@ Divides the trajectory into laps and returns a list of deviations for each lap.
 
 ---
 
-<a href="../trajectopy_core/evaluation/abs_traj_dev.py#L498"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\abs_traj_dev.py#L498"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_csv`
 
@@ -348,7 +348,7 @@ Init DataCollection from csv
 
 ---
 
-<a href="../trajectopy_core/evaluation/abs_traj_dev.py#L467"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\abs_traj_dev.py#L467"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_file`
 
@@ -362,7 +362,7 @@ from_file(filename: str)
 
 ---
 
-<a href="../trajectopy_core/evaluation/abs_traj_dev.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\abs_traj_dev.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `set_sorting`
 
@@ -376,7 +376,7 @@ set_sorting(sorting: Sorting, inplace: bool = True)
 
 ---
 
-<a href="../trajectopy_core/evaluation/abs_traj_dev.py#L536"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\abs_traj_dev.py#L536"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_dataframe`
 
@@ -389,12 +389,12 @@ Exports results as pandas dataframe
 
 ---
 
-<a href="../trajectopy_core/evaluation/abs_traj_dev.py#L593"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\abs_traj_dev.py#L593"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `DeviationCollection`
 This class is used to store deviations of multiple trajectories e.g. for plotting 
 
-<a href="../trajectopy_core/evaluation/abs_traj_dev.py#L599"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\abs_traj_dev.py#L599"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 

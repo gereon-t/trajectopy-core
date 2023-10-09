@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `alignment.functional_model.equations`
 Trajectopy - Trajectory Evaluation in Python 
@@ -10,7 +10,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L12"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L12"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `functional_relationship_x`
 
@@ -53,7 +53,7 @@ This method puts together the individual building blocks of the Helmert transfor
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L65"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L65"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `functional_relationship_y`
 
@@ -92,7 +92,7 @@ Evaluates the observation equations of the Gauß-Helmert-Model
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L113"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L113"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `functional_relationship_z`
 
@@ -130,7 +130,7 @@ Evaluates the observation equations of the Gauß-Helmert-Model
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L159"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L159"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `leverarm_time_component`
 
@@ -156,7 +156,7 @@ leverarm_time_component(
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L204"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L204"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `transformed_x_from`
 
@@ -190,7 +190,7 @@ transformed_x_from(
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L248"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L248"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `transformed_y_from`
 
@@ -224,7 +224,7 @@ transformed_y_from(
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L292"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L292"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `transformed_z_from`
 
@@ -257,7 +257,7 @@ transformed_z_from(
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L334"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L334"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `functional_helmert_component_x`
 
@@ -285,7 +285,7 @@ Helper function returning the helmert component of the functional relationship
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L357"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L357"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `functional_helmert_component_y`
 
@@ -313,7 +313,7 @@ Helper function returning the helmert component of the functional relationship
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L379"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L379"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `functional_helmert_component_z`
 
@@ -340,7 +340,7 @@ Helper function returning the helmert component of the functional relationship
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L400"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L400"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `functional_leverarm_time_component_x`
 
@@ -368,7 +368,7 @@ Helper function returning the helmert component of the functional relationship
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L422"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L422"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `functional_leverarm_time_component_y`
 
@@ -396,7 +396,7 @@ Helper function returning the helmert component of the functional relationship
 
 ---
 
-<a href="../trajectopy_core/alignment/functional_model/equations.py#L444"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\functional_model\equations.py#L444"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `functional_leverarm_time_component_z`
 

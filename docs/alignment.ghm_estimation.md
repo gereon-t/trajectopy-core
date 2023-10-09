@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/alignment/ghm_estimation.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\ghm_estimation.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `alignment.ghm_estimation`
 Trajectopy - Trajectory Evaluation in Python 
@@ -10,7 +10,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/alignment/ghm_estimation.py#L828"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\ghm_estimation.py#L828"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `print_summary`
 
@@ -25,7 +25,7 @@ print_summary(alignment: Alignment) → None
 
 ---
 
-<a href="../trajectopy_core/alignment/ghm_estimation.py#L833"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\ghm_estimation.py#L833"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `settings_str`
 
@@ -40,7 +40,7 @@ settings_str(alignment: Alignment) → str
 
 ---
 
-<a href="../trajectopy_core/alignment/ghm_estimation.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\ghm_estimation.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Alignment`
 Class representing the alignment of two trajectories 
@@ -55,7 +55,7 @@ It can fully align two trajectories their separation can be described by:
 - a time shift 
 - a leverarm (e.g. mounted at different locations on the platform) 
 
-<a href="../trajectopy_core/alignment/ghm_estimation.py#L46"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\ghm_estimation.py#L46"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -124,7 +124,7 @@ This method prepares the data and performs an trajectory alignment
 
 ---
 
-<a href="../trajectopy_core/alignment/ghm_estimation.py#L368"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\ghm_estimation.py#L368"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `auto_design_matrix`
 
@@ -138,7 +138,7 @@ auto_design_matrix() → csc_matrix
 
 ---
 
-<a href="../trajectopy_core/alignment/ghm_estimation.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\ghm_estimation.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `estimate`
 
@@ -152,7 +152,7 @@ Calls either robust reweighting or variance estimation methods.
 
 ---
 
-<a href="../trajectopy_core/alignment/ghm_estimation.py#L115"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\ghm_estimation.py#L115"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `init_parameters`
 
@@ -172,7 +172,7 @@ For this, the helmert transformation and the leverarm estimation are done separa
 
 ---
 
-<a href="../trajectopy_core/alignment/ghm_estimation.py#L204"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\ghm_estimation.py#L204"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `variance_component_estimation`
 
@@ -193,7 +193,7 @@ The observations groups are:
 
 ---
 
-<a href="../trajectopy_core/alignment/ghm_estimation.py#L264"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\alignment\ghm_estimation.py#L264"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `variance_estimation`
 

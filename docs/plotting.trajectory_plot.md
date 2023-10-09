@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/plotting/trajectory_plot.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\trajectory_plot.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `plotting.trajectory_plot`
 Trajectopy - Trajectory Evaluation in Python 
@@ -10,7 +10,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/plotting/trajectory_plot.py#L17"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\trajectory_plot.py#L17"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `plot_trajectories`
 
@@ -26,7 +26,7 @@ Plots Trajectories
 
 ---
 
-<a href="../trajectopy_core/plotting/trajectory_plot.py#L27"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\trajectory_plot.py#L27"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `plot_pos`
 
@@ -39,7 +39,7 @@ Plots xy(z) coordinates of trajectories as 2d or 3d plot
 
 ---
 
-<a href="../trajectopy_core/plotting/trajectory_plot.py#L60"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\trajectory_plot.py#L60"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `plot_xyz`
 
@@ -52,7 +52,7 @@ Plots xyz coordinates of trajectories as subplots
 
 ---
 
-<a href="../trajectopy_core/plotting/trajectory_plot.py#L83"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\trajectory_plot.py#L83"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_axis_label`
 
@@ -65,7 +65,7 @@ Returns the unit of the axis
 
 ---
 
-<a href="../trajectopy_core/plotting/trajectory_plot.py#L114"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\trajectory_plot.py#L114"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `plot_rpy`
 
@@ -78,7 +78,7 @@ Plots rpy coordinates of trajectories as subplots
 
 ---
 
-<a href="../trajectopy_core/plotting/trajectory_plot.py#L138"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\plotting\trajectory_plot.py#L138"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `set_aspect_equal_3d`
 

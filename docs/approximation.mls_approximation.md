@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/approximation/mls_approximation.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\mls_approximation.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `approximation.mls_approximation`
 Trajectopy - Trajectory Evaluation in Python 
@@ -10,7 +10,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/approximation/mls_approximation.py#L77"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\mls_approximation.py#L77"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `mls_iterative`
 
@@ -45,7 +45,7 @@ This method approximates the neighborhood of a point using a 3d line. Neighborho
 
 ---
 
-<a href="../trajectopy_core/approximation/mls_approximation.py#L114"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\mls_approximation.py#L114"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `mls_single`
 
@@ -78,7 +78,7 @@ This method approximates the neighborhood of a point using a 3d line. Neighborho
 
 ---
 
-<a href="../trajectopy_core/approximation/mls_approximation.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\mls_approximation.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Line3D`
 A 3D line defined by a mean point and a direction vector. 
@@ -90,7 +90,7 @@ A 3D line defined by a mean point and a direction vector.
  - <b>`mean`</b> (np.ndarray):  The mean point of the line. 
  - <b>`direction`</b> (np.ndarray):  The direction vector of the line. 
 
-<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -107,7 +107,7 @@ __init__(mean: ndarray, direction: ndarray) → None
 
 ---
 
-<a href="../trajectopy_core/approximation/mls_approximation.py#L57"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\mls_approximation.py#L57"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `evaluate_at`
 
@@ -133,7 +133,7 @@ This method calculates the projection of the input location onto the 3D line and
 
 ---
 
-<a href="../trajectopy_core/approximation/mls_approximation.py#L34"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\mls_approximation.py#L34"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_points`
 

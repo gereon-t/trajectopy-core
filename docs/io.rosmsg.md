@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/io/rosmsg.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\rosmsg.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `io.rosmsg`
 Trajectopy - Trajectory Evaluation in Python 
@@ -10,7 +10,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/io/rosmsg.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\rosmsg.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `geometry_pose_stamped_handler`
 
@@ -35,7 +35,7 @@ Handler for geometry_msgs/msg/PoseStamped messages
 
 ---
 
-<a href="../trajectopy_core/io/rosmsg.py#L10"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\rosmsg.py#L10"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Stamp`
 
@@ -48,7 +48,7 @@ Handler for geometry_msgs/msg/PoseStamped messages
 
 ---
 
-<a href="../trajectopy_core/io/rosmsg.py#L15"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\rosmsg.py#L15"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Point`
 
@@ -61,7 +61,7 @@ Handler for geometry_msgs/msg/PoseStamped messages
 
 ---
 
-<a href="../trajectopy_core/io/rosmsg.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\rosmsg.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Quaternion`
 
@@ -74,7 +74,7 @@ Handler for geometry_msgs/msg/PoseStamped messages
 
 ---
 
-<a href="../trajectopy_core/io/rosmsg.py#L28"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\rosmsg.py#L28"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Header`
 
@@ -87,7 +87,7 @@ Handler for geometry_msgs/msg/PoseStamped messages
 
 ---
 
-<a href="../trajectopy_core/io/rosmsg.py#L33"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\rosmsg.py#L33"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Pose`
 
@@ -100,7 +100,7 @@ Handler for geometry_msgs/msg/PoseStamped messages
 
 ---
 
-<a href="../trajectopy_core/io/rosmsg.py#L38"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\rosmsg.py#L38"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `PoseMessage`
 

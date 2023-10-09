@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/io/__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `io`
 The io module provides the Python interfaces to stream handling. The builtin open function is defined in this module. 
@@ -31,7 +31,7 @@ DEFAULT_BUFFER_SIZE
 
 ---
 
-<a href="../trajectopy_core/io/__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `BufferedIOBase`
 Base class for buffered IO objects. 
@@ -48,7 +48,7 @@ A typical implementation should not inherit from a RawIOBase implementation, but
 
 ---
 
-<a href="../trajectopy_core/io/__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `IOBase`
 The abstract base class for all I/O classes. 
@@ -73,7 +73,7 @@ with open('spam.txt', 'r') as fp:  fp.write('Spam and eggs!')
 
 ---
 
-<a href="../trajectopy_core/io/__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `RawIOBase`
 Base class for raw binary I/O. 
@@ -84,7 +84,7 @@ Base class for raw binary I/O.
 
 ---
 
-<a href="../trajectopy_core/io/__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `TextIOBase`
 Base class for text I/O. 
@@ -97,7 +97,7 @@ This class provides a character and line based interface to stream I/O. There is
 
 ---
 
-<a href="../trajectopy_core/io/__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\__init__.py"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `UnsupportedOperation`
 

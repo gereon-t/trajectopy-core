@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/approximation/voxelizer.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\voxelizer.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `approximation.voxelizer`
 Trajectopy - Trajectory Evaluation in Python 
@@ -11,7 +11,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/approximation/voxelizer.py#L15"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\voxelizer.py#L15"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Voxel`
 A class representing a voxel. 
@@ -29,7 +29,7 @@ Properties:
  - <b>`num_points`</b> (int):  The number of points contained within the voxel. 
  - <b>`to_numpy`</b> (np.ndarray):  The points contained within the voxel as a numpy array. 
 
-<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -71,7 +71,7 @@ __init__(id: str, size: float, points: list) → None
 
 ---
 
-<a href="../trajectopy_core/approximation/voxelizer.py#L47"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\voxelizer.py#L47"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Voxelizer`
 A class for voxelizing point clouds. 
@@ -87,7 +87,7 @@ Methods:
  - <b>`ball_query(xyz`</b>:  np.ndarray, r: float) -> list[frozenset[str]]: Performs a kd-ball-query within the voxels. 
  - <b>`index_to_id(index`</b>:  int) -> int: Returns the id of the voxel at the given index. 
 
-<a href="../trajectopy_core/approximation/voxelizer.py#L59"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\voxelizer.py#L59"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -112,7 +112,7 @@ __init__(xyz: ndarray, voxel_size: float = 0.05) → None
 
 ---
 
-<a href="../trajectopy_core/approximation/voxelizer.py#L101"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\voxelizer.py#L101"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `ball_query`
 
@@ -139,7 +139,7 @@ Returns a list of frozensets containing the voxel ids vor neighboring voxels.
 
 ---
 
-<a href="../trajectopy_core/approximation/voxelizer.py#L98"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\voxelizer.py#L98"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `index_to_id`
 
@@ -153,7 +153,7 @@ index_to_id(index: int) → str
 
 ---
 
-<a href="../trajectopy_core/approximation/voxelizer.py#L117"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\voxelizer.py#L117"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `k_nearest_query`
 
@@ -180,7 +180,7 @@ Returns a list of frozensets containing the voxel ids vor neighboring voxels.
 
 ---
 
-<a href="../trajectopy_core/approximation/voxelizer.py#L133"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\approximation\voxelizer.py#L133"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `points_from_voxel_set`
 

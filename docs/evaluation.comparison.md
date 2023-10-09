@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/evaluation/comparison.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `evaluation.comparison`
 Trajectopy - Trajectory Evaluation in Python 
@@ -10,7 +10,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/evaluation/comparison.py#L25"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L25"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `compare_trajectories_absolute`
 
@@ -39,7 +39,7 @@ Compares two trajectories in absolute terms, returning the deviations between th
 
 ---
 
-<a href="../trajectopy_core/evaluation/comparison.py#L63"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L63"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `compare_trajectories_relative`
 
@@ -72,7 +72,7 @@ This function compares two trajectories using the relative comparison method.
 
 ---
 
-<a href="../trajectopy_core/evaluation/comparison.py#L118"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L118"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `pairwise_comparison`
 
@@ -89,7 +89,7 @@ This function compares two trajectories using the relative comparison method.
 
 ---
 
-<a href="../trajectopy_core/evaluation/comparison.py#L198"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L198"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `se3_inv`
 
@@ -102,7 +102,7 @@ Invert SE3 pose
 
 ---
 
-<a href="../trajectopy_core/evaluation/comparison.py#L209"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L209"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `rotation_error`
 
@@ -115,7 +115,7 @@ KITTI metric port
 
 ---
 
-<a href="../trajectopy_core/evaluation/comparison.py#L218"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L218"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `translation_error`
 
@@ -128,7 +128,7 @@ KITTI metric port
 
 ---
 
-<a href="../trajectopy_core/evaluation/comparison.py#L226"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L226"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_directed_deviations`
 
@@ -147,7 +147,7 @@ get_directed_deviations(
 
 ---
 
-<a href="../trajectopy_core/evaluation/comparison.py#L235"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L235"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `derive_dev_directions_no_rot`
 
@@ -162,7 +162,7 @@ By constructing a 3D line between the corresponding point in xyz_ref and its suc
 
 ---
 
-<a href="../trajectopy_core/evaluation/comparison.py#L264"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L264"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `derive_dev_directions_with_rot`
 

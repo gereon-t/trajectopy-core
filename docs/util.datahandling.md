@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/util/datahandling.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `util.datahandling`
 Trajectopy - Trajectory Evaluation in Python 
@@ -10,7 +10,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L62"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L62"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `rms`
 
@@ -35,7 +35,7 @@ Calculates the root mean square of an array.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L75"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L75"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `merge_dicts`
 
@@ -60,7 +60,7 @@ Merges multiple dictionaries into a single dictionary, where each key in the mer
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L95"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L95"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_rot_matrix`
 
@@ -85,7 +85,7 @@ Returns rotation matrix to transform rotations to ENU
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L123"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L123"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `moving`
 
@@ -116,7 +116,7 @@ Computes values with a given window size and function. For example, if function=
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L154"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L154"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `moving_width`
 
@@ -149,7 +149,7 @@ Computes values with a given width and function. For example, if function=np.std
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L182"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L182"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `round_to_precision`
 
@@ -183,7 +183,7 @@ It will first smooth the data using a convolution with a filter of size filter_s
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L215"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L215"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `rndodd`
 
@@ -208,7 +208,7 @@ Rounds a float to the nearest odd integer.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L233"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L233"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `lengths_from_xyz`
 
@@ -233,7 +233,7 @@ Computes the cumulative distance along a path defined by a sequence of 3D points
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L259"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L259"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `nearest_point`
 
@@ -259,7 +259,7 @@ Finds the nearest point on a 3D line to a given point.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L291"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L291"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `remove_nan_vals`
 
@@ -284,7 +284,7 @@ Removes NaN values from a numpy array.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L307"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L307"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `rotate_to_main_axis`
 
@@ -309,7 +309,7 @@ Rotates a point cloud to align with its main axis.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L324"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L324"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `main_axis`
 
@@ -334,7 +334,7 @@ Computes the main axis of a point cloud.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L340"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L340"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `line_angle`
 
@@ -359,7 +359,7 @@ Calculates the angle between a 2D line and the x-axis.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L353"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L353"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `rot_from_vec`
 
@@ -385,7 +385,7 @@ Computes the rotation matrix that rotates vector a to vector b.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L375"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L375"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `cart2pol`
 
@@ -411,7 +411,7 @@ Converts Cartesian coordinates to polar coordinates.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L392"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L392"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `pol2cart`
 
@@ -437,7 +437,7 @@ Converts polar coordinates to Cartesian coordinates.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L410"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L410"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_tau`
 
@@ -463,7 +463,7 @@ Calculates the angle between a position and a target point.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L424"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L424"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `rot_z`
 
@@ -489,7 +489,7 @@ Computes the rotation matrix around the z-axis.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L454"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L454"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `filter_from_limits`
 
@@ -515,7 +515,7 @@ Creates a boolean filter which filters tstamps according to limits defined in ga
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L479"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L479"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `detect_time_gaps`
 
@@ -543,7 +543,7 @@ As soon as two timestamps have a difference greater than 'max_gap_size' they are
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L508"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L508"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `common_time_span`
 
@@ -572,7 +572,7 @@ Computes the common time span between two arrays of timestamps.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L539"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L539"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `gradient_3d`
 
@@ -598,7 +598,7 @@ Computes the gradient of a 3D trajectory.
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L558"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L558"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `togrid`
 
@@ -625,7 +625,7 @@ Discretizes data into a grid of size grid_mp
 
 ---
 
-<a href="../trajectopy_core/util/datahandling.py#L20"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\util\datahandling.py#L20"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Grid`
 A class representing a 2D grid of values, with methods for accessing and manipulating the grid. 
@@ -641,7 +641,7 @@ A class representing a 2D grid of values, with methods for accessing and manipul
 
 Methods: values() -> np.ndarray:  Returns the values of the grid cells. populated_grid_cells() -> np.ndarray:  Returns the x and y coordinates and values of the populated grid cells. scaled_grid_cells() -> np.ndarray:  Returns the x and y coordinates and values of the populated grid cells, scaled by the pixel size. 
 
-<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 

@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../trajectopy_core/trajectory.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `trajectory`
 Trajectopy - Trajectory Evaluation in Python 
@@ -11,7 +11,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `TrajectoryError`
 
@@ -24,14 +24,14 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L33"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L33"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Trajectory`
 Class representing a trajectory, i.e. position and orientation of a plattform over time 
 
 Position-Computations are always done in a local frame Time stamps are always in UTC time Rotations are always defined in a East-North-Up frame 
 
-<a href="../trajectopy_core/trajectory.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -172,7 +172,7 @@ Returns computed speeds or custom speeds
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L669"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L669"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `adopt_sampling_and_sorting`
 
@@ -197,7 +197,7 @@ Interpolates trajectory_1 onto trajectory_2 and copies the sorting of trajectory
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L813"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L813"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `append`
 
@@ -214,7 +214,7 @@ append(
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L742"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L742"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `apply_alignment`
 
@@ -243,7 +243,7 @@ After computing the alignment parameters needed to align two trajectories, they 
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L689"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L689"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `apply_index`
 
@@ -277,7 +277,7 @@ Those components are:
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L835"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L835"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `apply_sorter`
 
@@ -304,7 +304,7 @@ Unless not interpolated, this sorting information remains valid.
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L727"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L727"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `apply_transformation`
 
@@ -329,7 +329,7 @@ Applies transformation to trajectory
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L155"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L155"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `copy`
 
@@ -341,7 +341,7 @@ Deep copy of itself
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L463"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L463"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `crop`
 
@@ -373,7 +373,7 @@ Crops trajectory to timespan defined by t_start and t_end
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L440"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L440"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `divide_into_laps`
 
@@ -387,7 +387,7 @@ Only possible if there are lap_indices that can be computed by spatially sorting
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L161"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L161"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_file`
 
@@ -413,7 +413,7 @@ The file must be a csv file containing columns for at least the timestamp, x, y 
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L275"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L275"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_numpy`
 
@@ -430,7 +430,7 @@ Initialize trajectory using numpy arrays
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L152"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L152"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `init_arc_lengths`
 
@@ -444,7 +444,7 @@ init_arc_lengths()
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L488"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L488"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `interpolate`
 
@@ -471,7 +471,7 @@ This method removes timestamps from tstamps if they lie outside of the timestamp
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L550"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L550"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `interpolate_positions`
 
@@ -496,7 +496,7 @@ Function for position interpolation of a trajectory
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L525"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L525"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `interpolate_rotations`
 
@@ -526,7 +526,7 @@ This method uses Spherical-Linear-Interpolation for rotation interpolation.
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L584"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L584"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `intersect`
 
@@ -564,7 +564,7 @@ After intersection, the trajectory covers the same timespan as 'tstamps'. Furthe
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L568"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L568"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `match_timestamps`
 
@@ -589,7 +589,7 @@ Truncates trajectory to only those poses where the timestamps exactly match "tst
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L632"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L632"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `same_sampling`
 
@@ -618,7 +618,7 @@ This method will intersect both trajectories with each other and then approximat
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L860"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L860"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `set_sorting`
 
@@ -637,7 +637,7 @@ Sets the sorting of the trajectory
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L888"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L888"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `switch_sorting`
 
@@ -655,7 +655,7 @@ Since there are only two states
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L210"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L210"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_dataframe`
 
@@ -667,7 +667,7 @@ Returns a pandas dataframe containing tstamps, xyz, quat
 
 ---
 
-<a href="../trajectopy_core/trajectory.py#L242"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\trajectory.py#L242"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `to_file`
 
