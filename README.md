@@ -103,7 +103,7 @@ This section shows how to use trajectopy to evaluate two trajectories. The examp
     
 ```python
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute
-from trajectopy_core.alignment.util import align_trajectories
+from trajectopy_core.alignment.actions import align_trajectories
 from trajectopy_core.settings.alignment_settings import AlignmentSettings
 from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
 from trajectopy_core.trajectory import Trajectory
