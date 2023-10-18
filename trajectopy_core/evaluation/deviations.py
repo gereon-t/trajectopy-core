@@ -15,7 +15,7 @@ from trajectopy_core.util.rotationset import RotationSet
 
 
 @dataclass
-class RPEResult:
+class RelativeTrajectoryDeviations:
     pos_dev: Dict[float, List[float]]
     rot_dev: Dict[float, List[float]]
     pair_distance: Dict[float, List[float]]
@@ -27,7 +27,7 @@ class RPEResult:
 
 
 @dataclass
-class ATEResult:
+class AbsoluteTrajectoryDeviations:
     pos_dev: np.ndarray
     directed_pos_dev: np.ndarray
     rot_dev: Union[RotationSet, None] = None

@@ -15,8 +15,8 @@ from matplotlib.collections import LineCollection, PolyCollection
 from matplotlib.figure import Figure
 
 import trajectopy_core.util.datahandling as datahandling
-from trajectopy_core.evaluation.abs_traj_dev import AbsoluteTrajectoryDeviations, DeviationCollection
-from trajectopy_core.evaluation.rel_traj_dev import RelativeTrajectoryDeviations
+from trajectopy_core.evaluation.ate_result import ATEResult, DeviationCollection
+from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.plotting.heatmap import annotate_heatmap, heatmap
 from trajectopy_core.plotting.util import norm_hist, scatter_plotter, stair_hist, vertical_subplots
 from trajectopy_core.settings.plot_settings import PlotSettings
@@ -29,8 +29,8 @@ XLABEL_DICT = {Sorting.CHRONO: "time [s]", Sorting.SPATIAL: "trajectory length [
 UNIT_DICT = {Sorting.CHRONO: "s", Sorting.SPATIAL: "m"}
 
 
-def plot_combined_devs(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSettings = PlotSettings()) -> Figure:
-    if devs.ate_result.rot_dev is None:
+def plot_combined_devs(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Figure:
+    if devs.abs_dev.rot_dev is None:
         comb_devs = [[devs.comb_pos_devs * plot_settings.unit_multiplier]]
         ylabels = [f"position deviations {plot_settings.unit_str}"]
     else:
@@ -54,7 +54,7 @@ def plot_combined_devs(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSe
     )
 
 
-def plot_raw_rotation_devs(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSettings = PlotSettings()) -> Figure:
+def plot_raw_rotation_devs(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Figure:
     rpy_dev = devs.rpy_dev
     vert_sp_data_rot = [
         [
@@ -74,15 +74,15 @@ def plot_raw_rotation_devs(devs: AbsoluteTrajectoryDeviations, plot_settings: Pl
     )
 
 
-def plot_raw_position_devs(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSettings = PlotSettings()) -> Figure:
+def plot_raw_position_devs(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Figure:
     deviations_xa = (
-        devs.ate_result.directed_pos_dev[:, 0] if plot_settings.show_directed_devs else devs.ate_result.pos_dev[:, 0]
+        devs.abs_dev.directed_pos_dev[:, 0] if plot_settings.show_directed_devs else devs.abs_dev.pos_dev[:, 0]
     )
     deviations_yh = (
-        devs.ate_result.directed_pos_dev[:, 1] if plot_settings.show_directed_devs else devs.ate_result.pos_dev[:, 1]
+        devs.abs_dev.directed_pos_dev[:, 1] if plot_settings.show_directed_devs else devs.abs_dev.pos_dev[:, 1]
     )
     deviations_zv = (
-        devs.ate_result.directed_pos_dev[:, 2] if plot_settings.show_directed_devs else devs.ate_result.pos_dev[:, 2]
+        devs.abs_dev.directed_pos_dev[:, 2] if plot_settings.show_directed_devs else devs.abs_dev.pos_dev[:, 2]
     )
 
     if plot_settings.show_directed_devs:
@@ -115,29 +115,29 @@ def plot_raw_position_devs(devs: AbsoluteTrajectoryDeviations, plot_settings: Pl
     )
 
 
-def plot_dof_dev(*, devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSettings = PlotSettings()) -> Figure:
+def plot_dof_dev(*, devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Figure:
     fig = plt.figure(figsize=(12, 4))
 
     plot_position_dof(devs, plot_settings)
 
-    if devs.ate_result.rot_dev:
+    if devs.abs_dev.rot_dev:
         plot_rot_dof(devs, plot_settings)
 
     return fig
 
 
-def plot_position_dof(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSettings = PlotSettings()):
+def plot_position_dof(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()):
     deviations_xa = (
-        devs.ate_result.directed_pos_dev[:, 0] if plot_settings.show_directed_devs else devs.ate_result.pos_dev[:, 0]
+        devs.abs_dev.directed_pos_dev[:, 0] if plot_settings.show_directed_devs else devs.abs_dev.pos_dev[:, 0]
     )
     deviations_yh = (
-        devs.ate_result.directed_pos_dev[:, 1] if plot_settings.show_directed_devs else devs.ate_result.pos_dev[:, 1]
+        devs.abs_dev.directed_pos_dev[:, 1] if plot_settings.show_directed_devs else devs.abs_dev.pos_dev[:, 1]
     )
     deviations_zv = (
-        devs.ate_result.directed_pos_dev[:, 2] if plot_settings.show_directed_devs else devs.ate_result.pos_dev[:, 2]
+        devs.abs_dev.directed_pos_dev[:, 2] if plot_settings.show_directed_devs else devs.abs_dev.pos_dev[:, 2]
     )
 
-    rows = 1 if devs.ate_result.rot_dev is None else 2
+    rows = 1 if devs.abs_dev.rot_dev is None else 2
     xyz_dev = [devs.trajectory.pos.xyz]
     c_labels = [plot_settings.unit_str]
 
@@ -172,7 +172,7 @@ def plot_position_dof(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSet
     )
 
 
-def plot_rot_dof(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSettings = PlotSettings()) -> None:
+def plot_rot_dof(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> None:
     xyz_dev = [devs.trajectory.pos.xyz]
     rpy_dev = devs.rpy_dev
     plt.subplot(2, 3, 4)
@@ -206,9 +206,7 @@ def plot_rot_dof(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSettings
     )
 
 
-def plot_compact_deviations(
-    devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSettings = PlotSettings()
-) -> Union[Figure, None]:
+def plot_compact_deviations(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Union[Figure, None]:
     # positions
     dev_pos_list = [devs.trajectory.pos.xyz]
     comb_pos_rms = datahandling.moving_width(
@@ -218,7 +216,7 @@ def plot_compact_deviations(
         function=datahandling.rms,
     )
 
-    if devs.ate_result.rot_dev:
+    if devs.abs_dev.rot_dev:
         comb_rot_rms = datahandling.moving_width(
             t=devs.trajectory.function_of,
             data=devs.comb_rot_devs,
@@ -251,7 +249,7 @@ def plot_compact_deviations(
     )
 
 
-def plot_compact_hist(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSettings = PlotSettings()) -> Figure:
+def plot_compact_hist(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Figure:
     """
     Plot compact histograms of cross-track and rpy deviations
     """
@@ -260,7 +258,7 @@ def plot_compact_hist(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSet
     plot_position_hist(devs, plot_settings)
     pos_ax.ticklabel_format(style="sci", axis="y", scilimits=(0, 0))
 
-    if devs.ate_result.rot_dev is not None:
+    if devs.abs_dev.rot_dev is not None:
         rot_ax = plt.subplot(2, 1, 2)
         plot_rotation_hist(devs, plot_settings)
         rot_ax.ticklabel_format(style="sci", axis="y", scilimits=(0, 0))
@@ -268,7 +266,7 @@ def plot_compact_hist(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSet
     return fig
 
 
-def plot_rotation_hist(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSettings = PlotSettings()) -> None:
+def plot_rotation_hist(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> None:
     roll = np.rad2deg(devs.rpy_dev[:, 0])
     pitch = np.rad2deg(devs.rpy_dev[:, 1])
     yaw = np.rad2deg(devs.rpy_dev[:, 2])
@@ -286,15 +284,15 @@ def plot_rotation_hist(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSe
     plt.legend(["yaw", "pitch", "roll"])
 
 
-def plot_position_hist(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSettings = PlotSettings()):
+def plot_position_hist(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()):
     deviations_xa = (
-        devs.ate_result.directed_pos_dev[:, 0] if plot_settings.show_directed_devs else devs.ate_result.pos_dev[:, 0]
+        devs.abs_dev.directed_pos_dev[:, 0] if plot_settings.show_directed_devs else devs.abs_dev.pos_dev[:, 0]
     )
     deviations_yh = (
-        devs.ate_result.directed_pos_dev[:, 1] if plot_settings.show_directed_devs else devs.ate_result.pos_dev[:, 1]
+        devs.abs_dev.directed_pos_dev[:, 1] if plot_settings.show_directed_devs else devs.abs_dev.pos_dev[:, 1]
     )
     deviations_zv = (
-        devs.ate_result.directed_pos_dev[:, 2] if plot_settings.show_directed_devs else devs.ate_result.pos_dev[:, 2]
+        devs.abs_dev.directed_pos_dev[:, 2] if plot_settings.show_directed_devs else devs.abs_dev.pos_dev[:, 2]
     )
     labels = ["vertical", "horizontal", "along"] if plot_settings.show_directed_devs else ["x", "y", "z"]
 
@@ -313,7 +311,7 @@ def plot_position_hist(devs: AbsoluteTrajectoryDeviations, plot_settings: PlotSe
 
 
 def plot_edf(
-    deviation: Union[AbsoluteTrajectoryDeviations, List[AbsoluteTrajectoryDeviations]],
+    deviation: Union[ATEResult, List[ATEResult]],
     plot_settings: PlotSettings = PlotSettings(),
 ) -> Figure:
     deviation_list = deviation if isinstance(deviation, list) else [deviation]
@@ -327,7 +325,7 @@ def plot_edf(
 
 
 def plot_position_edf(
-    deviation_list: List[AbsoluteTrajectoryDeviations],
+    deviation_list: List[ATEResult],
     plot_settings: PlotSettings = PlotSettings(),
 ) -> None:
     ax_pos = plt.subplot(2, 1, 1)
@@ -340,8 +338,8 @@ def plot_position_edf(
         ax_pos.plot(sorted_comb_pos_dev * plot_settings.unit_multiplier, pos_norm_cdf)
 
 
-def plot_rotation_edf(deviation_list: List[AbsoluteTrajectoryDeviations]) -> None:
-    if all(dev.ate_result.rot_dev is None for dev in deviation_list):
+def plot_rotation_edf(deviation_list: List[ATEResult]) -> None:
+    if all(dev.abs_dev.rot_dev is None for dev in deviation_list):
         return
 
     ax_rot = plt.subplot(2, 1, 2)
@@ -350,7 +348,7 @@ def plot_rotation_edf(deviation_list: List[AbsoluteTrajectoryDeviations]) -> Non
     ax_rot.set_ylabel("Cummulative Probability")
 
     for dev in deviation_list:
-        if dev.ate_result.rot_dev is None:
+        if dev.abs_dev.rot_dev is None:
             continue
         sorted_comb_rot_dev = np.sort(np.rad2deg(dev.comb_rot_devs))
         rot_norm_cdf = np.arange(len(sorted_comb_rot_dev)) / float(len(sorted_comb_rot_dev))
@@ -358,7 +356,7 @@ def plot_rotation_edf(deviation_list: List[AbsoluteTrajectoryDeviations]) -> Non
 
 
 def plot_bars(
-    deviation_list: List[AbsoluteTrajectoryDeviations],
+    deviation_list: List[ATEResult],
     plot_settings: PlotSettings = PlotSettings(),
     mode: str = "positions",
 ) -> Figure:
@@ -373,7 +371,7 @@ def plot_bars(
     )
     x_positions = np.arange(len(characteristics))
     for deviation, spacing in zip(deviation_list, spacings):
-        if mode == "rotations" and deviation.ate_result.rot_dev is None:
+        if mode == "rotations" and deviation.abs_dev.rot_dev is None:
             continue
 
         if mode == "positions":
@@ -529,7 +527,7 @@ def derive_xlabel_from_sortings(sorting_list: List[Sorting]) -> str:
 
 
 def plot_multiple_comb_deviations(
-    deviation: Union[AbsoluteTrajectoryDeviations, List[AbsoluteTrajectoryDeviations]],
+    deviation: Union[ATEResult, List[ATEResult]],
     plot_settings: PlotSettings = PlotSettings(),
 ) -> Figure:
     deviation_list = deviation if isinstance(deviation, list) else [deviation]
@@ -540,7 +538,7 @@ def plot_multiple_comb_deviations(
     ax_pos.set_xlabel(x_label)
     ax_pos.set_ylabel(f"Deviation {plot_settings.unit_str}")
 
-    if any(dev.ate_result.rot_dev for dev in deviation_list):
+    if any(dev.abs_dev.rot_dev for dev in deviation_list):
         ax_rot = plt.subplot(2, 1, 2)
         ax_rot.set_xlabel(x_label)
         ax_rot.set_ylabel("Deviation [°]")
@@ -632,7 +630,7 @@ def plot_multiple_deviations(
     return xyz_dev_fig, rpy_dev_fig
 
 
-def plot_rpe(devs: List[RelativeTrajectoryDeviations]) -> Tuple[Figure, Figure]:
+def plot_rpe(devs: List[RPEResult]) -> Tuple[Figure, Figure]:
     """Plots metric and time RPE for each Deviation given in devs
 
     Args:
@@ -669,8 +667,8 @@ def plot_rpe(devs: List[RelativeTrajectoryDeviations]) -> Tuple[Figure, Figure]:
 
     _rpy_legend(figure_dict)
 
-    ret_sum = 1 if any(dev.rpe_result.pair_distance_unit == Unit.METER for dev in devs) else 0
-    if any(dev.rpe_result.pair_distance_unit == Unit.SECOND for dev in devs):
+    ret_sum = 1 if any(dev.rpe_dev.pair_distance_unit == Unit.METER for dev in devs) else 0
+    if any(dev.rpe_dev.pair_distance_unit == Unit.SECOND for dev in devs):
         ret_sum += 2
 
     plt.close({1: fig_time, 2: fig_metric}.get(ret_sum))
@@ -690,19 +688,19 @@ def _close_empty_figures(fig_metric: Figure, fig_time: Figure) -> None:
         plt.close(fig_time)
 
 
-def _plot_rpe_pos(figure_dict: Dict[Unit, Axes], devs: List[RelativeTrajectoryDeviations]) -> None:
+def _plot_rpe_pos(figure_dict: Dict[Unit, Axes], devs: List[RPEResult]) -> None:
     for dev in devs:
-        line_plot = figure_dict[dev.rpe_result.pair_distance_unit].plot(
+        line_plot = figure_dict[dev.rpe_dev.pair_distance_unit].plot(
             dev.mean_distances, dev.mean_pos_devs, label=dev.name
         )
 
-        if len(devs) > len({dev.rpe_result.pair_distance_unit for dev in devs}):
+        if len(devs) > len({dev.rpe_dev.pair_distance_unit for dev in devs}):
             continue
 
-        violin_plot = figure_dict[dev.rpe_result.pair_distance_unit].violinplot(
+        violin_plot = figure_dict[dev.rpe_dev.pair_distance_unit].violinplot(
             [
                 [val * dev.drift_factor for val in pos_list]
-                for pos_list in list(dev.rpe_result.pos_dev.values())
+                for pos_list in list(dev.rpe_dev.pos_dev.values())
                 if pos_list
             ],
             positions=dev.mean_distances,
@@ -712,24 +710,24 @@ def _plot_rpe_pos(figure_dict: Dict[Unit, Axes], devs: List[RelativeTrajectoryDe
         _set_violin_color(violin_plot, line_plot[0].get_color())
 
 
-def _plot_rpe_rot(figure_dict: Dict[Unit, Axes], devs: List[RelativeTrajectoryDeviations]) -> None:
+def _plot_rpe_rot(figure_dict: Dict[Unit, Axes], devs: List[RPEResult]) -> None:
     plot_sum = 0
     for dev in devs:
         if not dev.has_rot_dev:
             continue
 
         plot_sum += 1
-        line_plot = figure_dict[dev.rpe_result.pair_distance_unit].plot(
+        line_plot = figure_dict[dev.rpe_dev.pair_distance_unit].plot(
             dev.mean_distances, np.rad2deg(dev.mean_rot_devs), label=dev.name
         )
 
-        if len(devs) > len({dev.rpe_result.pair_distance_unit for dev in devs}):
+        if len(devs) > len({dev.rpe_dev.pair_distance_unit for dev in devs}):
             continue
 
-        violin_plot = figure_dict[dev.rpe_result.pair_distance_unit].violinplot(
+        violin_plot = figure_dict[dev.rpe_dev.pair_distance_unit].violinplot(
             [
                 list(np.rad2deg(rot_list) * dev.drift_factor)
-                for rot_list in list(dev.rpe_result.rot_dev.values())
+                for rot_list in list(dev.rpe_dev.rot_dev.values())
                 if rot_list
             ],
             positions=dev.mean_distances,
