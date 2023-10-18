@@ -6,17 +6,17 @@ import numpy as np
 
 from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
 from trajectopy_core.alignment.result import AlignmentResult
-from trajectopy_core.evaluation.abs_traj_dev import AbsoluteTrajectoryDeviations
+from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute, compare_trajectories_relative
 from trajectopy_core.evaluation.matching import match_trajectories
-from trajectopy_core.evaluation.rel_traj_dev import RelativeTrajectoryDeviations
+from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
 from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
 from trajectopy_core.trajectory import Trajectory
 from trajectopy_core.util.definitions import Unit
 
 
-def compare_trajectories_abs(traj_ref: Trajectory, traj_test: Trajectory) -> AbsoluteTrajectoryDeviations:
+def compare_trajectories_abs(traj_ref: Trajectory, traj_test: Trajectory) -> ATEResult:
     matching_settings = MatchingSettings(method=MatchingMethod.NEAREST_TEMPORAL)
 
     traj_test, traj_ref = match_trajectories(traj_test=traj_test, traj_ref=traj_ref, settings=matching_settings)
@@ -29,7 +29,7 @@ def compare_trajectories_abs(traj_ref: Trajectory, traj_test: Trajectory) -> Abs
 
 def compare_trajectories_rel(
     traj_ref: Trajectory, traj_test: Trajectory, settings: RelativeComparisonSettings
-) -> RelativeTrajectoryDeviations:
+) -> RPEResult:
     matching_settings = MatchingSettings(method=MatchingMethod.NEAREST_TEMPORAL)
 
     traj_test, traj_ref = match_trajectories(traj_test=traj_test, traj_ref=traj_ref, settings=matching_settings)

@@ -4,10 +4,10 @@ from typing import Tuple
 
 import numpy as np
 
+from trajectopy_core.alignment.actions import align_trajectories
 from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.alignment.rotation_alignment import align_rotations
-from trajectopy_core.alignment.actions import align_trajectories
 from trajectopy_core.settings.alignment_settings import (
     AlignmentEstimationSettings,
     AlignmentSettings,

@@ -10,9 +10,9 @@ from typing import Tuple, Union
 import numpy as np
 
 import trajectopy_core.util.datahandling as datahandling
-from trajectopy_core.evaluation.abs_traj_dev import AbsoluteTrajectoryDeviations
-from trajectopy_core.evaluation.rel_traj_dev import RelativeTrajectoryDeviations
-from trajectopy_core.evaluation.results import ATEResult, RPEResult
+from trajectopy_core.evaluation.ate_result import ATEResult
+from trajectopy_core.evaluation.deviations import AbsoluteTrajectoryDeviations, RelativeTrajectoryDeviations
+from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
 from trajectopy_core.trajectory import Trajectory
 from trajectopy_core.util.definitions import Unit
@@ -22,7 +22,7 @@ from trajectopy_core.util.spatialsorter import Sorting
 logger = logging.getLogger("root")
 
 
-def compare_trajectories_absolute(*, traj_test: Trajectory, traj_ref: Trajectory) -> AbsoluteTrajectoryDeviations:
+def compare_trajectories_absolute(*, traj_test: Trajectory, traj_ref: Trajectory) -> ATEResult:
     """
     Compares two trajectories in absolute terms, returning the deviations between them.
 
@@ -31,7 +31,7 @@ def compare_trajectories_absolute(*, traj_test: Trajectory, traj_ref: Trajectory
         traj_ref (Trajectory): The reference trajectory.
 
     Returns:
-        AbsoluteTrajectoryDeviations: An object containing the absolute deviations between the two trajectories.
+        ATEResult: An object containing the absolute deviations between the two trajectories.
     """
     logger.info("Performing absolute comparison")
     pos_dev = traj_ref.pos.xyz - traj_test.pos.xyz
@@ -46,17 +46,17 @@ def compare_trajectories_absolute(*, traj_test: Trajectory, traj_ref: Trajectory
     else:
         rot_dev = None
 
-    ate_result = ATEResult(
+    abs_dev = AbsoluteTrajectoryDeviations(
         pos_dev=pos_dev,
         directed_pos_dev=directed_pos_dev,
         rot_dev=rot_dev,
         rotations_used=(traj_ref.rot or traj_test.rot) is not None,
     )
 
-    return AbsoluteTrajectoryDeviations(
+    return ATEResult(
         name=f"{traj_test.name} vs. {traj_ref.name}",
         trajectory=traj_test,
-        ate_result=ate_result,
+        abs_dev=abs_dev,
     )
 
 
@@ -65,7 +65,7 @@ def compare_trajectories_relative(
     traj_test: Trajectory,
     traj_ref: Trajectory,
     settings: RelativeComparisonSettings,
-) -> RelativeTrajectoryDeviations:
+) -> RPEResult:
     """This function compares two trajectories using the relative comparison method.
 
 
@@ -117,7 +117,7 @@ def _get_pair_indices(distances: np.ndarray, settings: RelativeComparisonSetting
 
 def pairwise_comparison(
     *, traj_test: Trajectory, traj_ref: Trajectory, settings: RelativeComparisonSettings
-) -> RelativeTrajectoryDeviations:
+) -> RPEResult:
     """This function compares two trajectories using the relative comparison method."""
 
     if settings.pair_min_distance > settings.pair_max_distance:
@@ -182,16 +182,16 @@ def pairwise_comparison(
     if cnt == 0:
         raise ValueError("No pairs found")
 
-    rpe_result = RPEResult(
+    rpe_dev = RelativeTrajectoryDeviations(
         pos_dev=pos_dev,
         rot_dev=rot_dev,
         pair_distance=pair_distance,
         pair_distance_unit=settings.pair_distance_unit,
     )
 
-    return RelativeTrajectoryDeviations(
+    return RPEResult(
         name=f"{traj_test.name} vs. {traj_ref.name}",
-        rpe_result=rpe_result,
+        rpe_dev=rpe_dev,
     )
 
 

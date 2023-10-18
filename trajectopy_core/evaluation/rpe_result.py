@@ -10,12 +10,12 @@ from typing import Any, Callable, Dict, List
 import numpy as np
 import pandas as pd
 
-from trajectopy_core.evaluation.results import RPEResult
+from trajectopy_core.evaluation.deviations import RelativeTrajectoryDeviations
 from trajectopy_core.io.trajectory_io import read_data
 from trajectopy_core.util.definitions import Unit
 
 
-class RelativeTrajectoryDeviations:
+class RPEResult:
     """
     This class represents a set of relative trajectory deviations
 
@@ -26,11 +26,11 @@ class RelativeTrajectoryDeviations:
 
     def __init__(
         self,
-        rpe_result: RPEResult,
+        rpe_dev: RelativeTrajectoryDeviations,
         name: str,
     ) -> None:
         self.name = name
-        self.rpe_result = rpe_result
+        self.rpe_dev = rpe_dev
 
     def __eq__(self, other) -> bool:
         for self_value, other_value in zip(self.property_dict.values(), other.property_dict.values()):
@@ -39,11 +39,11 @@ class RelativeTrajectoryDeviations:
         return True
 
     def __len__(self) -> int:
-        return self.rpe_result.num_pairs
+        return self.rpe_dev.num_pairs
 
     @property
     def has_rot_dev(self) -> bool:
-        return any(self.rpe_result.rot_dev.values())
+        return any(self.rpe_dev.rot_dev.values())
 
     @property
     def step(self) -> float:
@@ -51,26 +51,26 @@ class RelativeTrajectoryDeviations:
 
     @property
     def pose_distance_unit(self) -> str:
-        return "m" if self.rpe_result.pair_distance_unit == Unit.METER else "s"
+        return "m" if self.rpe_dev.pair_distance_unit == Unit.METER else "s"
 
     @property
     def pos_drift_unit(self) -> str:
-        return "%" if self.rpe_result.pair_distance_unit == Unit.METER else "m/s"
+        return "%" if self.rpe_dev.pair_distance_unit == Unit.METER else "m/s"
 
     @property
     def rot_drift_unit(self) -> str:
-        return "deg/100m" if self.rpe_result.pair_distance_unit == Unit.METER else "deg/s"
+        return "deg/100m" if self.rpe_dev.pair_distance_unit == Unit.METER else "deg/s"
 
     @property
     def drift_factor(self) -> float:
-        return 100.0 if self.rpe_result.pair_distance_unit == Unit.METER else 1.0
+        return 100.0 if self.rpe_dev.pair_distance_unit == Unit.METER else 1.0
 
     def compute_metric(self, key: str, func: Callable[[Any], float], factor: float = 1.0) -> List[float]:
-        return [float(func(values) * factor) for values in self.rpe_result.__dict__[key].values() if values]
+        return [float(func(values) * factor) for values in self.rpe_dev.__dict__[key].values() if values]
 
     @property
     def num_pairs(self) -> List[int]:
-        return [len(values) for values in self.rpe_result.pair_distance.values() if values]
+        return [len(values) for values in self.rpe_dev.pair_distance.values() if values]
 
     @property
     def mean_distances(self) -> List[float]:
@@ -122,7 +122,7 @@ class RelativeTrajectoryDeviations:
 
     def get_all(self, key: str) -> List[float]:
         ret_list: List[float] = []
-        model_dict = self.rpe_result.__dict__
+        model_dict = self.rpe_dev.__dict__
 
         if key not in model_dict:
             return ret_list
@@ -213,7 +213,7 @@ class RelativeTrajectoryDeviations:
 
     def to_file(self, filename: str) -> None:
         with open(filename, "a", encoding="utf-8", newline="") as file:
-            file.write(f"#relative_dist_unit {self.rpe_result.pair_distance_unit.name}\n")
+            file.write(f"#relative_dist_unit {self.rpe_dev.pair_distance_unit.name}\n")
 
             writer = csv.writer(file)
             file.write("#num_pairs ")
@@ -240,11 +240,11 @@ class RelativeTrajectoryDeviations:
 
             last_index += index
 
-        rpe_result = RPEResult(
+        rpe_dev = RelativeTrajectoryDeviations(
             pair_distance=pair_distance,
             pos_dev=pos_dev,
             rot_dev=rot_dev,
             pair_distance_unit=header_data.relative_dist_unit,
         )
 
-        return cls(rpe_result=rpe_result, name=header_data.name)
+        return cls(rpe_dev=rpe_dev, name=header_data.name)

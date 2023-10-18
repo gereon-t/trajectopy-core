@@ -13,14 +13,14 @@ import pandas as pd
 from pointset import PointSet
 
 import trajectopy_core.util.datahandling as datahandling
-from trajectopy_core.evaluation.results import ATEResult
+from trajectopy_core.evaluation.deviations import AbsoluteTrajectoryDeviations
 from trajectopy_core.io.trajectory_io import read_data
 from trajectopy_core.trajectory import Trajectory
 from trajectopy_core.util.rotationset import RotationSet
 from trajectopy_core.util.spatialsorter import Sorting, complete_lap_dist
 
 
-class AbsoluteTrajectoryDeviations:
+class ATEResult:
     """
     This class represents a set of absolute trajectory deviations
 
@@ -32,12 +32,12 @@ class AbsoluteTrajectoryDeviations:
     def __init__(
         self,
         trajectory: Trajectory,
-        ate_result: ATEResult,
+        abs_dev: AbsoluteTrajectoryDeviations,
         name: str = "",
     ) -> None:
         self.name = name or trajectory.name
         self.trajectory = trajectory
-        self.ate_result = ate_result
+        self.abs_dev = abs_dev
 
     def __eq__(self, other) -> bool:
         assert self.trajectory == other.trajectory
@@ -61,10 +61,8 @@ class AbsoluteTrajectoryDeviations:
         return {
             "Name": self.name,
             "Type": self.__class__.__name__,
-            "Number of deviations": str(len(self.ate_result.pos_dev)),
-            "Deviation directions derived using": "Rotations"
-            if self.ate_result.rotations_used
-            else "Positions / Unkown",
+            "Number of deviations": str(len(self.abs_dev.pos_dev)),
+            "Deviation directions derived using": "Rotations" if self.abs_dev.rotations_used else "Positions / Unkown",
             "Maximum position deviation [m]": f"{self.max_pos:.4f}",
             "Mean position deviation [m]": f"{self.mean_pos:.4f}",
             "Median position deviation [m]": f"{self.median_pos:.4f}",
@@ -84,31 +82,31 @@ class AbsoluteTrajectoryDeviations:
             "RMS Horizontal Cross-Track [m]": f"{self.rms_cross_h:.4f}",
             "RMS Vertical Cross-Track [m]": f"{self.rms_cross_v:.4f}",
             "Maximum rotation deviation [°]": f"{np.rad2deg(self.max_rot):.4f}"
-            if self.ate_result.rot_dev is not None
+            if self.abs_dev.rot_dev is not None
             else "-",
             "Mean rotation deviation [°]": f"{np.rad2deg(self.mean_rot):.4f}"
-            if self.ate_result.rot_dev is not None
+            if self.abs_dev.rot_dev is not None
             else "-",
             "Median rotation deviation [°]": f"{np.rad2deg(self.median_rot):.4f}"
-            if self.ate_result.rot_dev is not None
+            if self.abs_dev.rot_dev is not None
             else "-",
             "Minimum rotation deviation [°]": f"{np.rad2deg(self.min_rot):.4f}"
-            if self.ate_result.rot_dev is not None
+            if self.abs_dev.rot_dev is not None
             else "-",
-            "RMS Rotation [°]": f"{np.rad2deg(self.rms_rot):.4f}" if self.ate_result.rot_dev is not None else "-",
-            "STD Rotation [°]": f"{np.rad2deg(self.std_rot):.4f}" if self.ate_result.rot_dev is not None else "-",
-            "RMS Roll [°]": f"{np.rad2deg(self.rms_roll):.4f}" if self.ate_result.rot_dev is not None else "-",
-            "RMS Pitch [°]": f"{np.rad2deg(self.rms_pitch):.4f}" if self.ate_result.rot_dev is not None else "-",
-            "RMS Yaw [°]": f"{np.rad2deg(self.rms_yaw):.4f}" if self.ate_result.rot_dev is not None else "-",
-            "Bias Roll [°]": f"{np.rad2deg(self.bias_roll):.4f}" if self.ate_result.rot_dev is not None else "-",
-            "Bias Pitch [°]": f"{np.rad2deg(self.bias_pitch):.4f}" if self.ate_result.rot_dev is not None else "-",
-            "Bias Yaw [°]": f"{np.rad2deg(self.bias_yaw):.4f}" if self.ate_result.rot_dev is not None else "-",
+            "RMS Rotation [°]": f"{np.rad2deg(self.rms_rot):.4f}" if self.abs_dev.rot_dev is not None else "-",
+            "STD Rotation [°]": f"{np.rad2deg(self.std_rot):.4f}" if self.abs_dev.rot_dev is not None else "-",
+            "RMS Roll [°]": f"{np.rad2deg(self.rms_roll):.4f}" if self.abs_dev.rot_dev is not None else "-",
+            "RMS Pitch [°]": f"{np.rad2deg(self.rms_pitch):.4f}" if self.abs_dev.rot_dev is not None else "-",
+            "RMS Yaw [°]": f"{np.rad2deg(self.rms_yaw):.4f}" if self.abs_dev.rot_dev is not None else "-",
+            "Bias Roll [°]": f"{np.rad2deg(self.bias_roll):.4f}" if self.abs_dev.rot_dev is not None else "-",
+            "Bias Pitch [°]": f"{np.rad2deg(self.bias_pitch):.4f}" if self.abs_dev.rot_dev is not None else "-",
+            "Bias Yaw [°]": f"{np.rad2deg(self.bias_yaw):.4f}" if self.abs_dev.rot_dev is not None else "-",
         }
 
     @property
     def numeric_property_dict(self) -> Dict[str, Union[float, np.ndarray]]:
         return {
-            "Number of deviations": len(self.ate_result.pos_dev),
+            "Number of deviations": len(self.abs_dev.pos_dev),
             "Maximum position deviation [m]": self.max_pos,
             "Mean position deviation [m]": self.mean_pos,
             "Median position deviation [m]": self.median_pos,
@@ -127,37 +125,33 @@ class AbsoluteTrajectoryDeviations:
             "RMS Along-Track [m]": self.rms_along,
             "RMS Horizontal Cross-Track [m]": self.rms_cross_h,
             "RMS Vertical Cross-Track [m]": self.rms_cross_v,
-            "Maximum rotation deviation [deg]": np.rad2deg(self.max_rot)
-            if self.ate_result.rot_dev is not None
-            else 0.0,
-            "Mean rotation deviation [deg]": np.rad2deg(self.mean_rot) if self.ate_result.rot_dev is not None else 0.0,
+            "Maximum rotation deviation [deg]": np.rad2deg(self.max_rot) if self.abs_dev.rot_dev is not None else 0.0,
+            "Mean rotation deviation [deg]": np.rad2deg(self.mean_rot) if self.abs_dev.rot_dev is not None else 0.0,
             "Median rotation deviation [deg]": np.rad2deg(self.median_rot)
-            if self.ate_result.rot_dev is not None
+            if self.abs_dev.rot_dev is not None
             else 0.0,
-            "Minimum rotation deviation [deg]": np.rad2deg(self.min_rot)
-            if self.ate_result.rot_dev is not None
-            else 0.0,
-            "RMS Rotation [deg]": np.rad2deg(self.rms_rot) if self.ate_result.rot_dev is not None else 0.0,
-            "STD Rotation [deg]": np.rad2deg(self.std_rot) if self.ate_result.rot_dev is not None else 0.0,
-            "RMS Roll [deg]": np.rad2deg(self.rms_roll) if self.ate_result.rot_dev is not None else 0.0,
-            "RMS Pitch [deg]": np.rad2deg(self.rms_pitch) if self.ate_result.rot_dev is not None else 0.0,
-            "RMS Yaw [deg]": np.rad2deg(self.rms_yaw) if self.ate_result.rot_dev is not None else 0.0,
-            "Bias Roll [deg]": np.rad2deg(self.bias_roll) if self.ate_result.rot_dev is not None else 0.0,
-            "Bias Pitch [deg]": np.rad2deg(self.bias_pitch) if self.ate_result.rot_dev is not None else 0.0,
-            "Bias Yaw [deg]": np.rad2deg(self.bias_yaw) if self.ate_result.rot_dev is not None else 0.0,
+            "Minimum rotation deviation [deg]": np.rad2deg(self.min_rot) if self.abs_dev.rot_dev is not None else 0.0,
+            "RMS Rotation [deg]": np.rad2deg(self.rms_rot) if self.abs_dev.rot_dev is not None else 0.0,
+            "STD Rotation [deg]": np.rad2deg(self.std_rot) if self.abs_dev.rot_dev is not None else 0.0,
+            "RMS Roll [deg]": np.rad2deg(self.rms_roll) if self.abs_dev.rot_dev is not None else 0.0,
+            "RMS Pitch [deg]": np.rad2deg(self.rms_pitch) if self.abs_dev.rot_dev is not None else 0.0,
+            "RMS Yaw [deg]": np.rad2deg(self.rms_yaw) if self.abs_dev.rot_dev is not None else 0.0,
+            "Bias Roll [deg]": np.rad2deg(self.bias_roll) if self.abs_dev.rot_dev is not None else 0.0,
+            "Bias Pitch [deg]": np.rad2deg(self.bias_pitch) if self.abs_dev.rot_dev is not None else 0.0,
+            "Bias Yaw [deg]": np.rad2deg(self.bias_yaw) if self.abs_dev.rot_dev is not None else 0.0,
         }
 
-    def apply_index(self, index: Union[list, np.ndarray], inplace: bool = True) -> "AbsoluteTrajectoryDeviations":
+    def apply_index(self, index: Union[list, np.ndarray], inplace: bool = True) -> "ATEResult":
         dev_self = self if inplace else copy.deepcopy(self)
         dev_self.trajectory.apply_index(index=index, inplace=True)
-        dev_self.ate_result.pos_dev = dev_self.ate_result.pos_dev[index]
-        dev_self.ate_result.directed_pos_dev = dev_self.ate_result.directed_pos_dev[index]
-        if dev_self.ate_result.rot_dev is not None:
-            quat_filtered = dev_self.ate_result.rot_dev.as_quat()[index, :]
-            dev_self.ate_result.rot_dev = RotationSet.from_quat(quat_filtered)
+        dev_self.abs_dev.pos_dev = dev_self.abs_dev.pos_dev[index]
+        dev_self.abs_dev.directed_pos_dev = dev_self.abs_dev.directed_pos_dev[index]
+        if dev_self.abs_dev.rot_dev is not None:
+            quat_filtered = dev_self.abs_dev.rot_dev.as_quat()[index, :]
+            dev_self.abs_dev.rot_dev = RotationSet.from_quat(quat_filtered)
         return dev_self
 
-    def divide_into_laps(self) -> Union[List["AbsoluteTrajectoryDeviations"], None]:
+    def divide_into_laps(self) -> Union[List["ATEResult"], None]:
         """
         Divides the trajectory into laps and returns a list of deviations for each lap.
         """
@@ -180,7 +174,7 @@ class AbsoluteTrajectoryDeviations:
 
     @property
     def pos_dev_close_to_zero(self) -> bool:
-        return np.allclose(self.ate_result.pos_dev, np.zeros(self.ate_result.pos_dev.shape))
+        return np.allclose(self.abs_dev.pos_dev, np.zeros(self.abs_dev.pos_dev.shape))
 
     @property
     def rpy_dev_close_to_zero(self) -> bool:
@@ -191,22 +185,22 @@ class AbsoluteTrajectoryDeviations:
         """
         Returns True if orientation is available
         """
-        return self.ate_result.rot_dev is not None
+        return self.abs_dev.rot_dev is not None
 
     @property
     def x(self) -> np.ndarray:
         """Returns x deviations"""
-        return self.ate_result.pos_dev[:, 0]
+        return self.abs_dev.pos_dev[:, 0]
 
     @property
     def y(self) -> np.ndarray:
         """Returns y deviations"""
-        return self.ate_result.pos_dev[:, 1]
+        return self.abs_dev.pos_dev[:, 1]
 
     @property
     def z(self) -> np.ndarray:
         """Returns z deviations"""
-        return self.ate_result.pos_dev[:, 2]
+        return self.abs_dev.pos_dev[:, 2]
 
     @property
     def bias_x(self) -> float:
@@ -241,9 +235,7 @@ class AbsoluteTrajectoryDeviations:
     @cached_property
     def bias_rpy(self) -> np.ndarray:
         """Returns roll, pitch and yaw bias"""
-        return (
-            self.ate_result.rot_dev.mean().as_euler(seq="xyz") if self.ate_result.rot_dev is not None else np.zeros(3)
-        )
+        return self.abs_dev.rot_dev.mean().as_euler(seq="xyz") if self.abs_dev.rot_dev is not None else np.zeros(3)
 
     @property
     def bias_roll(self) -> np.ndarray:
@@ -265,28 +257,28 @@ class AbsoluteTrajectoryDeviations:
         """
         Returns deviations of along track deviations
         """
-        return self.ate_result.directed_pos_dev[:, 0]
+        return self.abs_dev.directed_pos_dev[:, 0]
 
     @property
     def cross(self) -> np.ndarray:
         """
         Returns deviations of horizontal and vertical cross track deviations
         """
-        return self.ate_result.directed_pos_dev[:, 1:3]
+        return self.abs_dev.directed_pos_dev[:, 1:3]
 
     @property
     def cross_h(self) -> np.ndarray:
         """
         Returns deviations of horizontal cross track deviations
         """
-        return self.ate_result.directed_pos_dev[:, 1]
+        return self.abs_dev.directed_pos_dev[:, 1]
 
     @property
     def cross_v(self) -> np.ndarray:
         """
         Returns deviations of vertical cross track deviations
         """
-        return self.ate_result.directed_pos_dev[:, 2]
+        return self.abs_dev.directed_pos_dev[:, 2]
 
     @cached_property
     def rpy_dev(self) -> np.ndarray:
@@ -294,9 +286,9 @@ class AbsoluteTrajectoryDeviations:
         Returns rpy deviations
         """
         return (
-            self.ate_result.rot_dev.as_euler(seq="xyz")
-            if self.ate_result.rot_dev is not None
-            else np.zeros_like(self.ate_result.pos_dev)
+            self.abs_dev.rot_dev.as_euler(seq="xyz")
+            if self.abs_dev.rot_dev is not None
+            else np.zeros_like(self.abs_dev.pos_dev)
         )
 
     @property
@@ -304,7 +296,7 @@ class AbsoluteTrajectoryDeviations:
         """
         Returns position deviations combined using the L2 norm
         """
-        return np.linalg.norm(self.ate_result.pos_dev, axis=1)
+        return np.linalg.norm(self.abs_dev.pos_dev, axis=1)
 
     @property
     def comb_rot_devs(self) -> np.ndarray:
@@ -312,9 +304,7 @@ class AbsoluteTrajectoryDeviations:
         Returns rotation deviations as single rotation angles
         """
         return (
-            self.ate_result.rot_dev.rotangle
-            if self.ate_result.rot_dev is not None
-            else np.zeros_like(self.ate_result.pos_dev)
+            self.abs_dev.rot_dev.rotangle if self.abs_dev.rot_dev is not None else np.zeros_like(self.abs_dev.pos_dev)
         )
 
     @property
@@ -364,7 +354,7 @@ class AbsoluteTrajectoryDeviations:
         """
         Returns RMS of rotations
         """
-        return datahandling.rms(self.comb_rot_devs) if self.ate_result.rot_dev is not None else 0.0
+        return datahandling.rms(self.comb_rot_devs) if self.abs_dev.rot_dev is not None else 0.0
 
     @property
     def std_rot(self) -> float:
@@ -492,8 +482,8 @@ class AbsoluteTrajectoryDeviations:
             sorting=header_data.sorting,
             sort_index=sort_index,
         )
-        ate_result = ATEResult(pos_dev=pos_dev, directed_pos_dev=directed_pos_dev, rot_dev=rot_dev)
-        return AbsoluteTrajectoryDeviations(trajectory=trajectory, ate_result=ate_result)
+        ate_result = AbsoluteTrajectoryDeviations(pos_dev=pos_dev, directed_pos_dev=directed_pos_dev, rot_dev=rot_dev)
+        return ATEResult(trajectory=trajectory, abs_dev=ate_result)
 
     @classmethod
     def from_csv(cls, filename: str) -> pd.DataFrame:
@@ -530,22 +520,22 @@ class AbsoluteTrajectoryDeviations:
             rot_dev = None
 
         trajectory = Trajectory(tstamps=tstamps, arc_lengths=arc_lengths, pos=pos)
-        ate_result = ATEResult(pos_dev=pos_dev, directed_pos_dev=directed_pos_dev, rot_dev=rot_dev)
-        return cls(trajectory=trajectory, ate_result=ate_result)
+        abs_dev = AbsoluteTrajectoryDeviations(pos_dev=pos_dev, directed_pos_dev=directed_pos_dev, rot_dev=rot_dev)
+        return cls(trajectory=trajectory, abs_dev=abs_dev)
 
     def to_dataframe(self) -> pd.DataFrame:
         """
         Exports results as pandas dataframe
         """
-        if self.ate_result.rot_dev:
+        if self.abs_dev.rot_dev:
             return pd.DataFrame(
                 np.c_[
                     self.trajectory.tstamps,
                     self.trajectory.arc_lengths,
                     self.trajectory.pos.xyz,
-                    self.ate_result.pos_dev,
-                    self.ate_result.directed_pos_dev,
-                    self.ate_result.rot_dev.as_quat(),
+                    self.abs_dev.pos_dev,
+                    self.abs_dev.directed_pos_dev,
+                    self.abs_dev.rot_dev.as_quat(),
                 ],
                 columns=[
                     "time",
@@ -571,8 +561,8 @@ class AbsoluteTrajectoryDeviations:
                 self.trajectory.tstamps,
                 self.trajectory.arc_lengths,
                 self.trajectory.pos.xyz,
-                self.ate_result.pos_dev,
-                self.ate_result.directed_pos_dev,
+                self.abs_dev.pos_dev,
+                self.abs_dev.directed_pos_dev,
             ],
             columns=[
                 "time",
@@ -589,6 +579,15 @@ class AbsoluteTrajectoryDeviations:
             ],
         )
 
+    def to_file(self, filename: str) -> None:
+        """
+        Exports results as csv
+        """
+        with open(filename, "w", newline="\n", encoding="utf-8") as file:
+            file.write(f"#name {self.name}\n")
+            file.write(f"#sorting {str(self.trajectory.sorting)}\n")
+        self.to_dataframe().to_csv(filename, header=False, index=False, mode="a", float_format="%.12f")
+
 
 class DeviationCollection:
     """
@@ -596,20 +595,20 @@ class DeviationCollection:
     e.g. for plotting
     """
 
-    def __init__(self, deviations: List[AbsoluteTrajectoryDeviations]) -> None:
+    def __init__(self, deviations: List[ATEResult]) -> None:
         self.lengths = [dev.trajectory.arc_lengths for dev in deviations]
         self.times = [dev.trajectory.tstamps for dev in deviations]
         self.xyz = [dev.trajectory.pos.xyz for dev in deviations]
-        self.pos_dev = [dev.ate_result.pos_dev for dev in deviations]
+        self.pos_dev = [dev.abs_dev.pos_dev for dev in deviations]
         self.pos_bias = [[dev.bias_x, dev.bias_y, dev.bias_z] for dev in deviations]
         self.pos_rms = [[dev.rms_x, dev.rms_y, dev.rms_z] for dev in deviations]
-        self.directed_pos_dev = [dev.ate_result.directed_pos_dev for dev in deviations]
+        self.directed_pos_dev = [dev.abs_dev.directed_pos_dev for dev in deviations]
         self.directed_pos_bias = [[dev.bias_along, dev.bias_cross_h, dev.bias_cross_v] for dev in deviations]
         self.directed_pos_rms = [[dev.rms_along, dev.rms_cross_h, dev.rms_cross_v] for dev in deviations]
-        self.rpy_dev = [dev.rpy_dev for dev in deviations if dev.ate_result.rot_dev is not None]
-        self.rpy_bias = [dev.bias_rpy for dev in deviations if dev.ate_result.rot_dev is not None]
+        self.rpy_dev = [dev.rpy_dev for dev in deviations if dev.abs_dev.rot_dev is not None]
+        self.rpy_bias = [dev.bias_rpy for dev in deviations if dev.abs_dev.rot_dev is not None]
         self.rpy_rms = [
-            [dev.rms_roll, dev.rms_pitch, dev.rms_yaw] for dev in deviations if dev.ate_result.rot_dev is not None
+            [dev.rms_roll, dev.rms_pitch, dev.rms_yaw] for dev in deviations if dev.abs_dev.rot_dev is not None
         ]
         self.complete = [complete_lap_dist(l) for l in self.xyz]
         self.names = [dev.name for dev in deviations]

@@ -16,7 +16,7 @@ from trajectopy_core.io.rosmsg import geometry_pose_stamped_handler
 from trajectopy_core.trajectory import Trajectory
 from trajectopy_core.util.rotationset import RotationSet
 
-ROS_MESSAGE_TYPES = {"geometry_msgs/msg/PoseStamped": geometry_pose_stamped_handler}
+ROS_MESSAGE_HANDLERS = {"geometry_msgs/msg/PoseStamped": geometry_pose_stamped_handler}
 
 logger = logging.getLogger("root")
 
@@ -65,7 +65,7 @@ def read_ros_bag(filename: str) -> Dict[str, Dict[str, List[Any]]]:
         for connection, _, rawdata in reader.messages(connections=reader.connections):
             msg = reader.deserialize(rawdata, connection.msgtype)
 
-            msg_dict = ROS_MESSAGE_TYPES.get(connection.msgtype)
+            msg_dict = ROS_MESSAGE_HANDLERS.get(connection.msgtype)
             if msg_dict is None:
                 logger.warning("Message type %s not supported", connection.msgtype)
                 continue

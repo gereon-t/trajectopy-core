@@ -145,4 +145,4 @@ def _average_rot(x: float, lap_slerp: List[Tuple[Slerp, float, float]]) -> np.nd
     if rots := [l[0](x).as_quat() for l in lap_slerp if l[1] <= x <= l[2]]:
         return RotationSet.from_quat(np.array(rots)).mean().as_quat()
 
-    return np.array([np.NaN, np.NaN, np.NaN, np.NaN])
+    return np.array([np.NaN] * 4)
