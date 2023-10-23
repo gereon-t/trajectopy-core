@@ -25,7 +25,7 @@ class MatchingSettings(Settings):
 
     method: MatchingMethod = MatchingMethod.INTERPOLATION
     max_time_diff: float = 0.01
-    max_distance: float = 0.01
+    max_distance: float = 0.00
     k_nearest: int = 10
 
     def to_dict(self) -> Dict[str, Any]:
