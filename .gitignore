@@ -54,3 +54,5 @@ build/
 analysis/
 test/tmp
 %Code*/
+scripts/
+data/

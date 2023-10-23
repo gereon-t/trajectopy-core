@@ -176,6 +176,7 @@ def norm_hist(*, l, mm: bool = False, alpha: float = 0.5, norm: bool = True) -> 
     """
     Plots a histogram
     """
+    l = l[np.abs(l) > 1e-6]
     hist, bin_edges = np.histogram(l, bins="auto")
     if norm:
         hist = hist / len(l)
@@ -189,6 +190,7 @@ def stair_hist(*, l, mm: bool = False, linewidth: float = 1.5) -> None:
     """
     Plots a stair histogram
     """
+    l = l[np.abs(l) > 1e-6]
     hist, bin_edges = np.histogram(l, bins="auto")
     n_hist = hist / len(l)
     if mm:

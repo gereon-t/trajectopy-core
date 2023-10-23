@@ -8,8 +8,10 @@ import logging
 from typing import Tuple
 
 import numpy as np
+from pointset import PointSet
 from scipy.spatial import KDTree
 
+from trajectopy_core.approximation.util import Line3D
 from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
 from trajectopy_core.trajectory import Trajectory
 
@@ -29,6 +31,7 @@ def match_trajectories(
         - MatchingMethod.INTERPOLATION
         - MatchingMethod.NEAREST_TEMPORAL
         - MatchingMethod.NEAREST_SPATIAL
+        - MatchingMethod.NEAREST_SPATIAL_INTERPOLATED
 
     """
     traj_test = traj_test if inplace else traj_test.copy()
@@ -45,6 +48,14 @@ def match_trajectories(
 
     if settings.method == MatchingMethod.NEAREST_SPATIAL:
         return match_trajectories_spatial(traj_test=traj_test, traj_ref=traj_ref, max_distance=settings.max_distance)
+
+    if settings.method == MatchingMethod.NEAREST_SPATIAL_INTERPOLATED:
+        return match_trajectories_spatial_interpolated(
+            traj_test=traj_test,
+            traj_ref=traj_ref,
+            max_distance=settings.max_distance,
+            k_nearest=settings.k_nearest,
+        )
 
     raise ValueError(f"Matching method {settings.method} not supported!")
 
@@ -96,6 +107,66 @@ def match_trajectories_spatial(
     ref_indices, test_indices = kd_matcher(ref=traj_ref.pos.xyz, test=traj_test.pos.xyz, max_distance=max_distance)
     logger.info("Found %i spatial matches", len(ref_indices))
     return traj_test.apply_index(test_indices), traj_ref.apply_index(ref_indices)
+
+
+def match_trajectories_spatial_interpolated(
+    traj_test: Trajectory, traj_ref: Trajectory, max_distance: float = 0.0, k_nearest: int = 10
+) -> Tuple[Trajectory, Trajectory]:
+    """This method matches both trajectories spatially by requesting
+    the nearest two poses from the reference trajectory for each pose in the
+    test trajectory. Then, an interpolation is performed between the two
+    nearest poses.
+
+    After this operation, both trajectories will have the length of the
+    test trajectory. This means, that the reference trajectory may be
+    modified.
+
+    Args:
+        traj_from (Trajectory): Test trajectory
+        traj_to (Trajectory): Reference trajectory
+        max_distance (float, optional): Maximum distance between two poses.
+                                        Defaults to None. This means all
+                                        matches are accepted.
+        k_nearest (int, optional): Number of nearest poses to request from
+                                   the reference trajectory. Defaults to 10.
+
+    Returns:
+        Tuple[Trajectory, Trajectory]: Matched trajectories
+    """
+    test_xyz = traj_test.pos.xyz
+    ref_xyz = traj_ref.pos.xyz
+
+    if max_distance == 0:
+        distances, closest_indices = KDTree(ref_xyz).query(test_xyz, k=k_nearest, workers=-1)
+    else:
+        distances, closest_indices = KDTree(ref_xyz).query(
+            test_xyz, k=k_nearest, workers=-1, distance_upper_bound=max_distance
+        )
+
+    matched_ref_pos = []
+    matched_test_pos = []
+    for i, (dists, idxs) in enumerate(zip(distances, closest_indices)):
+        if any(np.isinf(dists)):
+            continue
+
+        test_pos = test_xyz[i, :]
+
+        fit_line = Line3D.from_points(ref_xyz[idxs, :])
+        line_point = fit_line.evaluate_at(test_pos)
+
+        matched_test_pos.append(test_pos)
+        matched_ref_pos.append(line_point)
+
+    traj_test = Trajectory(
+        name=traj_test.name,
+        pos=PointSet(np.array(matched_test_pos), local_transformer=traj_test.pos.local_transformer),
+    )
+    traj_ref = Trajectory(
+        name=traj_ref.name,
+        pos=PointSet(np.array(matched_ref_pos), local_transformer=traj_ref.pos.local_transformer),
+    )
+
+    return traj_test, traj_ref
 
 
 def kd_matcher(ref: np.ndarray, test: np.ndarray, max_distance: float = 0.0) -> Tuple[np.ndarray, np.ndarray]:

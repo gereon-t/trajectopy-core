@@ -15,6 +15,7 @@ class MatchingMethod(Enum):
     NEAREST_SPATIAL = auto()
     NEAREST_TEMPORAL = auto()
     INTERPOLATION = auto()
+    NEAREST_SPATIAL_INTERPOLATED = auto()
     UNKNOWN = auto()
 
 
@@ -25,12 +26,14 @@ class MatchingSettings(Settings):
     method: MatchingMethod = MatchingMethod.INTERPOLATION
     max_time_diff: float = 0.01
     max_distance: float = 0.01
+    k_nearest: int = 10
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "method": self.method.name,
             "max_time_diff": self.max_time_diff,
             "max_distance": self.max_distance,
+            "k_nearest": self.k_nearest,
         }
 
     @classmethod
