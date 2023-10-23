@@ -85,6 +85,28 @@ class AlignmentEstimationSettings(Settings):
         )
 
     @classmethod
+    def all(cls, sensor_rotation: bool = True) -> "AlignmentEstimationSettings":
+        return cls(
+            helmert=True,
+            trans_x=True,
+            trans_y=True,
+            trans_z=True,
+            rot_x=True,
+            rot_y=True,
+            rot_z=True,
+            scale=True,
+            time_shift=True,
+            use_x_speed=True,
+            use_y_speed=True,
+            use_z_speed=True,
+            leverarm=True,
+            lever_x=True,
+            lever_y=True,
+            lever_z=True,
+            sensor_rotation=sensor_rotation,
+        )
+
+    @classmethod
     def from_bool_list(cls, bool_list: List[bool]) -> "AlignmentEstimationSettings":
         if len(bool_list) != 14:
             raise ValueError(

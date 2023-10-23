@@ -139,4 +139,5 @@ def align_trajectories(
         position_parameters=estimated_parameters,
         rotation_parameters=sensor_rot_params,
         estimation_of=ghm_alignment.settings.estimation_of,
+        converged=ghm_alignment.has_results,
     )

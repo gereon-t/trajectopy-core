@@ -18,6 +18,7 @@ class AlignmentResult:
     position_parameters: AlignmentParameters = field(default_factory=AlignmentParameters)
     rotation_parameters: SensorRotationParameters = field(default_factory=SensorRotationParameters)
     estimation_of: AlignmentEstimationSettings = field(default_factory=AlignmentEstimationSettings)
+    converged: bool = True
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, AlignmentResult):
