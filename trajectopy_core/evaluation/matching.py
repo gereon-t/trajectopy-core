@@ -143,6 +143,9 @@ def match_trajectories_spatial_interpolated(
             test_xyz, k=k_nearest, workers=-1, distance_upper_bound=max_distance
         )
 
+    if np.isinf(distances).all():
+        raise ValueError("No matches found!")
+
     matched_ref_pos = []
     matched_test_pos = []
     for i, (dists, idxs) in enumerate(zip(distances, closest_indices)):
