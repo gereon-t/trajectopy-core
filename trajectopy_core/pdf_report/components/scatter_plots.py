@@ -7,6 +7,10 @@ from trajectopy_core.evaluation.ate_result import ATEResult
 
 def render_pos_devs(ate_result: ATEResult, ate_pos_unit: str, max_std: float = 3.0) -> str:
     comb_pos_devs = ate_result.comb_pos_devs
+
+    cbar_min = min(comb_pos_devs)
+    cbar_max = min(np.max(comb_pos_devs), cbar_min + np.std(comb_pos_devs) * max_std)
+
     fig = go.Figure()
 
     fig.add_trace(
@@ -15,11 +19,11 @@ def render_pos_devs(ate_result: ATEResult, ate_pos_unit: str, max_std: float = 3
             y=ate_result.trajectory.pos.y,
             mode="lines+markers",
             marker=dict(
-                color=comb_pos_devs,  # Color based on comb_pos_error
-                colorscale="RdYlBu_r",  # You can choose a different color scale
+                color=comb_pos_devs,
+                colorscale="RdYlBu_r",
                 colorbar=dict(title=f"[{ate_pos_unit}]"),
-                cmin=min(comb_pos_devs),
-                cmax=min(np.max(comb_pos_devs), np.std(comb_pos_devs) * max_std),
+                cmin=cbar_min,
+                cmax=cbar_max,
             ),
         )
     )
@@ -39,19 +43,22 @@ def render_pos_devs(ate_result: ATEResult, ate_pos_unit: str, max_std: float = 3
 
 def render_rot_devs(ate_result: ATEResult, max_std: float = 3.0) -> str:
     comb_rot_devs = np.rad2deg(ate_result.comb_rot_devs)
-    fig = go.Figure()
 
+    cbar_min = min(comb_rot_devs)
+    cbar_max = min(np.max(comb_rot_devs), cbar_min + np.std(comb_rot_devs) * max_std)
+
+    fig = go.Figure()
     fig.add_trace(
         go.Scatter(
             x=ate_result.trajectory.pos.x,
             y=ate_result.trajectory.pos.y,
             mode="lines+markers",
             marker=dict(
-                color=comb_rot_devs,  # Color based on comb_pos_error
-                colorscale="RdYlBu_r",  # You can choose a different color scale
+                color=comb_rot_devs,
+                colorscale="RdYlBu_r",
                 colorbar=dict(title="[°]"),
-                cmin=min(comb_rot_devs),
-                cmax=min(np.max(comb_rot_devs), np.std(comb_rot_devs) * max_std),
+                cmin=cbar_min,
+                cmax=cbar_max,
             ),
         )
     )

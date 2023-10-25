@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Optional
 
@@ -12,14 +13,29 @@ base_path = os.path.join(os.path.dirname(__file__))
 
 TEMPLATES_PATH = os.path.join(base_path, "templates")
 
+logger = logging.getLogger("root")
+
 
 def write_report(
     output_file: str,
     ate_result: ATEResult,
     rpe_result: Optional[RPEResult] = None,
-    max_std: float = 3.0,
+    max_std: float = 4.0,
     mm: bool = False,
-):
+) -> None:
+    """
+    Writes a report to the given output file.
+
+    Args:
+
+        output_file (str): The output file path
+        ate_result (ATEResult): The absolute trajectory error result
+        rpe_result (Optional[RPEResult]): The relative pose error result
+        max_std (float): The upper bound of scatter plot colorbars is set to max_std * std of the data
+        mm (bool): If True, the ATE result will be multiplied by 1000 and the unit will be changed to mm
+
+    """
+    logger.info("Writing report to %s", output_file)
     template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("report.html")
 
     if mm:

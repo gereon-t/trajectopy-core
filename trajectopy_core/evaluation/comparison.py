@@ -77,6 +77,7 @@ def compare_trajectories_relative(
     Returns:
         RelativeTrajectoryDeviations: Relative trajectory deviations.
     """
+    logger.info("Performing relative comparison")
     traj_ref = traj_ref.set_sorting(sorting=Sorting.CHRONO, inplace=False)
     traj_test = traj_test.set_sorting(sorting=Sorting.CHRONO, inplace=False)
 
