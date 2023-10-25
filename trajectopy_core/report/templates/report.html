@@ -117,7 +117,7 @@
         .summary {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
             width: 100%;
 
         }
@@ -185,7 +185,7 @@
         .summary-plots {
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
+            justify-content: center;
         }
 
         .histogram {
@@ -203,6 +203,10 @@
 
         .scatter-plot {
             width: 50%;
+        }
+
+        .plot {
+            width: 100%;
         }
     </style>
     <title>{{title}}</title>
@@ -258,12 +262,14 @@
                     {% endif %}
                 </div>
                 <div class="scatter-container">
-                    <div class="scatter-plot">
+                    <div class={{ scatter_class }}>
                         {{pos_scatter_plot}}
                     </div>
+                    {% if rot_available %}
                     <div class="scatter-plot">
                         {{rot_scatter_plot}}
                     </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="separator"></div>

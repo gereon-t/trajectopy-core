@@ -49,10 +49,14 @@ def write_report(
         rot_histogram_plot = histograms.render_rot_devs(ate_result)
         rot_line_plot = line_plots.render_rot_time_plot(ate_result)
         rot_scatter_plot = scatter_plots.render_rot_devs(ate_result, max_std=max_std)
+        rot_available = True
+        scatter_class = "scatter-plot"
     else:
         rot_histogram_plot = ""
         rot_line_plot = ""
         rot_scatter_plot = ""
+        rot_available = False
+        scatter_class = "plot"
 
     pos_histogram_plot = histograms.render_pos_devs(ate_result=ate_result, ate_pos_unit=ate_pos_unit)
     sum_line_plot = line_plots.render_sum_line_plot(ate_result, ate_pos_unit=ate_pos_unit)
@@ -84,6 +88,8 @@ def write_report(
         "rot_scatter_plot": rot_scatter_plot,
         "rpe_plot": rpe_plot,
         "rpe_available": rpe_available,
+        "rot_available": rot_available,
+        "scatter_class": scatter_class,
     }
 
     report_text = template.render(context)
