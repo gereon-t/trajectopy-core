@@ -173,7 +173,6 @@ def plot_position_dof(devs: ATEResult, plot_settings: PlotSettings = PlotSetting
 
 def plot_rot_dof(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> None:
     xyz_dev = [devs.trajectory.pos.xyz]
-    rpy_dev = devs.rpy_dev
     plt.subplot(2, 3, 4)
     scatter_plotter(
         xyz=xyz_dev,

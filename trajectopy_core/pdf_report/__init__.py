@@ -3,11 +3,9 @@ from typing import Optional
 
 import jinja2
 
-import trajectopy_core.pdf_report.components.histograms as histograms
-import trajectopy_core.pdf_report.components.line_plots as line_plots
-import trajectopy_core.pdf_report.components.scatter_plots as scatter_plots
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
+from trajectopy_core.pdf_report.components import histograms, line_plots, scatter_plots
 from trajectopy_core.pdf_report.util import number_to_string
 from trajectopy_core.util.path import TEMPLATES_PATH, resource_path
 
