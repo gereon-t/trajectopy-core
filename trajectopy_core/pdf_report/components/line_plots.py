@@ -7,7 +7,7 @@ from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
 
 
-def render_pos_time_plot(ate_result: ATEResult) -> str:
+def render_pos_time_plot(ate_result: ATEResult, ate_pos_unit: str) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
         go.Scatter(x=ate_result.trajectory.tstamps, y=ate_result.along, mode="lines+markers", name="along"),
@@ -30,9 +30,9 @@ def render_pos_time_plot(ate_result: ATEResult) -> str:
     )
 
     fig.update_xaxes(title_text="Time [s]", row=3, col=1)
-    fig.update_yaxes(title_text="[m]", row=1, col=1)
-    fig.update_yaxes(title_text="[m]", row=2, col=1)
-    fig.update_yaxes(title_text="[m]", row=3, col=1)
+    fig.update_yaxes(title_text=f"[{ate_pos_unit}]", row=1, col=1)
+    fig.update_yaxes(title_text=f"[{ate_pos_unit}]", row=2, col=1)
+    fig.update_yaxes(title_text=f"[{ate_pos_unit}]", row=3, col=1)
 
     return plot(fig, output_type="div")
 
@@ -69,7 +69,7 @@ def render_rot_time_plot(ate_result: ATEResult) -> str:
     return plot(fig, output_type="div")
 
 
-def render_sum_line_plot(ate_result: ATEResult) -> str:
+def render_sum_line_plot(ate_result: ATEResult, ate_pos_unit: str) -> str:
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
 
     fig.add_trace(
@@ -98,7 +98,7 @@ def render_sum_line_plot(ate_result: ATEResult) -> str:
     )
 
     fig.update_xaxes(title_text="Time [s]", row=2, col=1)
-    fig.update_yaxes(title_text="[m]", row=1, col=1)
+    fig.update_yaxes(title_text=f"[{ate_pos_unit}]", row=1, col=1)
     fig.update_yaxes(title_text="[°]", row=2, col=1)
 
     return plot(fig, output_type="div")

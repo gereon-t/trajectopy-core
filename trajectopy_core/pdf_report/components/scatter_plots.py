@@ -5,7 +5,7 @@ from plotly.offline import plot
 from trajectopy_core.evaluation.ate_result import ATEResult
 
 
-def render_pos_devs(ate_result: ATEResult, max_std: float = 3.0) -> str:
+def render_pos_devs(ate_result: ATEResult, ate_pos_unit: str, max_std: float = 3.0) -> str:
     comb_pos_devs = ate_result.comb_pos_devs
     fig = go.Figure()
 
@@ -17,7 +17,7 @@ def render_pos_devs(ate_result: ATEResult, max_std: float = 3.0) -> str:
             marker=dict(
                 color=comb_pos_devs,  # Color based on comb_pos_error
                 colorscale="RdYlBu_r",  # You can choose a different color scale
-                colorbar=dict(title="[m]"),
+                colorbar=dict(title=f"[{ate_pos_unit}]"),
                 cmin=min(comb_pos_devs),
                 cmax=min(np.max(comb_pos_devs), np.std(comb_pos_devs) * max_std),
             ),

@@ -11,10 +11,6 @@ from trajectopy_core.pdf_report.util import number_to_string
 base_path = os.path.join(os.path.dirname(__file__))
 
 TEMPLATES_PATH = os.path.join(base_path, "templates")
-STYLE = os.path.relpath(os.path.join(base_path, "assets", "style.css"))
-UNI_BONN = os.path.relpath(os.path.join(base_path, "assets", "uni-bonn.png"))
-IGG = os.path.relpath(os.path.join(base_path, "assets", "igg.png"))
-ICON = os.path.relpath(os.path.join(base_path, "assets", "icon.png"))
 
 
 def write_report(
@@ -27,26 +23,29 @@ def write_report(
     template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("report.html")
 
     if mm:
-        ate_result.abs_dev.pos_dev /= 1000.0
+        ate_result.abs_dev.pos_dev *= 1000.0
+        ate_result.abs_dev.directed_pos_dev *= 1000.0
         ate_pos_unit = "mm"
     else:
         ate_pos_unit = "m"
 
-    pos_histogram_plot = histograms.render_pos_devs(ate_result)
+    pos_histogram_plot = histograms.render_pos_devs(ate_result=ate_result, ate_pos_unit=ate_pos_unit)
     rot_histogram_plot = histograms.render_rot_devs(ate_result)
 
-    sum_line_plot = line_plots.render_sum_line_plot(ate_result)
+    sum_line_plot = line_plots.render_sum_line_plot(ate_result, ate_pos_unit=ate_pos_unit)
 
-    pos_line_plot = line_plots.render_pos_time_plot(ate_result)
+    pos_line_plot = line_plots.render_pos_time_plot(ate_result, ate_pos_unit=ate_pos_unit)
     rot_line_plot = line_plots.render_rot_time_plot(ate_result)
 
-    pos_scatter_plot = scatter_plots.render_pos_devs(ate_result, max_std=max_std)
+    pos_scatter_plot = scatter_plots.render_pos_devs(ate_result, max_std=max_std, ate_pos_unit=ate_pos_unit)
     rot_scatter_plot = scatter_plots.render_rot_devs(ate_result, max_std=max_std)
 
     if rpe_result is not None:
         rpe_plot = line_plots.render_rpe(rpe_result)
+        rpe_available = True
     else:
-        rpe_plot = None
+        rpe_plot = ""
+        rpe_available = False
 
     context = {
         "title": ate_result.name,
@@ -65,10 +64,7 @@ def write_report(
         "pos_scatter_plot": pos_scatter_plot,
         "rot_scatter_plot": rot_scatter_plot,
         "rpe_plot": rpe_plot,
-        "style_file": STYLE,
-        "uni_bonn_file": UNI_BONN,
-        "igg_file": IGG,
-        "icon_file": ICON,
+        "rpe_available": rpe_available,
     }
 
     report_text = template.render(context)

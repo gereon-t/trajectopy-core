@@ -5,7 +5,7 @@ from plotly.offline import plot
 from trajectopy_core.evaluation.ate_result import ATEResult
 
 
-def render_pos_devs(ate_result: ATEResult) -> str:
+def render_pos_devs(ate_result: ATEResult, ate_pos_unit: str) -> str:
     fig = go.Figure()
 
     fig.add_trace(go.Histogram(x=ate_result.along, name="along", opacity=0.7))
@@ -14,7 +14,7 @@ def render_pos_devs(ate_result: ATEResult) -> str:
 
     fig.update_layout(
         title="Position Deviations",
-        xaxis=dict(title="Absolute Position Error [m]"),
+        xaxis=dict(title=f"Absolute Position Error [{ate_pos_unit}]"),
         yaxis=dict(title="Count"),
         barmode="overlay",
         bargap=0.1,
