@@ -6,8 +6,8 @@ import jinja2
 
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.pdf_report.components import histograms, line_plots, scatter_plots
-from trajectopy_core.pdf_report.util import number_to_string
+from trajectopy_core.report.components import histograms, line_plots, scatter_plots
+from trajectopy_core.report.util import number_to_string
 
 base_path = os.path.join(os.path.dirname(__file__))
 

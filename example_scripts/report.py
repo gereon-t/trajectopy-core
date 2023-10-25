@@ -5,7 +5,7 @@ from rich.logging import RichHandler
 from trajectopy_core.alignment.actions import align_trajectories
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute, compare_trajectories_relative
 from trajectopy_core.evaluation.matching import match_trajectories
-from trajectopy_core.pdf_report import write_report
+from trajectopy_core.report import write_report
 from trajectopy_core.settings.alignment_settings import AlignmentSettings
 from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
 from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
