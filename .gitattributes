@@ -1,2 +1,2 @@
-./trajectopy_core/report/templates/*.html linguist-vendored=false
-./example_data/*.html linguist-vendored=false
+trajectopy_core/report/templates/*.html linguist-generated
+example_data/*.html linguist-generated
