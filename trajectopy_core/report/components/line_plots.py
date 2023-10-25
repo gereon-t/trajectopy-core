@@ -70,7 +70,10 @@ def render_rot_time_plot(ate_result: ATEResult) -> str:
 
 
 def render_sum_line_plot(ate_result: ATEResult, ate_pos_unit: str) -> str:
-    fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
+    if ate_result.has_orientation:
+        fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
+    else:
+        fig = make_subplots(rows=1, cols=1)
 
     fig.add_trace(
         go.Scatter(
@@ -82,24 +85,26 @@ def render_sum_line_plot(ate_result: ATEResult, ate_pos_unit: str) -> str:
         row=1,
         col=1,
     )
-    fig.add_trace(
-        go.Scatter(
-            x=ate_result.trajectory.tstamps,
-            y=np.rad2deg(ate_result.comb_rot_devs),
-            mode="lines+markers",
-            name="rotation",
-        ),
-        row=2,
-        col=1,
-    )
+
+    if ate_result.has_orientation:
+        fig.add_trace(
+            go.Scatter(
+                x=ate_result.trajectory.tstamps,
+                y=np.rad2deg(ate_result.comb_rot_devs),
+                mode="lines+markers",
+                name="rotation",
+            ),
+            row=2,
+            col=1,
+        )
+        fig.update_yaxes(title_text="[°]", row=2, col=1)
 
     fig.update_layout(
         title="Trajectory Deviations",
     )
 
-    fig.update_xaxes(title_text="Time [s]", row=2, col=1)
+    fig.update_xaxes(title_text="Time [s]", row=2 if ate_result.has_orientation else 1, col=1)
     fig.update_yaxes(title_text=f"[{ate_pos_unit}]", row=1, col=1)
-    fig.update_yaxes(title_text="[°]", row=2, col=1)
 
     return plot(fig, output_type="div")
 
@@ -122,25 +127,28 @@ def render_rpe(rpe_result: RPEResult) -> str:
         col=1,
     )
 
-    fig.add_trace(
-        go.Scatter(
-            x=rpe_result.mean_distances,
-            y=np.rad2deg(rpe_result.mean_rot_devs),
-            mode="lines+markers",
-            name="rotation",
-            error_y=dict(
-                type="data",
-                array=np.rad2deg(rpe_result.rot_stds),
-                visible=True,
+    if rpe_result.has_rot_dev:
+        fig.add_trace(
+            go.Scatter(
+                x=rpe_result.mean_distances,
+                y=np.rad2deg(rpe_result.mean_rot_devs),
+                mode="lines+markers",
+                name="rotation",
+                error_y=dict(
+                    type="data",
+                    array=np.rad2deg(rpe_result.rot_stds),
+                    visible=True,
+                ),
             ),
-        ),
-        row=2,
-        col=1,
-    )
+            row=2,
+            col=1,
+        )
+        fig.update_yaxes(title_text=f"[{rpe_result.rot_drift_unit}]", row=2, col=1)
 
     fig.update_layout(title="Relative Pose Error")
     fig.update_yaxes(title_text=f"[{rpe_result.pos_drift_unit}]", row=1, col=1)
-    fig.update_yaxes(title_text=f"[{rpe_result.rot_drift_unit}]", row=2, col=1)
-    fig.update_xaxes(title_text=f"Pose Distance [{rpe_result.pose_distance_unit}]", row=2, col=1)
+    fig.update_xaxes(
+        title_text=f"Pose Distance [{rpe_result.pose_distance_unit}]", row=2 if rpe_result.has_rot_dev else 1, col=1
+    )
 
     return plot(fig, output_type="div")

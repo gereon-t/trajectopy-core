@@ -45,16 +45,19 @@ def write_report(
     else:
         ate_pos_unit = "m"
 
+    if ate_result.has_orientation:
+        rot_histogram_plot = histograms.render_rot_devs(ate_result)
+        rot_line_plot = line_plots.render_rot_time_plot(ate_result)
+        rot_scatter_plot = scatter_plots.render_rot_devs(ate_result, max_std=max_std)
+    else:
+        rot_histogram_plot = ""
+        rot_line_plot = ""
+        rot_scatter_plot = ""
+
     pos_histogram_plot = histograms.render_pos_devs(ate_result=ate_result, ate_pos_unit=ate_pos_unit)
-    rot_histogram_plot = histograms.render_rot_devs(ate_result)
-
     sum_line_plot = line_plots.render_sum_line_plot(ate_result, ate_pos_unit=ate_pos_unit)
-
     pos_line_plot = line_plots.render_pos_time_plot(ate_result, ate_pos_unit=ate_pos_unit)
-    rot_line_plot = line_plots.render_rot_time_plot(ate_result)
-
     pos_scatter_plot = scatter_plots.render_pos_devs(ate_result, max_std=max_std, ate_pos_unit=ate_pos_unit)
-    rot_scatter_plot = scatter_plots.render_rot_devs(ate_result, max_std=max_std)
 
     if rpe_result is not None:
         rpe_plot = line_plots.render_rpe(rpe_result)
