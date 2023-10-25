@@ -77,6 +77,26 @@ class RPEResult:
         return self.compute_metric(key="pair_distance", func=np.mean)
 
     @property
+    def rpe_pos(self) -> float:
+        return float(np.mean(self.mean_pos_devs))
+
+    @property
+    def rpe_rot(self) -> float:
+        """Returns the average rotation drift in degrees per 100 meters."""
+        return np.rad2deg(np.mean(self.mean_rot_devs))
+
+    @property
+    def pos_stds(self) -> List[float]:
+        return self.compute_metric(key="pos_dev", func=np.std, factor=self.drift_factor)
+
+    @property
+    def rot_stds(self) -> List[float]:
+        if not self.has_rot_dev:
+            return []
+
+        return self.compute_metric(key="rot_dev", func=np.std, factor=self.drift_factor)
+
+    @property
     def mean_pos_devs(self) -> List[float]:
         return self.compute_metric(key="pos_dev", func=np.mean, factor=self.drift_factor)
 
@@ -177,7 +197,7 @@ class RPEResult:
         static_pos_dict = {
             "Maximum Position Drift": f"{np.max(self.max_pos_devs):.3f} {self.pos_drift_unit}",
             "Minimum Position Drift": f"{np.min(self.min_pos_devs):.3f} {self.pos_drift_unit}",
-            "Average Position Drift": f"{np.mean(self.mean_pos_devs):.3f} {self.pos_drift_unit}",
+            "Average Position Drift": f"{self.rpe_pos:.3f} {self.pos_drift_unit}",
             "Median Position Drift": f"{np.median(self.median_pos_devs):.3f} {self.pos_drift_unit}",
         }
 
@@ -192,7 +212,7 @@ class RPEResult:
         static_rot_dict = {
             "Maximum Rotation Drift": f"{np.rad2deg(np.max(self.max_rot_devs)):.3f} {self.rot_drift_unit}",
             "Minimum Rotation Drift": f"{np.rad2deg(np.min(self.min_rot_devs)):.3f} {self.rot_drift_unit}",
-            "Average Rotation Drift": f"{np.rad2deg(np.mean(self.mean_rot_devs)):.3f} {self.rot_drift_unit}",
+            "Average Rotation Drift": f"{np.rad2deg(self.rpe_rot):.3f} {self.rot_drift_unit}",
             "Median Rotation Drift": f"{np.rad2deg(np.median(self.median_rot_devs)):.3f} {self.rot_drift_unit}",
         }
         pos_dict.update(dynamic_rot_dict)

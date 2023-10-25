@@ -64,7 +64,7 @@ class ATEResult:
             "Number of deviations": str(len(self.abs_dev.pos_dev)),
             "Deviation directions derived using": "Rotations" if self.abs_dev.rotations_used else "Positions / Unkown",
             "Maximum position deviation [m]": f"{self.max_pos:.4f}",
-            "Mean position deviation [m]": f"{self.mean_pos:.4f}",
+            "Mean position deviation [m]": f"{self.ate_pos:.4f}",
             "Median position deviation [m]": f"{self.median_pos:.4f}",
             "Minimum position deviation [m]": f"{self.min_pos:.4f}",
             "RMS Position [m]": f"{self.rms_pos:.4f}",
@@ -84,9 +84,7 @@ class ATEResult:
             "Maximum rotation deviation [°]": f"{np.rad2deg(self.max_rot):.4f}"
             if self.abs_dev.rot_dev is not None
             else "-",
-            "Mean rotation deviation [°]": f"{np.rad2deg(self.mean_rot):.4f}"
-            if self.abs_dev.rot_dev is not None
-            else "-",
+            "Mean rotation deviation [°]": f"{self.ate_rot:.4f}" if self.abs_dev.rot_dev is not None else "-",
             "Median rotation deviation [°]": f"{np.rad2deg(self.median_rot):.4f}"
             if self.abs_dev.rot_dev is not None
             else "-",
@@ -108,7 +106,7 @@ class ATEResult:
         return {
             "Number of deviations": len(self.abs_dev.pos_dev),
             "Maximum position deviation [m]": self.max_pos,
-            "Mean position deviation [m]": self.mean_pos,
+            "Mean position deviation [m]": self.ate_pos,
             "Median position deviation [m]": self.median_pos,
             "Minimum position deviation [m]": self.min_pos,
             "RMS Position [m]": self.rms_pos,
@@ -126,7 +124,7 @@ class ATEResult:
             "RMS Horizontal Cross-Track [m]": self.rms_cross_h,
             "RMS Vertical Cross-Track [m]": self.rms_cross_v,
             "Maximum rotation deviation [deg]": np.rad2deg(self.max_rot) if self.abs_dev.rot_dev is not None else 0.0,
-            "Mean rotation deviation [deg]": np.rad2deg(self.mean_rot) if self.abs_dev.rot_dev is not None else 0.0,
+            "Mean rotation deviation [deg]": self.ate_rot if self.abs_dev.rot_dev is not None else 0.0,
             "Median rotation deviation [deg]": np.rad2deg(self.median_rot)
             if self.abs_dev.rot_dev is not None
             else 0.0,
@@ -232,6 +230,21 @@ class ATEResult:
         """Returns along track bias"""
         return np.mean(self.along)
 
+    @property
+    def roll(self) -> np.ndarray:
+        """Returns roll deviations"""
+        return self.rpy_dev[:, 0]
+
+    @property
+    def pitch(self) -> np.ndarray:
+        """Returns pitch deviations"""
+        return self.rpy_dev[:, 1]
+
+    @property
+    def yaw(self) -> np.ndarray:
+        """Returns yaw deviations"""
+        return self.rpy_dev[:, 2]
+
     @cached_property
     def bias_rpy(self) -> np.ndarray:
         """Returns roll, pitch and yaw bias"""
@@ -315,7 +328,7 @@ class ATEResult:
         return datahandling.rms(self.comb_pos_devs)
 
     @property
-    def mean_pos(self) -> float:
+    def ate_pos(self) -> float:
         """
         Returns mean of 3d position deviations
         """
@@ -364,11 +377,11 @@ class ATEResult:
         return float(np.std(self.comb_rot_devs))
 
     @property
-    def mean_rot(self) -> float:
+    def ate_rot(self) -> float:
         """
-        Returns mean of rotations
+        Returns mean of rotation deviations in degree
         """
-        return float(np.mean(self.comb_rot_devs))
+        return np.rad2deg(float(np.mean(self.comb_rot_devs)))
 
     @property
     def median_rot(self) -> float:
@@ -438,21 +451,21 @@ class ATEResult:
         """
         Returns RMS of roll deviations
         """
-        return datahandling.rms(self.rpy_dev[:, 0])
+        return datahandling.rms(self.roll)
 
     @property
     def rms_pitch(self) -> float:
         """
         Returns RMS of pitch deviations
         """
-        return datahandling.rms(self.rpy_dev[:, 1])
+        return datahandling.rms(self.pitch)
 
     @property
     def rms_yaw(self) -> float:
         """
         Returns RMS of yaw deviations
         """
-        return datahandling.rms(self.rpy_dev[:, 2])
+        return datahandling.rms(self.yaw)
 
     @classmethod
     def from_file(cls, filename: str):

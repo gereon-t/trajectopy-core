@@ -55,12 +55,11 @@ def plot_combined_devs(devs: ATEResult, plot_settings: PlotSettings = PlotSettin
 
 
 def plot_raw_rotation_devs(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Figure:
-    rpy_dev = devs.rpy_dev
     vert_sp_data_rot = [
         [
-            np.rad2deg(rpy_dev[:, 0]),
-            np.rad2deg(rpy_dev[:, 1]),
-            np.rad2deg(rpy_dev[:, 2]),
+            np.rad2deg(devs.roll),
+            np.rad2deg(devs.pitch),
+            np.rad2deg(devs.yaw),
         ]
     ]
     ylabels = ["roll [°]", "pitch [°]", "yaw [°]"]
@@ -178,7 +177,7 @@ def plot_rot_dof(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) 
     plt.subplot(2, 3, 4)
     scatter_plotter(
         xyz=xyz_dev,
-        data=[np.rad2deg(rpy_dev[:, 0])],
+        data=[np.rad2deg(devs.roll)],
         c_labels=["[°]"],
         titles=["roll"],
         figure=False,
@@ -188,7 +187,7 @@ def plot_rot_dof(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) 
     plt.subplot(2, 3, 5)
     scatter_plotter(
         xyz=xyz_dev,
-        data=[np.rad2deg(rpy_dev[:, 1])],
+        data=[np.rad2deg(devs.pitch)],
         c_labels=["[°]"],
         titles=["pitch"],
         figure=False,
@@ -198,7 +197,7 @@ def plot_rot_dof(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) 
     plt.subplot(2, 3, 6)
     scatter_plotter(
         xyz=xyz_dev,
-        data=[np.rad2deg(rpy_dev[:, 2])],
+        data=[np.rad2deg(devs.yaw)],
         c_labels=["[°]"],
         titles=["yaw"],
         figure=False,
@@ -267,9 +266,9 @@ def plot_compact_hist(devs: ATEResult, plot_settings: PlotSettings = PlotSetting
 
 
 def plot_rotation_hist(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> None:
-    roll = np.rad2deg(devs.rpy_dev[:, 0])
-    pitch = np.rad2deg(devs.rpy_dev[:, 1])
-    yaw = np.rad2deg(devs.rpy_dev[:, 2])
+    roll = np.rad2deg(devs.roll)
+    pitch = np.rad2deg(devs.pitch)
+    yaw = np.rad2deg(devs.yaw)
 
     plt.xlabel("[°]")
     plt.ylabel("counts")
@@ -378,7 +377,7 @@ def plot_bars(
             data = [
                 deviation.min_pos * plot_settings.unit_multiplier,
                 deviation.max_pos * plot_settings.unit_multiplier,
-                deviation.mean_pos * plot_settings.unit_multiplier,
+                deviation.ate_pos * plot_settings.unit_multiplier,
                 deviation.median_pos * plot_settings.unit_multiplier,
                 deviation.rms_pos * plot_settings.unit_multiplier,
                 deviation.std_pos * plot_settings.unit_multiplier,
@@ -387,7 +386,7 @@ def plot_bars(
             data = [
                 np.rad2deg(deviation.min_rot),
                 np.rad2deg(deviation.max_rot),
-                np.rad2deg(deviation.mean_rot),
+                deviation.ate_rot,
                 np.rad2deg(deviation.median_rot),
                 np.rad2deg(deviation.rms_rot),
                 np.rad2deg(deviation.std_rot),

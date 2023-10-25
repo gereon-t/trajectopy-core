@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ style_file }}">
+    <title>{{title}}</title>
+</head>
+
+<body>
+
+    <header class="header">
+        <a href="https://github.com/gereon-t/trajectopy" class="left-section">
+            <img class="trajectopy-logo" src="{{ icon_file }}">
+            <div class="trajectopy-text">Trajectopy</div>
+        </a>
+        <div class="middle-section"></div>
+        <div class="right-section">
+            <a href="https://www.igg.uni-bonn.de/de">
+                <img class="igg-logo" src="{{ igg_file }}">
+            </a>
+            <a href="https://www.uni-bonn.de/">
+                <img class="uni-bonn-logo" src="{{ uni_bonn_file }}">
+            </a>
+        </div>
+    </header>
+    <main>
+        <div class="title">{{ title }}</div>
+        <div class="report-container">
+            <div class="summary">
+                <div class="metrics-box">
+                    <div class="metrics-table">
+                        <div class="metrics-row">
+                            <div class="metric-label">ATE Position [{{ ate_pos_unit }}]:</div>
+                            <div class="metric-value">{{ ate_pos }}</div>
+                        </div>
+                        <div class="metrics-row">
+                            <div class="metric-label">ATE Rotation [°]:</div>
+                            <div class="metric-value">{{ ate_rot }}</div>
+                        </div>
+                    </div>
+                    <div class="vertical-separator"></div>
+                    <div class="metrics-table">
+                        <div class="metrics-row">
+                            <div class="metric-label">RPE Position [{{ rpe_pos_drift_unit }}]:</div>
+                            <div class="metric-value">{{ rpe_pos }}</div>
+                        </div>
+                        <div class="metrics-row">
+                            <div class="metric-label">RPE Rotation [{{ rpe_rot_drift_unit }}]:</div>
+                            <div class="metric-value">{{ rpe_rot }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="scatter-container">
+                    <div class="scatter-plot">
+                        {{pos_scatter_plot}}
+                    </div>
+                    <div class="scatter-plot">
+                        {{rot_scatter_plot}}
+                    </div>
+                </div>
+            </div>
+            <div class="separator"></div>
+            <div class="plot">
+                {{ rpe_plot }}
+            </div>
+            <div class="separator"></div>
+            <div class="plot">
+                {{pos_histogram_plot}}
+            </div>
+            <div class="plot">
+                {{rot_histogram_plot}}
+            </div>
+            <div class="separator"></div>
+            <div class="plot">
+                {{sum_line_plot}}
+            </div>
+            <div class="separator"></div>
+            <div class="plot">
+                {{pos_line_plot}}
+            </div>
+            <div class="plot">
+                {{rot_line_plot}}
+            </div>
+        </div>
+    </main>
+
+
+    <div class="footer" id="footer">
+        Trajectopy by&nbsp;<a href="https://github.com/gereon-t">Gereon Tombrink</a>.
+    </div>
+</body>
+
+</html>
