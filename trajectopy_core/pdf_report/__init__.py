@@ -7,12 +7,14 @@ from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.pdf_report.components import histograms, line_plots, scatter_plots
 from trajectopy_core.pdf_report.util import number_to_string
-from trajectopy_core.util.path import TEMPLATES_PATH, resource_path
 
-STYLE = os.path.relpath(resource_path("trajectopy_core/pdf_report/assets/style.css"))
-UNI_BONN = os.path.relpath(resource_path("trajectopy_core/pdf_report/assets/uni-bonn.png"))
-IGG = os.path.relpath(resource_path("trajectopy_core/pdf_report/assets/igg.png"))
-ICON = os.path.relpath(resource_path("trajectopy_core/pdf_report/assets/icon.png"))
+base_path = os.path.join(os.path.dirname(__file__))
+
+TEMPLATES_PATH = os.path.join(base_path, "templates")
+STYLE = os.path.relpath(os.path.join(base_path, "assets", "style.css"))
+UNI_BONN = os.path.relpath(os.path.join(base_path, "assets", "uni-bonn.png"))
+IGG = os.path.relpath(os.path.join(base_path, "assets", "igg.png"))
+ICON = os.path.relpath(os.path.join(base_path, "assets", "icon.png"))
 
 
 def write_report(
