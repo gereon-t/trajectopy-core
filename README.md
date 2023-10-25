@@ -28,6 +28,7 @@ Trajectopy offers a range of features, including:
 - Comparison Metrics: Absolute and relative comparison metrics that can be computed using various pose-matching methods
 - Data Import/Export: Support for importing and exporting data, ensuring compatibility with your existing workflows.
 - Customizable Visualization: A flexible visualization that allows users to customize plot styles, tailoring the output to their specific needs.
+- HTML report generation ([Demo](https://htmlpreview.github.io/?https://github.com/gereon-t/trajectopy-core/blob/feature/example_data/report.html))
 
 ## Table of Contents
 - [Installation](#installation)
