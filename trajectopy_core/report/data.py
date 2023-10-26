@@ -58,7 +58,8 @@ class ReportData:
         self.x = shrink_data(ate_result.trajectory.pos.x, max_data_size)
         self.y = shrink_data(ate_result.trajectory.pos.y, max_data_size)
 
-        self.tstamps = shrink_data(ate_result.trajectory.tstamps, max_data_size)
+        self.function_of = shrink_data(ate_result.trajectory.function_of, max_data_size)
+        self.function_of_unit = ate_result.trajectory.function_of_unit
 
         self.comb_pos_devs = shrink_data(ate_result.comb_pos_devs, max_data_size)
         self.along = shrink_data(ate_result.along, max_data_size)

@@ -302,6 +302,11 @@ class Trajectory:
         raise ValueError(f"Unknown Sorting {self._sorting}")
 
     @property
+    def function_of_unit(self) -> str:
+        """Returns the unit of the current parameterization"""
+        return "Length [m]" if self._sorting == Sorting.SPATIAL else "Time [s]"
+
+    @property
     def all(self) -> np.ndarray:
         """
         Return position and orientation as an nx7 matrix

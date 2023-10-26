@@ -628,6 +628,7 @@ def shrink_data(data: np.ndarray, max_size: int = 1000) -> np.ndarray:
     if len(data) <= max_size:
         return data
 
+    data = data.astype(float)
     array_size = (-len(data) % max_size) + len(data)
     padded_data = np.pad(data, (0, array_size - len(data)))
     padded_data[padded_data == 0] = np.nan

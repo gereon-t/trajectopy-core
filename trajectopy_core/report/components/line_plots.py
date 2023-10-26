@@ -9,17 +9,17 @@ from trajectopy_core.report.data import ReportData
 def render_pos_time_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
-        go.Scatter(x=report_data.tstamps, y=report_data.along, mode="lines+markers", name="along"),
+        go.Scatter(x=report_data.function_of, y=report_data.along, mode="lines+markers", name="along"),
         row=1,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.tstamps, y=report_data.cross_h, mode="lines+markers", name="cross-h"),
+        go.Scatter(x=report_data.function_of, y=report_data.cross_h, mode="lines+markers", name="cross-h"),
         row=2,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.tstamps, y=report_data.cross_v, mode="lines+markers", name="cross-v"),
+        go.Scatter(x=report_data.function_of, y=report_data.cross_v, mode="lines+markers", name="cross-v"),
         row=3,
         col=1,
     )
@@ -28,7 +28,7 @@ def render_pos_time_plot(report_data: ReportData) -> str:
         title="Position Deviations per Direction",
     )
 
-    fig.update_xaxes(title_text="Time [s]", row=3, col=1)
+    fig.update_xaxes(title_text=report_data.function_of_unit, row=3, col=1)
     fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=1, col=1)
     fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=2, col=1)
     fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=3, col=1)
@@ -40,17 +40,17 @@ def render_rot_time_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
 
     fig.add_trace(
-        go.Scatter(x=report_data.tstamps, y=np.rad2deg(report_data.roll), mode="lines+markers", name="roll"),
+        go.Scatter(x=report_data.function_of, y=np.rad2deg(report_data.roll), mode="lines+markers", name="roll"),
         row=1,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.tstamps, y=np.rad2deg(report_data.pitch), mode="lines+markers", name="pitch"),
+        go.Scatter(x=report_data.function_of, y=np.rad2deg(report_data.pitch), mode="lines+markers", name="pitch"),
         row=2,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.tstamps, y=np.rad2deg(report_data.yaw), mode="lines+markers", name="yaw"),
+        go.Scatter(x=report_data.function_of, y=np.rad2deg(report_data.yaw), mode="lines+markers", name="yaw"),
         row=3,
         col=1,
     )
@@ -58,7 +58,7 @@ def render_rot_time_plot(report_data: ReportData) -> str:
     fig.update_layout(
         title="Rotation Deviations per Axis",
     )
-    fig.update_xaxes(title_text="Time [s]", row=3, col=1)
+    fig.update_xaxes(title_text=report_data.function_of_unit, row=3, col=1)
     fig.update_yaxes(title_text="[°]", row=1, col=1)
     fig.update_yaxes(title_text="[°]", row=2, col=1)
     fig.update_yaxes(title_text="[°]", row=3, col=1)
@@ -74,7 +74,7 @@ def render_sum_line_plot(report_data: ReportData) -> str:
 
     fig.add_trace(
         go.Scatter(
-            x=report_data.tstamps,
+            x=report_data.function_of,
             y=report_data.comb_pos_devs,
             mode="lines+markers",
             name="position",
@@ -86,7 +86,7 @@ def render_sum_line_plot(report_data: ReportData) -> str:
     if report_data.has_ate_orientation:
         fig.add_trace(
             go.Scatter(
-                x=report_data.tstamps,
+                x=report_data.function_of,
                 y=np.rad2deg(report_data.comb_rot_devs),
                 mode="lines+markers",
                 name="rotation",
@@ -100,7 +100,7 @@ def render_sum_line_plot(report_data: ReportData) -> str:
         title="Trajectory Deviations",
     )
 
-    fig.update_xaxes(title_text="Time [s]", row=2 if report_data.has_ate_orientation else 1, col=1)
+    fig.update_xaxes(title_text=report_data.function_of_unit, row=2 if report_data.has_ate_orientation else 1, col=1)
     fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=1, col=1)
 
     return plot(fig, output_type="div")
