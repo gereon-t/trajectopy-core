@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 
 import jinja2
 
@@ -29,7 +29,7 @@ def convert_images_to_base64() -> Tuple[str, str, str]:
     return igg_base64, uni_bonn_base64, icon_base64
 
 
-def render_side_by_side_plots(report_data: ReportData) -> list[str]:
+def render_side_by_side_plots(report_data: ReportData) -> List[str]:
     side_by_side_plots = [scatter_plots.render_pos_devs(report_data)]
 
     if not report_data.has_ate_orientation:
@@ -40,7 +40,7 @@ def render_side_by_side_plots(report_data: ReportData) -> list[str]:
     return side_by_side_plots
 
 
-def render_one_line_plots(report_data: ReportData) -> list[str]:
+def render_one_line_plots(report_data: ReportData) -> List[str]:
     one_line_plots = []
 
     if report_data.has_rpe:
