@@ -1,13 +1,14 @@
 import logging
 import os
-from typing import Optional
+from typing import Optional, Tuple
 
 import jinja2
 
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.report.components import histograms, line_plots, scatter_plots
-from trajectopy_core.report.util import number_to_string
+from trajectopy_core.report.data import ReportData
+from trajectopy_core.util.datahandling import image_to_base64, number_to_string
 
 base_path = os.path.join(os.path.dirname(__file__))
 
@@ -16,10 +17,56 @@ TEMPLATES_PATH = os.path.join(base_path, "templates")
 logger = logging.getLogger("root")
 
 
+def convert_images_to_base64() -> Tuple[str, str, str]:
+    igg_path = os.path.join(os.path.join(base_path), "assets", "igg.png")
+    uni_bonn_path = os.path.join(os.path.join(base_path), "assets", "uni_bonn.png")
+    icon_path = os.path.join(os.path.join(base_path), "assets", "icon.png")
+
+    igg_base64 = image_to_base64(igg_path)
+    uni_bonn_base64 = image_to_base64(uni_bonn_path)
+    icon_base64 = image_to_base64(icon_path)
+
+    return igg_base64, uni_bonn_base64, icon_base64
+
+
+def render_side_by_side_plots(report_data: ReportData) -> list[str]:
+    side_by_side_plots = [scatter_plots.render_pos_devs(report_data)]
+
+    if not report_data.has_ate_orientation:
+        return side_by_side_plots
+
+    side_by_side_plots.append(scatter_plots.render_rot_devs(report_data))
+
+    return side_by_side_plots
+
+
+def render_one_line_plots(report_data: ReportData) -> list[str]:
+    one_line_plots = []
+
+    if report_data.has_rpe:
+        one_line_plots.append(line_plots.render_rpe(report_data))
+
+    one_line_plots.extend(
+        (
+            histograms.render_pos_devs(report_data),
+            line_plots.render_sum_line_plot(report_data),
+            line_plots.render_pos_time_plot(report_data),
+        )
+    )
+    if not report_data.has_ate_orientation:
+        return one_line_plots
+
+    one_line_plots.insert(2, histograms.render_rot_devs(report_data))
+    one_line_plots.append(line_plots.render_rot_time_plot(report_data))
+
+    return one_line_plots
+
+
 def write_report(
     output_file: str,
     ate_result: ATEResult,
     rpe_result: Optional[RPEResult] = None,
+    max_data_size: int = 2000,
     max_std: float = 4.0,
     mm: bool = False,
 ) -> None:
@@ -37,38 +84,18 @@ def write_report(
     """
     logger.info("Writing report to %s", output_file)
     template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("report.html")
+    igg, uni_bonn, icon = convert_images_to_base64()
 
-    if mm:
-        ate_result.abs_dev.pos_dev *= 1000.0
-        ate_result.abs_dev.directed_pos_dev *= 1000.0
-        ate_pos_unit = "mm"
-    else:
-        ate_pos_unit = "m"
+    report_data = ReportData(
+        ate_result=ate_result, rpe_result=rpe_result, max_data_size=max_data_size, mm=mm, max_std=max_std
+    )
 
-    if ate_result.has_orientation:
-        rot_histogram_plot = histograms.render_rot_devs(ate_result)
-        rot_line_plot = line_plots.render_rot_time_plot(ate_result)
-        rot_scatter_plot = scatter_plots.render_rot_devs(ate_result, max_std=max_std)
-        rot_available = True
-        scatter_class = "scatter-plot"
-    else:
-        rot_histogram_plot = ""
-        rot_line_plot = ""
-        rot_scatter_plot = ""
-        rot_available = False
-        scatter_class = "plot"
+    side_by_side_plots = render_side_by_side_plots(report_data)
+    one_line_plots = render_one_line_plots(report_data)
 
-    pos_histogram_plot = histograms.render_pos_devs(ate_result=ate_result, ate_pos_unit=ate_pos_unit)
-    sum_line_plot = line_plots.render_sum_line_plot(ate_result, ate_pos_unit=ate_pos_unit)
-    pos_line_plot = line_plots.render_pos_time_plot(ate_result, ate_pos_unit=ate_pos_unit)
-    pos_scatter_plot = scatter_plots.render_pos_devs(ate_result, max_std=max_std, ate_pos_unit=ate_pos_unit)
-
-    if rpe_result is not None:
-        rpe_plot = line_plots.render_rpe(rpe_result)
-        rpe_available = True
-    else:
-        rpe_plot = ""
-        rpe_available = False
+    if len(side_by_side_plots) == 1:
+        one_line_plots = side_by_side_plots + one_line_plots
+        side_by_side_plots = []
 
     context = {
         "title": ate_result.name,
@@ -78,18 +105,13 @@ def write_report(
         "rpe_rot": number_to_string(rpe_result.rpe_rot) if rpe_result is not None else "-",
         "rpe_pos_drift_unit": rpe_result.pos_drift_unit if rpe_result is not None else "-",
         "rpe_rot_drift_unit": rpe_result.rot_drift_unit if rpe_result is not None else "-",
-        "ate_pos_unit": ate_pos_unit,
-        "pos_histogram_plot": pos_histogram_plot,
-        "rot_histogram_plot": rot_histogram_plot,
-        "sum_line_plot": sum_line_plot,
-        "pos_line_plot": pos_line_plot,
-        "rot_line_plot": rot_line_plot,
-        "pos_scatter_plot": pos_scatter_plot,
-        "rot_scatter_plot": rot_scatter_plot,
-        "rpe_plot": rpe_plot,
-        "rpe_available": rpe_available,
-        "rot_available": rot_available,
-        "scatter_class": scatter_class,
+        "ate_pos_unit": report_data.ate_unit,
+        "rpe_available": rpe_result is not None,
+        "side_by_side_plots": side_by_side_plots,
+        "one_line_plots": one_line_plots,
+        "icon": icon,
+        "igg": igg,
+        "uni_bonn": uni_bonn,
     }
 
     report_text = template.render(context)

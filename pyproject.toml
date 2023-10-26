@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "trajectopy-core"
-version = "1.5.4"
+version = "1.5.5"
 description = "Trajectory Evaluation in Python"
 authors = ["Gereon Tombrink <tombrink@igg.uni-bonn.de>"]
 maintainers = ["Gereon Tombrink <tombrink@igg.uni-bonn.de>"]

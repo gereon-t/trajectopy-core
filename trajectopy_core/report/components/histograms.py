@@ -2,19 +2,19 @@ import numpy as np
 import plotly.graph_objects as go
 from plotly.offline import plot
 
-from trajectopy_core.evaluation.ate_result import ATEResult
+from trajectopy_core.report.data import ReportData
 
 
-def render_pos_devs(ate_result: ATEResult, ate_pos_unit: str) -> str:
+def render_pos_devs(report_data: ReportData) -> str:
     fig = go.Figure()
 
-    fig.add_trace(go.Histogram(x=ate_result.along, name="along", opacity=0.7))
-    fig.add_trace(go.Histogram(x=ate_result.cross_h, name="cross-h", opacity=0.7))
-    fig.add_trace(go.Histogram(x=ate_result.cross_v, name="cross-v", opacity=0.7))
+    fig.add_trace(go.Histogram(x=report_data.along, name="along", opacity=0.7))
+    fig.add_trace(go.Histogram(x=report_data.cross_h, name="cross-h", opacity=0.7))
+    fig.add_trace(go.Histogram(x=report_data.cross_v, name="cross-v", opacity=0.7))
 
     fig.update_layout(
         title="Position Deviations",
-        xaxis=dict(title=f"Absolute Position Error [{ate_pos_unit}]"),
+        xaxis=dict(title=f"Absolute Position Error [{report_data.ate_unit}]"),
         yaxis=dict(title="Count"),
         barmode="overlay",
         bargap=0.1,
@@ -23,12 +23,12 @@ def render_pos_devs(ate_result: ATEResult, ate_pos_unit: str) -> str:
     return plot(fig, output_type="div")
 
 
-def render_rot_devs(ate_result: ATEResult) -> str:
+def render_rot_devs(report_data: ReportData) -> str:
     fig = go.Figure()
 
-    fig.add_trace(go.Histogram(x=np.rad2deg(ate_result.roll), name="roll", opacity=0.7))
-    fig.add_trace(go.Histogram(x=np.rad2deg(ate_result.pitch), name="pitch", opacity=0.7))
-    fig.add_trace(go.Histogram(x=np.rad2deg(ate_result.yaw), name="yaw", opacity=0.7))
+    fig.add_trace(go.Histogram(x=np.rad2deg(report_data.roll), name="roll", opacity=0.7))
+    fig.add_trace(go.Histogram(x=np.rad2deg(report_data.pitch), name="pitch", opacity=0.7))
+    fig.add_trace(go.Histogram(x=np.rad2deg(report_data.yaw), name="yaw", opacity=0.7))
 
     fig.update_layout(
         title="Rotation Deviations",

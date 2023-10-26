@@ -3,24 +3,23 @@ import plotly.graph_objects as go
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from trajectopy_core.evaluation.ate_result import ATEResult
-from trajectopy_core.evaluation.rpe_result import RPEResult
+from trajectopy_core.report.data import ReportData
 
 
-def render_pos_time_plot(ate_result: ATEResult, ate_pos_unit: str) -> str:
+def render_pos_time_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
-        go.Scatter(x=ate_result.trajectory.tstamps, y=ate_result.along, mode="lines+markers", name="along"),
+        go.Scatter(x=report_data.tstamps, y=report_data.along, mode="lines+markers", name="along"),
         row=1,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=ate_result.trajectory.tstamps, y=ate_result.cross_h, mode="lines+markers", name="cross-h"),
+        go.Scatter(x=report_data.tstamps, y=report_data.cross_h, mode="lines+markers", name="cross-h"),
         row=2,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=ate_result.trajectory.tstamps, y=ate_result.cross_v, mode="lines+markers", name="cross-v"),
+        go.Scatter(x=report_data.tstamps, y=report_data.cross_v, mode="lines+markers", name="cross-v"),
         row=3,
         col=1,
     )
@@ -30,30 +29,28 @@ def render_pos_time_plot(ate_result: ATEResult, ate_pos_unit: str) -> str:
     )
 
     fig.update_xaxes(title_text="Time [s]", row=3, col=1)
-    fig.update_yaxes(title_text=f"[{ate_pos_unit}]", row=1, col=1)
-    fig.update_yaxes(title_text=f"[{ate_pos_unit}]", row=2, col=1)
-    fig.update_yaxes(title_text=f"[{ate_pos_unit}]", row=3, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=1, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=2, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=3, col=1)
 
     return plot(fig, output_type="div")
 
 
-def render_rot_time_plot(ate_result: ATEResult) -> str:
+def render_rot_time_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
 
     fig.add_trace(
-        go.Scatter(x=ate_result.trajectory.tstamps, y=np.rad2deg(ate_result.roll), mode="lines+markers", name="roll"),
+        go.Scatter(x=report_data.tstamps, y=np.rad2deg(report_data.roll), mode="lines+markers", name="roll"),
         row=1,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(
-            x=ate_result.trajectory.tstamps, y=np.rad2deg(ate_result.pitch), mode="lines+markers", name="pitch"
-        ),
+        go.Scatter(x=report_data.tstamps, y=np.rad2deg(report_data.pitch), mode="lines+markers", name="pitch"),
         row=2,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=ate_result.trajectory.tstamps, y=np.rad2deg(ate_result.yaw), mode="lines+markers", name="yaw"),
+        go.Scatter(x=report_data.tstamps, y=np.rad2deg(report_data.yaw), mode="lines+markers", name="yaw"),
         row=3,
         col=1,
     )
@@ -69,16 +66,16 @@ def render_rot_time_plot(ate_result: ATEResult) -> str:
     return plot(fig, output_type="div")
 
 
-def render_sum_line_plot(ate_result: ATEResult, ate_pos_unit: str) -> str:
-    if ate_result.has_orientation:
+def render_sum_line_plot(report_data: ReportData) -> str:
+    if report_data.has_ate_orientation:
         fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
     else:
         fig = make_subplots(rows=1, cols=1)
 
     fig.add_trace(
         go.Scatter(
-            x=ate_result.trajectory.tstamps,
-            y=ate_result.comb_pos_devs,
+            x=report_data.tstamps,
+            y=report_data.comb_pos_devs,
             mode="lines+markers",
             name="position",
         ),
@@ -86,11 +83,11 @@ def render_sum_line_plot(ate_result: ATEResult, ate_pos_unit: str) -> str:
         col=1,
     )
 
-    if ate_result.has_orientation:
+    if report_data.has_ate_orientation:
         fig.add_trace(
             go.Scatter(
-                x=ate_result.trajectory.tstamps,
-                y=np.rad2deg(ate_result.comb_rot_devs),
+                x=report_data.tstamps,
+                y=np.rad2deg(report_data.comb_rot_devs),
                 mode="lines+markers",
                 name="rotation",
             ),
@@ -103,13 +100,17 @@ def render_sum_line_plot(ate_result: ATEResult, ate_pos_unit: str) -> str:
         title="Trajectory Deviations",
     )
 
-    fig.update_xaxes(title_text="Time [s]", row=2 if ate_result.has_orientation else 1, col=1)
-    fig.update_yaxes(title_text=f"[{ate_pos_unit}]", row=1, col=1)
+    fig.update_xaxes(title_text="Time [s]", row=2 if report_data.has_ate_orientation else 1, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=1, col=1)
 
     return plot(fig, output_type="div")
 
 
-def render_rpe(rpe_result: RPEResult) -> str:
+def render_rpe(report_data: ReportData) -> str:
+    rpe_result = report_data.rpe_result
+    if rpe_result is None:
+        return ""
+
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
     fig.add_trace(
         go.Scatter(
