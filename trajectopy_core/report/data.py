@@ -1,5 +1,7 @@
 from typing import Optional
 
+import numpy as np
+
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.util.datahandling import shrink_data
@@ -69,7 +71,7 @@ class ReportData:
         if not ate_result.has_orientation:
             return
 
-        self.comb_rot_devs = shrink_data(ate_result.comb_rot_devs, max_data_size)
-        self.roll = shrink_data(ate_result.roll, max_data_size)
-        self.pitch = shrink_data(ate_result.pitch, max_data_size)
-        self.yaw = shrink_data(ate_result.yaw, max_data_size)
+        self.comb_rot_devs = np.rad2deg(shrink_data(ate_result.comb_rot_devs, max_data_size))
+        self.roll = np.rad2deg(shrink_data(ate_result.roll, max_data_size))
+        self.pitch = np.rad2deg(shrink_data(ate_result.pitch, max_data_size))
+        self.yaw = np.rad2deg(shrink_data(ate_result.yaw, max_data_size))
