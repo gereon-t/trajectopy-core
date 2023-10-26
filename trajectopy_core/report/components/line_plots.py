@@ -26,6 +26,7 @@ def render_pos_time_plot(report_data: ReportData) -> str:
 
     fig.update_layout(
         title="Position Deviations per Direction",
+        height=750,
     )
 
     fig.update_xaxes(title_text=report_data.function_of_unit, row=3, col=1)
@@ -57,6 +58,7 @@ def render_rot_time_plot(report_data: ReportData) -> str:
 
     fig.update_layout(
         title="Rotation Deviations per Axis",
+        height=750,
     )
     fig.update_xaxes(title_text=report_data.function_of_unit, row=3, col=1)
     fig.update_yaxes(title_text="[°]", row=1, col=1)
@@ -98,6 +100,7 @@ def render_sum_line_plot(report_data: ReportData) -> str:
 
     fig.update_layout(
         title="Trajectory Deviations",
+        height=540 if report_data.has_ate_orientation else 400,
     )
 
     fig.update_xaxes(title_text=report_data.function_of_unit, row=2 if report_data.has_ate_orientation else 1, col=1)
@@ -146,7 +149,7 @@ def render_rpe(report_data: ReportData) -> str:
         )
         fig.update_yaxes(title_text=f"[{rpe_result.rot_drift_unit}]", row=2, col=1)
 
-    fig.update_layout(title="Relative Pose Error")
+    fig.update_layout(title="Relative Pose Error", height=540 if rpe_result.has_rot_dev else 400)
     fig.update_yaxes(title_text=f"[{rpe_result.pos_drift_unit}]", row=1, col=1)
     fig.update_xaxes(
         title_text=f"Pose Distance [{rpe_result.pose_distance_unit}]", row=2 if rpe_result.has_rot_dev else 1, col=1
