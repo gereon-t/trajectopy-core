@@ -5,7 +5,7 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 import logging
-from typing import Tuple, Union
+from typing import Dict, List, Tuple, Union
 
 import numpy as np
 
@@ -130,9 +130,9 @@ def pairwise_comparison(
         settings.pair_distance_step,
     )
 
-    pos_dev: dict[float, list[float]] = {}
-    rot_dev: dict[float, list[float]] = {}
-    pair_distance: dict[float, list[float]] = {}
+    pos_dev: Dict[float, List[float]] = {}
+    rot_dev: Dict[float, List[float]] = {}
+    pair_distance: Dict[float, List[float]] = {}
 
     se3_ref = traj_ref.se3
     se3_test = traj_test.se3
@@ -278,7 +278,7 @@ def derive_dev_directions_with_rot(*, xyz_ref: np.ndarray, xyz_test: np.ndarray,
     return devs
 
 
-def _along_track_dev(*, p: np.ndarray, line_pts: list, is_last: bool) -> float:
+def _along_track_dev(*, p: np.ndarray, line_pts: List, is_last: bool) -> float:
     """
     Helper function that computes the along track deviation
     """
@@ -296,7 +296,7 @@ def _along_track_dev(*, p: np.ndarray, line_pts: list, is_last: bool) -> float:
     )
 
 
-def _cross_track_dev(*, p: np.ndarray, line_pts: list, z_slope_dist: bool = False) -> Tuple[float, float]:
+def _cross_track_dev(*, p: np.ndarray, line_pts: List, z_slope_dist: bool = False) -> Tuple[float, float]:
     """
     Helper function that computes the cross track deviation
     """
