@@ -7,11 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ style_file }}">
     <style type="text/css">
-        p {
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-
         body {
             font-family: Roboto, Arial;
             background-color: rgb(245, 245, 245);
@@ -185,6 +180,14 @@
         .one-line-plot {
             width: 100%;
         }
+
+        @media print {
+            .plot-container {
+                width: 100%;
+                padding-top: 50px;
+                page-break-inside: avoid;
+            }
+        }
     </style>
     <title>{{title}}</title>
 </head>
@@ -238,14 +241,18 @@
             <div class="side-by-side-container">
                 {% for plot in side_by_side_plots %}
                 <div class="side-by-side-plot">
-                    {{ plot }}
+                    <div class="plot-container">
+                        {{ plot }}
+                    </div>
                 </div>
                 {% endfor %}
             </div>
             <div class="separator"></div>
             {% for plot in one_line_plots %}
             <div class="one-line-plot">
-                {{ plot }}
+                <div class="plot-container">
+                    {{ plot }}
+                </div>
             </div>
             <div class="separator"></div>
             {% endfor %}
