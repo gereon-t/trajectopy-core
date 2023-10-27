@@ -44,7 +44,7 @@ def main():
     settings = RelativeComparisonSettings()  # Default settings
     rpe_result = compare_trajectories_relative(traj_ref=gt_traj, traj_test=est_traj, settings=settings)
 
-    write_report("./report.html", ate_result, rpe_result)
+    write_report("./report.html", ate_result, rpe_result, max_data_size=2000)
 
 
 if __name__ == "__main__":
