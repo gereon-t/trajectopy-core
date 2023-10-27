@@ -41,17 +41,17 @@ def render_rot_time_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
 
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=np.rad2deg(report_data.roll), mode="lines+markers", name="roll"),
+        go.Scatter(x=report_data.function_of, y=report_data.roll, mode="lines+markers", name="roll"),
         row=1,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=np.rad2deg(report_data.pitch), mode="lines+markers", name="pitch"),
+        go.Scatter(x=report_data.function_of, y=report_data.pitch, mode="lines+markers", name="pitch"),
         row=2,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=np.rad2deg(report_data.yaw), mode="lines+markers", name="yaw"),
+        go.Scatter(x=report_data.function_of, y=report_data.yaw, mode="lines+markers", name="yaw"),
         row=3,
         col=1,
     )
@@ -89,7 +89,7 @@ def render_sum_line_plot(report_data: ReportData) -> str:
         fig.add_trace(
             go.Scatter(
                 x=report_data.function_of,
-                y=np.rad2deg(report_data.comb_rot_devs),
+                y=report_data.comb_rot_devs,
                 mode="lines+markers",
                 name="rotation",
             ),

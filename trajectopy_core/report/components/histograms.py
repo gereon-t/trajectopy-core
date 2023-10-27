@@ -1,4 +1,3 @@
-import numpy as np
 import plotly.graph_objects as go
 from plotly.offline import plot
 
@@ -26,9 +25,9 @@ def render_pos_devs(report_data: ReportData) -> str:
 def render_rot_devs(report_data: ReportData) -> str:
     fig = go.Figure()
 
-    fig.add_trace(go.Histogram(x=np.rad2deg(report_data.roll), name="roll", opacity=0.7))
-    fig.add_trace(go.Histogram(x=np.rad2deg(report_data.pitch), name="pitch", opacity=0.7))
-    fig.add_trace(go.Histogram(x=np.rad2deg(report_data.yaw), name="yaw", opacity=0.7))
+    fig.add_trace(go.Histogram(x=report_data.roll, name="roll", opacity=0.7))
+    fig.add_trace(go.Histogram(x=report_data.pitch, name="pitch", opacity=0.7))
+    fig.add_trace(go.Histogram(x=report_data.yaw, name="yaw", opacity=0.7))
 
     fig.update_layout(
         title="Rotation Deviations",
