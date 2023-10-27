@@ -84,7 +84,9 @@ class ATEResult:
             "Maximum rotation deviation [°]": f"{np.rad2deg(self.max_rot):.4f}"
             if self.abs_dev.rot_dev is not None
             else "-",
-            "Mean rotation deviation [°]": f"{self.ate_rot:.4f}" if self.abs_dev.rot_dev is not None else "-",
+            "Mean rotation deviation [°]": f"{np.rad2deg(self.ate_rot):.4f}"
+            if self.abs_dev.rot_dev is not None
+            else "-",
             "Median rotation deviation [°]": f"{np.rad2deg(self.median_rot):.4f}"
             if self.abs_dev.rot_dev is not None
             else "-",
@@ -124,7 +126,7 @@ class ATEResult:
             "RMS Horizontal Cross-Track [m]": self.rms_cross_h,
             "RMS Vertical Cross-Track [m]": self.rms_cross_v,
             "Maximum rotation deviation [deg]": np.rad2deg(self.max_rot) if self.abs_dev.rot_dev is not None else 0.0,
-            "Mean rotation deviation [deg]": self.ate_rot if self.abs_dev.rot_dev is not None else 0.0,
+            "Mean rotation deviation [deg]": np.rad2deg(self.ate_rot) if self.abs_dev.rot_dev is not None else 0.0,
             "Median rotation deviation [deg]": np.rad2deg(self.median_rot)
             if self.abs_dev.rot_dev is not None
             else 0.0,
@@ -379,9 +381,9 @@ class ATEResult:
     @property
     def ate_rot(self) -> float:
         """
-        Returns mean of rotation deviations in degree
+        Returns mean of rotation deviations
         """
-        return np.rad2deg(float(np.mean(self.comb_rot_devs)))
+        return float(np.mean(self.comb_rot_devs))
 
     @property
     def median_rot(self) -> float:

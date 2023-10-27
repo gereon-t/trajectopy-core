@@ -82,8 +82,8 @@ class RPEResult:
 
     @property
     def rpe_rot(self) -> float:
-        """Returns the average rotation drift in degrees per 100 meters."""
-        return np.rad2deg(np.mean(self.mean_rot_devs))
+        """Returns the average rotation drift in radians per 100 meters."""
+        return np.mean(self.mean_rot_devs)
 
     @property
     def pos_stds(self) -> List[float]:

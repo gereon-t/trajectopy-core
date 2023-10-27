@@ -3,6 +3,7 @@ import os
 from typing import List, Optional, Tuple
 
 import jinja2
+import numpy as np
 
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
@@ -100,9 +101,9 @@ def write_report(
     context = {
         "title": ate_result.name,
         "ate_pos": number_to_string(ate_result.ate_pos),
-        "ate_rot": number_to_string(ate_result.ate_rot),
+        "ate_rot": number_to_string(np.rad2deg(ate_result.ate_rot)),
         "rpe_pos": number_to_string(rpe_result.rpe_pos) if rpe_result is not None else "-",
-        "rpe_rot": number_to_string(rpe_result.rpe_rot) if rpe_result is not None else "-",
+        "rpe_rot": number_to_string(np.rad2deg(rpe_result.rpe_rot)) if rpe_result is not None else "-",
         "rpe_pos_drift_unit": rpe_result.pos_drift_unit if rpe_result is not None else "-",
         "rpe_rot_drift_unit": rpe_result.rot_drift_unit if rpe_result is not None else "-",
         "ate_pos_unit": report_data.ate_unit,

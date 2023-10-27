@@ -385,7 +385,7 @@ def plot_bars(
             data = [
                 np.rad2deg(deviation.min_rot),
                 np.rad2deg(deviation.max_rot),
-                deviation.ate_rot,
+                np.rad2deg(deviation.ate_rot),
                 np.rad2deg(deviation.median_rot),
                 np.rad2deg(deviation.rms_rot),
                 np.rad2deg(deviation.std_rot),
