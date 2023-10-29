@@ -63,27 +63,26 @@ def render_one_line_plots(report_data: ReportData) -> List[str]:
     return one_line_plots
 
 
-def write_report(
-    output_file: str,
+def render_report(
     ate_result: ATEResult,
     rpe_result: Optional[RPEResult] = None,
     max_data_size: int = 2000,
     max_std: float = 4.0,
     mm: bool = False,
-) -> None:
+) -> str:
     """
-    Writes a report to the given output file.
+    Renders a html report string.
 
     Args:
-
-        output_file (str): The output file path
         ate_result (ATEResult): The absolute trajectory error result
         rpe_result (Optional[RPEResult]): The relative pose error result
         max_std (float): The upper bound of scatter plot colorbars is set to max_std * std of the data
         mm (bool): If True, the ATE result will be multiplied by 1000 and the unit will be changed to mm
 
+    Returns:
+        str: The html report string
+
     """
-    logger.info("Writing report to %s", output_file)
     template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("report.html")
     igg, uni_bonn, icon = convert_images_to_base64()
 
@@ -115,7 +114,18 @@ def write_report(
         "uni_bonn": uni_bonn,
     }
 
-    report_text = template.render(context)
+    return template.render(context)
 
+
+def write_report(output_file: str, report_text: str) -> None:
+    """
+    Writes a report to the given output file.
+
+    Args:
+
+        output_file (str): The output file path
+
+    """
+    logger.info("Writing report to %s", output_file)
     with open(output_file, "w", encoding="utf-8") as f:
         f.write(report_text)
