@@ -73,8 +73,8 @@ def align_trajectories(
     *,
     traj_from: Trajectory,
     traj_to: Trajectory,
-    alignment_settings: AlignmentSettings,
-    matching_settings: MatchingSettings,
+    alignment_settings: AlignmentSettings = AlignmentSettings(),
+    matching_settings: MatchingSettings = MatchingSettings(),
 ) -> AlignmentResult:
     """Aligns two trajectories
 

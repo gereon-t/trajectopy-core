@@ -64,7 +64,7 @@ def compare_trajectories_relative(
     *,
     traj_test: Trajectory,
     traj_ref: Trajectory,
-    settings: RelativeComparisonSettings,
+    settings: RelativeComparisonSettings = RelativeComparisonSettings(),
 ) -> RPEResult:
     """This function compares two trajectories using the relative comparison method.
 

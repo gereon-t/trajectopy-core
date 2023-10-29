@@ -21,7 +21,7 @@ logger = logging.getLogger("root")
 def match_trajectories(
     traj_test: Trajectory,
     traj_ref: Trajectory,
-    settings: MatchingSettings,
+    settings: MatchingSettings = MatchingSettings(),
     inplace: bool = True,
 ) -> Tuple[Trajectory, Trajectory]:
     """
