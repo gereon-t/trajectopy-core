@@ -5,7 +5,7 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 import logging
-from typing import Dict
+from typing import Dict, Union
 
 import numpy as np
 from numpy import matlib
@@ -19,7 +19,7 @@ from trajectopy_core.alignment.direct_leverarm import direct_leverarm
 from trajectopy_core.alignment.direct_timeshift import direct_timeshift
 from trajectopy_core.alignment.functional_model.interface import FunctionalRelationship
 from trajectopy_core.alignment.parameters import AlignmentParameters, HelmertTransformation, Leverarm, Parameter
-from trajectopy_core.settings.alignment_settings import AlignmentSettings
+from trajectopy_core.settings.alignment_settings import AlignmentEstimationSettings, AlignmentSettings
 from trajectopy_core.util.definitions import Unit
 from trajectopy_core.util.printing import dict2table
 
@@ -75,6 +75,40 @@ class Alignment:
     @property
     def settings(self) -> AlignmentSettings:
         return self.data.alignment_settings
+
+    @property
+    def updated_estimation_settings(self) -> Union[AlignmentEstimationSettings, None]:
+        """Checks if enabled parameters are actually needed and returns the updated settings"""
+
+        def default_check(parameter: Parameter) -> bool:
+            return abs(parameter.value) <= 3 * np.sqrt(parameter.variance)
+
+        def scale_check(parameter: Parameter) -> bool:
+            return abs(parameter.value - 1) <= 3 * np.sqrt(parameter.variance)
+
+        if not self.has_results:
+            logger.warning("No results available. Returning None.")
+            return None
+
+        logger.info("Checking if enabled parameters are needed...")
+
+        check_mapping = {Unit.SCALE: scale_check}
+
+        settings_changed = False
+        for parameter in self.est_params:
+            if not parameter.enabled:
+                continue
+
+            if check_mapping.get(parameter.unit, default_check)(parameter):
+                logger.info("Parameter %s is enabled but not needed. Disabling.", parameter.name)
+                parameter.enabled = False
+                settings_changed = True
+
+        if not settings_changed:
+            logger.info("No settings changed.")
+            return None
+
+        return self.est_params.to_estimation_settings()
 
     def estimate(self) -> AlignmentParameters:
         """Handles the estimation of the parameters
@@ -236,10 +270,8 @@ class Alignment:
                 group_global_test = self._global_test(variance=group_variance_factor, redundancy=group_redundancy)
 
                 # global test for group
-                if not group_global_test:
-                    # only scale if global test gets denied otherwise I can assume that
-                    # our a-priori model is correct
-                    self.data.set_var_group(values=group_variances * group_variance_factor, key=group_key)
+                self.data.set_var_group(values=group_variances * group_variance_factor, key=group_key)
+                logger.info("Adjusted variance for group %s by factor %.3f", group_key, group_variance_factor)
 
                 group_global_tests[group_key] = group_global_test
                 logger.debug(
@@ -261,7 +293,7 @@ class Alignment:
         logging.debug(dict2table(group_global_tests, title="Group Global Test Results"))
         return group_global_tests
 
-    def variance_estimation(self, at_least_once: bool = False) -> None:
+    def variance_estimation(self, at_least_once: bool = True) -> None:
         """
         Tests the consistency of the functional and stochastic model and
         adjusts the variance vector if necessary.
@@ -270,11 +302,7 @@ class Alignment:
         max_iterations = 5
         global_test_result = self._global_test(variance=self.variance_factor, redundancy=self.redundancy)
         while not global_test_result or at_least_once:
-            logger.debug(
-                "Global test failed. Adjusting variance vector (%i/%i).",
-                cnt,
-                max_iterations,
-            )
+            logger.info("Global test rejected. Adjusting variance vector (%i/%i).", cnt, max_iterations)
             self.data._var_vector *= self.variance_factor
             self._estimate_parameters()
             global_test_result = self._global_test(variance=self.variance_factor, redundancy=self.redundancy)

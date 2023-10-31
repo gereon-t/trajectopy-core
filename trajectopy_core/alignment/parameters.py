@@ -145,6 +145,9 @@ class ParameterSet(ABC):
             lower_boundary=True,
         )
 
+    def __iter__(self):
+        return iter(self.__parameter_fields)
+
     @property
     def any_enabled(self) -> bool:
         return self.num_enabled > 0
@@ -468,19 +471,19 @@ class AlignmentParameters(ParameterSet):
 
     def apply_settings(self, settings: AlignmentEstimationSettings) -> None:
         """Applies the estimation settings to the parameters by enabling or disabling them"""
-        self.sim_trans_x.enabled = settings.trans_x
-        self.sim_trans_y.enabled = settings.trans_y
-        self.sim_trans_z.enabled = settings.trans_z
-        self.sim_rot_x.enabled = settings.rot_x
-        self.sim_rot_y.enabled = settings.rot_y
-        self.sim_rot_z.enabled = settings.rot_z
-        self.sim_scale.enabled = settings.scale
+        self.sim_trans_x.enabled = settings.trans_x and settings.helmert_enabled
+        self.sim_trans_y.enabled = settings.trans_y and settings.helmert_enabled
+        self.sim_trans_z.enabled = settings.trans_z and settings.helmert_enabled
+        self.sim_rot_x.enabled = settings.rot_x and settings.helmert_enabled
+        self.sim_rot_y.enabled = settings.rot_y and settings.helmert_enabled
+        self.sim_rot_z.enabled = settings.rot_z and settings.helmert_enabled
+        self.sim_scale.enabled = settings.scale and settings.helmert_enabled
 
         self.time_shift.enabled = settings.time_shift_enabled
 
-        self.lever_x.enabled = settings.lever_x and settings.leverarm
-        self.lever_y.enabled = settings.lever_y and settings.leverarm
-        self.lever_z.enabled = settings.lever_z and settings.leverarm
+        self.lever_x.enabled = settings.lever_x and settings.leverarm_enabled
+        self.lever_y.enabled = settings.lever_y and settings.leverarm_enabled
+        self.lever_z.enabled = settings.lever_z and settings.leverarm_enabled
 
     @property
     def helmert(self) -> HelmertTransformation:
@@ -545,6 +548,21 @@ class AlignmentParameters(ParameterSet):
         params.enabled_bool_list = [item != 0.0 for item in alignment_data.iloc[:11, 1].to_list()]
         params.set_covariance_matrix(alignment_data.iloc[:11, 2:].to_numpy())
         return params
+
+    def to_estimation_settings(self) -> AlignmentEstimationSettings:
+        return AlignmentEstimationSettings(
+            trans_x=self.sim_trans_x.enabled,
+            trans_y=self.sim_trans_y.enabled,
+            trans_z=self.sim_trans_z.enabled,
+            rot_x=self.sim_rot_x.enabled,
+            rot_y=self.sim_rot_y.enabled,
+            rot_z=self.sim_rot_z.enabled,
+            scale=self.sim_scale.enabled,
+            time_shift=self.time_shift.enabled,
+            lever_x=self.lever_x.enabled,
+            lever_y=self.lever_y.enabled,
+            lever_z=self.lever_z.enabled,
+        )
 
 
 @dataclass

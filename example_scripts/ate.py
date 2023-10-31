@@ -9,7 +9,7 @@ from trajectopy_core.alignment.actions import align_trajectories
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute
 from trajectopy_core.evaluation.matching import match_trajectories
 from trajectopy_core.plotting.deviation_plot import plot_compact_hist
-from trajectopy_core.settings.alignment_settings import AlignmentSettings
+from trajectopy_core.settings.alignment_settings import AlignmentEstimationSettings, AlignmentSettings
 from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
 from trajectopy_core.trajectory import Trajectory
 
@@ -42,7 +42,9 @@ def main():
     match_trajectories(traj_test=est_traj, traj_ref=gt_traj, settings=matching_settings)  # in-place by default
 
     # Align
-    alignment_settings = AlignmentSettings()  # Default settings
+    alignment_settings = AlignmentSettings(
+        estimation_of=AlignmentEstimationSettings.all(sensor_rotation=False)
+    )  # Default settings
     alignment = align_trajectories(
         traj_from=est_traj,
         traj_to=gt_traj,

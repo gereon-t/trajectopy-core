@@ -100,7 +100,7 @@ def align_trajectories(
     # one of the trajectories is in an unknown datum
     if (
         None in [traj_to.pos.local_transformer, traj_to.pos.local_transformer]
-        and not alignment_settings.estimation_of.helmert
+        and not alignment_settings.estimation_of.helmert_enabled
     ):
         print(
             "\n ____________________________________________________\n"
@@ -113,14 +113,27 @@ def align_trajectories(
         )
     logger.info("Aligning trajectory positions ...")
 
-    alignment_data = AlignmentData(
-        traj_from=traj_from,
-        traj_to=traj_to,
-        alignment_settings=alignment_settings,
-        matching_settings=matching_settings,
-    )
-    ghm_alignment = Alignment(alignment_data=alignment_data)
-    estimated_parameters = ghm_alignment.estimate()
+    estimation_settings_changed = True
+    while estimation_settings_changed:
+        alignment_data = AlignmentData(
+            traj_from=traj_from,
+            traj_to=traj_to,
+            alignment_settings=alignment_settings,
+            matching_settings=matching_settings,
+        )
+        ghm_alignment = Alignment(alignment_data=alignment_data)
+        estimated_parameters = ghm_alignment.estimate()
+
+        if alignment_settings.estimation_of.auto_update:
+            estimation_settings = ghm_alignment.updated_estimation_settings
+        else:
+            estimation_settings = None
+
+        if estimation_settings is not None:
+            estimation_settings_changed = True
+            alignment_settings.estimation_of = estimation_settings
+        else:
+            estimation_settings_changed = False
 
     if (
         alignment_data.traj_from.rot is not None

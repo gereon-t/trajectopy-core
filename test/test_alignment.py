@@ -165,7 +165,6 @@ class TestAlignment(unittest.TestCase):
         )
 
         estimation_of = AlignmentEstimationSettings(
-            helmert=similarity_enabled,
             trans_x=similarity_enabled,
             trans_y=similarity_enabled,
             trans_z=similarity_enabled,
@@ -173,7 +172,6 @@ class TestAlignment(unittest.TestCase):
             rot_y=similarity_enabled,
             rot_z=similarity_enabled,
             scale=similarity_enabled,
-            leverarm=lever_enabled,
             lever_x=lever_enabled,
             lever_y=lever_enabled,
             lever_z=lever_enabled,

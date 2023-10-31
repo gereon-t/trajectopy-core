@@ -46,7 +46,6 @@ class AlignmentEstimationSettings(Settings):
     during the alignment process
     """
 
-    helmert: bool = True
     trans_x: bool = True
     trans_y: bool = True
     trans_z: bool = True
@@ -60,12 +59,13 @@ class AlignmentEstimationSettings(Settings):
     use_y_speed: bool = True
     use_z_speed: bool = True
 
-    leverarm: bool = False
     lever_x: bool = True
     lever_y: bool = True
     lever_z: bool = True
 
     sensor_rotation: bool = False
+
+    auto_update: bool = False
 
     def __bool__(self) -> bool:
         return not self.all_lq_disabled
@@ -85,9 +85,36 @@ class AlignmentEstimationSettings(Settings):
         )
 
     @classmethod
-    def all(cls, sensor_rotation: bool = True) -> "AlignmentEstimationSettings":
+    def from_components(
+        cls,
+        similarity: bool = False,
+        time_shift: bool = False,
+        leverarm: bool = False,
+        sensor_rotation: bool = False,
+        auto_update: bool = False,
+    ) -> "AlignmentEstimationSettings":
         return cls(
-            helmert=True,
+            trans_x=similarity,
+            trans_y=similarity,
+            trans_z=similarity,
+            rot_x=similarity,
+            rot_y=similarity,
+            rot_z=similarity,
+            scale=similarity,
+            time_shift=time_shift,
+            use_x_speed=time_shift,
+            use_y_speed=time_shift,
+            use_z_speed=time_shift,
+            lever_x=leverarm,
+            lever_y=leverarm,
+            lever_z=leverarm,
+            sensor_rotation=sensor_rotation,
+            auto_update=auto_update,
+        )
+
+    @classmethod
+    def all(cls, sensor_rotation: bool = True, auto_update: bool = False) -> "AlignmentEstimationSettings":
+        return cls(
             trans_x=True,
             trans_y=True,
             trans_z=True,
@@ -99,11 +126,11 @@ class AlignmentEstimationSettings(Settings):
             use_x_speed=True,
             use_y_speed=True,
             use_z_speed=True,
-            leverarm=True,
             lever_x=True,
             lever_y=True,
             lever_z=True,
             sensor_rotation=sensor_rotation,
+            auto_update=auto_update,
         )
 
     @classmethod
@@ -113,12 +140,7 @@ class AlignmentEstimationSettings(Settings):
                 f"Size mismatch: bool_list must have length 14 (Number of configurable parameters) (got {len(bool_list)})"
             )
 
-        helmert_enabled = any(bool_list[:8])
-        leverarm_enabled = any(bool_list[8:11])
-
         return AlignmentEstimationSettings(
-            helmert=helmert_enabled,
-            leverarm=leverarm_enabled,
             trans_x=bool_list[0],
             trans_y=bool_list[1],
             trans_z=bool_list[2],
@@ -151,11 +173,11 @@ class AlignmentEstimationSettings(Settings):
 
     @property
     def helmert_enabled(self) -> bool:
-        return any(self.helmert_filter)
+        return any([self.trans_x, self.trans_y, self.trans_z, self.rot_x, self.rot_y, self.rot_z, self.scale])
 
     @property
     def leverarm_enabled(self) -> bool:
-        return any(self.leverarm_filter)
+        return any([self.lever_x, self.lever_y, self.lever_z])
 
     @property
     def time_shift_enabled(self) -> bool:
@@ -182,31 +204,24 @@ class AlignmentEstimationSettings(Settings):
 
     @property
     def time_shift_filter(self) -> List[bool]:
-        return [
-            self.use_x_speed and self.time_shift,
-            self.use_y_speed and self.time_shift,
-            self.use_z_speed and self.time_shift,
-        ]
+        if not self.time_shift:
+            return [False] * 3
+
+        return [self.use_x_speed, self.use_y_speed, self.use_z_speed]
 
     @property
     def helmert_filter(self) -> List[bool]:
-        return [
-            self.trans_x and self.helmert,
-            self.trans_y and self.helmert,
-            self.trans_z and self.helmert,
-            self.rot_x and self.helmert,
-            self.rot_y and self.helmert,
-            self.rot_z and self.helmert,
-            self.scale and self.helmert,
-        ]
+        if not self.helmert_enabled:
+            return [False] * 7
+
+        return [self.trans_x, self.trans_y, self.trans_z, self.rot_x, self.rot_y, self.rot_z, self.scale]
 
     @property
     def leverarm_filter(self) -> List[bool]:
-        return [
-            self.lever_x and self.leverarm,
-            self.lever_y and self.leverarm,
-            self.lever_z and self.leverarm,
-        ]
+        if not self.leverarm_enabled:
+            return [False] * 3
+
+        return [self.lever_x, self.lever_y, self.lever_z]
 
     @property
     def enabled_lq_parameter_filter(self) -> List[bool]:
