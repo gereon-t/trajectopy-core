@@ -207,6 +207,55 @@ class Trajectory:
 
         return trajectory
 
+    @classmethod
+    def from_string(cls, input_str: str) -> "Trajectory":
+        """Create trajectory from an input string
+
+        The input string must be in a csv-like format containing columns for at least
+        the timestamp, x, y and z coordinates of the trajectory. Those
+        fields must be named "t", "px", "py" and "pz" in the header using
+        the #fields tag. However, by default a trajectory with
+        "t,px,py,pz,qx,qy,qz,qw" fields is assumed. Additional fields
+        include the arc length, specified by "l", and the speed, specified
+        by "vx", "vy" and "vz".
+        The delimiter can be specified using the #delimiter
+        tag. The default delimiter is a comma.
+
+        Args:
+            input_str (str): csv-like string
+
+        Returns:
+            Trajectory: trajectory object
+        """
+        header_data, trajectory_data = trajectory_io.read_string(input_str, dtype=object)
+
+        tstamps = trajectory_io.extract_trajectory_timestamps(header_data=header_data, trajectory_data=trajectory_data)
+        pos = trajectory_io.extract_trajectory_pointset(header_data=header_data, trajectory_data=trajectory_data)
+        arc_lengths = trajectory_io.extract_trajectory_arc_lengths(
+            header_data=header_data, trajectory_data=trajectory_data
+        )
+        speed_3d = trajectory_io.extract_trajectory_speed(header_data=header_data, trajectory_data=trajectory_data)
+        sort_index = infer_sort_index(sorting=header_data.sorting, tstamps=tstamps)
+        rot = trajectory_io.extract_trajectory_rotations(header_data=header_data, trajectory_data=trajectory_data)
+
+        trajectory = Trajectory(
+            tstamps=tstamps,
+            pos=pos,
+            rot=rot,
+            name=header_data.name,
+            sorting=header_data.sorting,
+            sort_index=sort_index,
+            arc_lengths=arc_lengths,
+            speed_3d=speed_3d,
+            state=header_data.state,
+        )
+
+        if trajectory.sorting == Sorting.CHRONO:
+            tstamp_index = np.unique(trajectory.tstamps, return_index=True)[1]
+            trajectory.apply_index(tstamp_index)
+
+        return trajectory
+
     def to_dataframe(self) -> pd.DataFrame:
         """
         Returns a pandas dataframe containing tstamps, xyz, quat

@@ -150,6 +150,17 @@ class HeaderData:
     def datetime_timezone(self) -> str:
         return str(self.data.get("datetime_timezone", "UTC"))
 
+    @staticmethod
+    def handle_line(metadata: Dict[str, Union[str, int, float]], line: str) -> None:
+        if not line.startswith("#"):
+            return
+
+        splitted_line = line.split()
+        keyword = splitted_line[0][1:]
+
+        if keyword in HEADER_KEYS:
+            metadata[keyword] = HANDLER_MAPPING.get(keyword, HANDLER_MAPPING["default"])(line)
+
     @classmethod
     def from_file(cls, filename: str) -> "HeaderData":
         """Reads the header of a trajectory file.
@@ -163,13 +174,24 @@ class HeaderData:
         metadata: Dict[str, Union[str, int, float]] = {}
         with open(filename, "r", encoding="utf-8") as file:
             for line in file:
-                if not line.startswith("#"):
-                    break
-                splitted_line = line.split()
-                keyword = splitted_line[0][1:]
-
-                if keyword in HEADER_KEYS:
-                    metadata[keyword] = HANDLER_MAPPING.get(keyword, HANDLER_MAPPING["default"])(line)
+                cls.handle_line(metadata, line)
 
         logger.info("Read header of %s", filename)
+        return cls(metadata)
+
+    @classmethod
+    def from_string(cls, input_str: str) -> "HeaderData":
+        """Reads the header of an input string.
+
+        Args:
+            input_str (str): The header string.
+
+        Returns:
+            HeaderData: The header data.
+        """
+        metadata: Dict[str, Union[str, int, float]] = {}
+        for line in input_str.splitlines():
+            cls.handle_line(metadata, line)
+
+        logger.info("Read header from string")
         return cls(metadata)

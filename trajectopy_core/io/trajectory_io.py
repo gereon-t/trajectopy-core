@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+from io import StringIO
 import logging
 from typing import List, Tuple, Union
 
@@ -44,6 +45,35 @@ def read_data(filename: str, dtype=float) -> Tuple[HeaderData, np.ndarray]:
         except Exception:
             logger.warning("Could not read file using pandas. Trying numpy instead.")
             data = np.loadtxt(filename, comments="#")
+    return header_data, data
+
+
+def read_string(input_str: str, dtype=float) -> Tuple[HeaderData, np.ndarray]:
+    """Reads the header and the data from a string
+
+    By default, the trajectory data is read using pandas. If this fails,
+    numpy is used instead.
+
+    Args:
+        input_str (str): String to read
+
+    Returns:
+        Tuple[HeaderData, np.ndarray]: Header data and data
+    """
+    header_data = HeaderData.from_string(input_str)
+    input_str = StringIO(input_str)
+    try:
+        data = pd.read_csv(input_str, comment="#", header=None, sep=header_data.delimiter).to_numpy(dtype=dtype)
+
+        if data.shape[1] == 1:
+            logger.info("Assuming whitespaces as delimiter since imported data has only one column.")
+            data = pd.read_csv(input_str, comment="#", header=None, delim_whitespace=True).to_numpy(dtype=dtype)
+    except Exception:
+        try:
+            data = pd.read_csv(input_str, comment="#", header=None, delim_whitespace=True).to_numpy(dtype=dtype)
+        except Exception:
+            logger.warning("Could not read string using pandas. Trying numpy instead.")
+            data = np.loadtxt(input_str, comments="#")
     return header_data, data
 
 
