@@ -12,7 +12,7 @@ import pandas as pd
 
 from trajectopy_core.evaluation.deviations import RelativeTrajectoryDeviations
 from trajectopy_core.io.trajectory_io import read_data
-from trajectopy_core.util.definitions import Unit
+from trajectopy_core.utils.definitions import Unit
 
 
 class RPEResult:

@@ -61,22 +61,6 @@ UNIT_FORMAT_RULES: Dict[Unit, Dict[str, Tuple[float, str, int]]] = {
 }
 
 
-class RotApprox(Enum):
-    """
-    Enumeration class handling different techniques for rpy approximation
-    """
-
-    WINDOW = 0
-    INTERP = 1
-    CUBIC = 2
-
-    def __str__(self) -> str:
-        if self.value == 0:
-            return "window"
-
-        return "lap_interp" if self.value == 1 else "cubic"
-
-
 GPS_LEAP_SECONDS = 18
 GPS_WEEK_ZERO = datetime.datetime(1980, 1, 6, 0, 0, 0)
 

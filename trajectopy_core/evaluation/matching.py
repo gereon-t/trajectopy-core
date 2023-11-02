@@ -11,9 +11,9 @@ import numpy as np
 from pointset import PointSet
 from scipy.spatial import KDTree
 
-from trajectopy_core.approximation.util import Line3D
-from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
+from trajectopy_core.evaluation.settings import MatchingMethod, MatchingSettings
 from trajectopy_core.trajectory import Trajectory
+from trajectopy_core.utils.datahandling import Line3D
 
 logger = logging.getLogger("root")
 

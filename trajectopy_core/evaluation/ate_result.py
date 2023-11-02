@@ -11,13 +11,13 @@ from typing import Dict, List, Union
 import numpy as np
 import pandas as pd
 from pointset import PointSet
+from rotationset import RotationSet
+from spatialsorter import Sorting, complete_lap_dist
 
-import trajectopy_core.util.datahandling as datahandling
+import trajectopy_core.utils.datahandling as datahandling
 from trajectopy_core.evaluation.deviations import AbsoluteTrajectoryDeviations
 from trajectopy_core.io.trajectory_io import read_data
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.util.rotationset import RotationSet
-from trajectopy_core.util.spatialsorter import Sorting, complete_lap_dist
 
 
 class ATEResult:

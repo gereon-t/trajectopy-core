@@ -3,12 +3,11 @@ import logging
 from rich.logging import RichHandler
 
 from trajectopy_core.alignment.actions import align_trajectories
+from trajectopy_core.alignment.settings import AlignmentSettings
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute, compare_trajectories_relative
 from trajectopy_core.evaluation.matching import match_trajectories
-from trajectopy_core.report import write_report
-from trajectopy_core.settings.alignment_settings import AlignmentSettings
-from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
-from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
+from trajectopy_core.evaluation.settings import MatchingMethod, MatchingSettings, RelativeComparisonSettings
+from trajectopy_core.report import render_report, write_report
 from trajectopy_core.trajectory import Trajectory
 
 logging.basicConfig(
@@ -44,7 +43,8 @@ def main():
     settings = RelativeComparisonSettings()  # Default settings
     rpe_result = compare_trajectories_relative(traj_ref=gt_traj, traj_test=est_traj, settings=settings)
 
-    write_report("./report.html", ate_result, rpe_result, max_data_size=2000)
+    report = render_report(ate_result=ate_result, rpe_result=rpe_result, max_data_size=2000)
+    write_report(output_file="./report.html", report_text=report)
 
 
 if __name__ == "__main__":

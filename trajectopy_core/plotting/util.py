@@ -11,8 +11,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.colorbar import Colorbar
 
-import trajectopy_core.util.datahandling as datahandling
-from trajectopy_core.settings.plot_settings import PlotSettings
+import trajectopy_core.utils.datahandling as datahandling
+from trajectopy_core.plotting.settings import PlotSettings
 
 # logger configuration
 logger = logging.getLogger("root")

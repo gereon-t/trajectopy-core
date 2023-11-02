@@ -6,15 +6,16 @@ mail@gtombrink.de
 """
 import logging
 
-from trajectopy_core.alignment.data import AlignmentData
-from trajectopy_core.alignment.ghm_estimation import Alignment
+from rotationset import RotationSet
+
+from trajectopy_core.alignment.ghm.data import AlignmentData
+from trajectopy_core.alignment.ghm.estimation import Alignment
 from trajectopy_core.alignment.parameters import SensorRotationParameters
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.alignment.rotation_alignment import align_rotations
-from trajectopy_core.settings.alignment_settings import AlignmentSettings
-from trajectopy_core.settings.matching_settings import MatchingSettings
+from trajectopy_core.alignment.settings import AlignmentSettings
+from trajectopy_core.evaluation.settings import MatchingSettings
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.util.rotationset import RotationSet
 
 logger = logging.getLogger("root")
 

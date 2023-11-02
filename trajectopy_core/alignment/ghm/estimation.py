@@ -13,15 +13,15 @@ from scipy.sparse import csc_matrix
 from scipy.sparse.linalg import spsolve
 from scipy.stats.distributions import chi2
 
-from trajectopy_core.alignment.data import AlignmentData
-from trajectopy_core.alignment.direct_helmert_transformation import direct_helmert_transformation
-from trajectopy_core.alignment.direct_leverarm import direct_leverarm
-from trajectopy_core.alignment.direct_timeshift import direct_timeshift
-from trajectopy_core.alignment.functional_model.interface import FunctionalRelationship
+from trajectopy_core.alignment.direct.helmert_transformation import direct_helmert_transformation
+from trajectopy_core.alignment.direct.leverarm import direct_leverarm
+from trajectopy_core.alignment.direct.timeshift import direct_timeshift
+from trajectopy_core.alignment.ghm.data import AlignmentData
+from trajectopy_core.alignment.ghm.functional_model.interface import FunctionalRelationship
 from trajectopy_core.alignment.parameters import AlignmentParameters, HelmertTransformation, Leverarm, Parameter
-from trajectopy_core.settings.alignment_settings import AlignmentEstimationSettings, AlignmentSettings
-from trajectopy_core.util.definitions import Unit
-from trajectopy_core.util.printing import dict2table
+from trajectopy_core.alignment.settings import AlignmentEstimationSettings, AlignmentSettings
+from trajectopy_core.utils.definitions import Unit
+from trajectopy_core.utils.printing import dict2table
 
 logger = logging.getLogger("root")
 

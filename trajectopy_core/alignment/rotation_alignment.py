@@ -5,10 +5,10 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 import numpy as np
+from rotationset import RotationSet
 
 from trajectopy_core.alignment.parameters import Parameter, SensorRotationParameters
-from trajectopy_core.util.definitions import Unit
-from trajectopy_core.util.rotationset import RotationSet
+from trajectopy_core.utils.definitions import Unit
 
 
 def align_rotations(rot_from: RotationSet, rot_to: RotationSet) -> SensorRotationParameters:

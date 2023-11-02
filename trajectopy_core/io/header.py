@@ -11,11 +11,10 @@ from datetime import datetime
 from typing import Callable, Dict, List, Union
 
 import numpy as np
+from spatialsorter import SORTING_DICT, Sorting
 
-from trajectopy_core.settings.comparison_settings import ComparisonMethod
-from trajectopy_core.util.definitions import GPS_WEEK_ZERO, TIME_FORMAT_DICT, TimeFormat, Unit
-from trajectopy_core.util.spatialsorter import SORTING_DICT, Sorting
-from trajectopy_core.util.trajectory_processing_state import TrajectoryProcessingState
+from trajectopy_core.evaluation.settings import ComparisonMethod
+from trajectopy_core.utils.definitions import GPS_WEEK_ZERO, TIME_FORMAT_DICT, TimeFormat, Unit
 
 logger = logging.getLogger("root")
 
@@ -97,10 +96,6 @@ class HeaderData:
     @property
     def sorting(self) -> Sorting:
         return SORTING_DICT[str(self.data.get("sorting", "chrono"))]
-
-    @property
-    def state(self) -> TrajectoryProcessingState:
-        return TrajectoryProcessingState.from_string(str(self.data.get("state", "")))
 
     @property
     def fields(self) -> List[str]:

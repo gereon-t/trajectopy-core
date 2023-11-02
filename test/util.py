@@ -2,7 +2,7 @@ import numpy as np
 from pointset import PointSet
 
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.util.rotationset import RotationSet
+from rotationset import RotationSet
 
 
 def random_number(min: float, max: float) -> float:

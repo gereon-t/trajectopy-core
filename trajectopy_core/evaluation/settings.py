@@ -8,8 +8,9 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, Dict
 
-from trajectopy_core.settings.core import Settings, field_extractor
-from trajectopy_core.util.definitions import Unit
+from yaml_dataclass import Settings, dataclass
+
+from trajectopy_core.utils.definitions import Unit
 
 
 class ComparisonMethod(Enum):
@@ -20,6 +21,13 @@ class ComparisonMethod(Enum):
     @classmethod
     def from_string(cls, string: str):
         return comparison_method_from_string(string)
+
+
+def comparison_method_from_string(string: str) -> ComparisonMethod:
+    if "absolute" in string.lower():
+        return ComparisonMethod.ABSOLUTE
+
+    return ComparisonMethod.RELATIVE if "relative" in string.lower() else ComparisonMethod.UNKNOWN
 
 
 @dataclass
@@ -50,22 +58,20 @@ class RelativeComparisonSettings(Settings):
             "use_all_pose_pairs": self.use_all_pose_pairs,
         }
 
-    @classmethod
-    def from_config_dict(cls, config_dict: dict):
-        return relative_settings_from_dict(config_dict=config_dict)
+
+class MatchingMethod(Enum):
+    NEAREST_SPATIAL = auto()
+    NEAREST_TEMPORAL = auto()
+    INTERPOLATION = auto()
+    NEAREST_SPATIAL_INTERPOLATED = auto()
+    UNKNOWN = auto()
 
 
-def comparison_method_from_string(string: str) -> ComparisonMethod:
-    if "absolute" in string.lower():
-        return ComparisonMethod.ABSOLUTE
+@dataclass
+class MatchingSettings(Settings):
+    """Dataclass defining matching configuration"""
 
-    return ComparisonMethod.RELATIVE if "relative" in string.lower() else ComparisonMethod.UNKNOWN
-
-
-def relative_settings_from_dict(config_dict: dict):
-    return field_extractor(
-        config_class=RelativeComparisonSettings(),
-        config_dict=config_dict,
-        fill_missing_with={"default": 0.0},
-        field_handler={"pair_distance_unit": Unit.from_str},
-    )
+    method: MatchingMethod = MatchingMethod.INTERPOLATION
+    max_time_diff: float = 0.01
+    max_distance: float = 0.00
+    k_nearest: int = 10

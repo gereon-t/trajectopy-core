@@ -6,21 +6,21 @@ mail@gtombrink.de
 """
 import copy
 import logging
+from dataclasses import dataclass
 from typing import List, Tuple, Union
 
 import numpy as np
 import pandas as pd
 from pointset import PointSet
+from rotationset import RotationSet
 from scipy.spatial.transform import Slerp
+from spatialsorter import Sorting, SpatialSorter, detect_laps_by_length, infer_sort_index
 
 import trajectopy_core.io.trajectory_io as trajectory_io
-import trajectopy_core.util.datahandling as datahandling
-from trajectopy_core.alignment.functional_model.equations import leverarm_time_component
+import trajectopy_core.utils.datahandling as datahandling
+from trajectopy_core.alignment.ghm.functional_model.equations import leverarm_time_component
 from trajectopy_core.alignment.parameters import AlignmentParameters
 from trajectopy_core.alignment.result import AlignmentResult
-from trajectopy_core.util.rotationset import RotationSet
-from trajectopy_core.util.spatialsorter import Sorting, SpatialSorter, detect_laps_by_length, infer_sort_index
-from trajectopy_core.util.trajectory_processing_state import TrajectoryProcessingState
 
 # logger configuration
 logger = logging.getLogger("root")
@@ -50,7 +50,6 @@ class Trajectory:
         sort_index: Union[np.ndarray, None] = None,
         arc_lengths: Union[np.ndarray, None] = None,
         speed_3d: Union[np.ndarray, None] = None,
-        state: Union[TrajectoryProcessingState, None] = None,
     ) -> None:
         if rot and len(rot) != len(pos):
             raise ValueError("Dimension mismatch between positions and orientations.")
@@ -80,7 +79,6 @@ class Trajectory:
 
         self.name = name or f"Trajectory {Trajectory._counter}"
         self._sorting = sorting or (Sorting.SPATIAL if tstamps is None else Sorting.CHRONO)
-        self.state = state or TrajectoryProcessingState(sorting_known=sorting == Sorting.SPATIAL)
 
         Trajectory._counter += 1
 
@@ -99,8 +97,6 @@ class Trajectory:
             f"| Length [m]:                   {self.arc_length:<{width}.3f}|\n"
             f"| Data rate [Hz]:               {self.data_rate:<{width}.3f}|\n"
             f"| Sorting:                      {str(self._sorting):<{width}}|\n"
-            f"| Approximated:                 {'yes' if self.state.approximated else 'no':<{width}}|\n"
-            f"| Has valid sorting index:      {'yes' if self.state.sorting_known else 'no':<{width}}|\n"
             f"|_______________________________________________________|\n"
         )
 
@@ -198,7 +194,6 @@ class Trajectory:
             sort_index=sort_index,
             arc_lengths=arc_lengths,
             speed_3d=speed_3d,
-            state=header_data.state,
         )
 
         if trajectory.sorting == Sorting.CHRONO:
@@ -247,7 +242,6 @@ class Trajectory:
             sort_index=sort_index,
             arc_lengths=arc_lengths,
             speed_3d=speed_3d,
-            state=header_data.state,
         )
 
         if trajectory.sorting == Sorting.CHRONO:
@@ -317,7 +311,6 @@ class Trajectory:
             file.write(f"#epsg {self.pos.epsg}\n")
             file.write(f"#name {self.name}\n")
             file.write(f"#sorting {str(self.sorting)}\n")
-            file.write(f"#state {str(self.state)}\n")
             file.write("#nframe enu\n")
             file.write(f"#fields {self.fields}\n")
 
@@ -459,9 +452,6 @@ class Trajectory:
         Returns:
             None | np.ndarray: lap indices or None
         """
-        if not self.state.sorting_known:
-            return None
-
         orig_sorting = copy.deepcopy(self.sorting)
         self.set_sorting(Sorting.CHRONO)
         lap_indices = detect_laps_by_length(self.arc_lengths)
@@ -569,8 +559,6 @@ class Trajectory:
 
         # rebuild index
         traj_self.sort_index = np.arange(0, len(traj_self.pos), dtype=int)
-        traj_self.state.sorting_known = False
-        traj_self.state.interpolated = True
 
         logger.info("Interpolated %s", traj_self.name)
 
@@ -632,7 +620,6 @@ class Trajectory:
         traj_self = self if inplace else self.copy()
         _, idx_self, _ = np.intersect1d(traj_self.tstamps, tstamps, return_indices=True)
         traj_self.apply_index(idx_self)
-        traj_self.state.matched = True
         return traj_self
 
     def intersect(self, tstamps: np.ndarray, max_gap_size: float = 2.0, inplace: bool = True) -> "Trajectory":
@@ -679,7 +666,6 @@ class Trajectory:
             )
         ]
         traj_self.apply_index(np.array(filter_index, dtype=int))
-        traj_self.state.intersected = True
 
         return traj_self
 
@@ -737,7 +723,6 @@ class Trajectory:
         traj_self.arc_lengths = copy.deepcopy(traj_other.arc_lengths)
         traj_self.sort_index = copy.deepcopy(traj_other.sort_index)
         traj_self.sorting = traj_other.sorting
-        traj_self.state.sorting_known = traj_other.state.sorting_known
         return traj_self
 
     def apply_index(self, index: Union[list, np.ndarray], inplace: bool = True) -> "Trajectory":
@@ -845,7 +830,6 @@ class Trajectory:
             traj_self.rot = alignment_result.rotation_parameters.rotation_set * traj_self.rot
             logger.info("Applied alignment parameters to orientations.")
 
-        traj_self.state.aligned = True
         return traj_self
 
     def _prepare_alignment_application(self, alignment_parameters: AlignmentParameters, traj_self: "Trajectory"):
@@ -907,7 +891,6 @@ class Trajectory:
         traj_self.arc_lengths = sorter.function_of
 
         traj_self.sorting = Sorting.SPATIAL
-        traj_self.state.sorting_known = True
 
         return traj_self
 
@@ -925,7 +908,7 @@ class Trajectory:
         if traj_self.sorting == sorting:
             return traj_self
 
-        if traj_self.sorting == Sorting.CHRONO and sorting == Sorting.SPATIAL and not traj_self.state.sorting_known:
+        if traj_self.sorting == Sorting.CHRONO and sorting == Sorting.SPATIAL:
             raise TrajectoryError(
                 (
                     f"Could not change sorting from {traj_self.sorting} to {sorting}"

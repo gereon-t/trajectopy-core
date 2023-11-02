@@ -13,15 +13,15 @@ from matplotlib import colors
 from matplotlib.axes import Axes
 from matplotlib.collections import LineCollection, PolyCollection
 from matplotlib.figure import Figure
+from spatialsorter import Sorting
 
-import trajectopy_core.util.datahandling as datahandling
+import trajectopy_core.utils.datahandling as datahandling
 from trajectopy_core.evaluation.ate_result import ATEResult, DeviationCollection
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.plotting.heatmap import annotate_heatmap, heatmap
+from trajectopy_core.plotting.settings import PlotSettings
 from trajectopy_core.plotting.util import norm_hist, scatter_plotter, stair_hist, vertical_subplots
-from trajectopy_core.settings.plot_settings import PlotSettings
-from trajectopy_core.trajectory import Sorting
-from trajectopy_core.util.definitions import Unit
+from trajectopy_core.utils.definitions import Unit
 
 logger = logging.getLogger("root")
 

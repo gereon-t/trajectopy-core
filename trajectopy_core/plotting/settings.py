@@ -7,9 +7,7 @@ mail@gtombrink.de
 import logging
 from dataclasses import dataclass
 
-import yaml
-
-from trajectopy_core.settings.core import Settings, field_extractor, yaml2dict
+from yaml_dataclass import Settings, dataclass
 
 logger = logging.getLogger("root")
 
@@ -39,22 +37,6 @@ class PlotSettings(Settings):
     @property
     def unit_str(self) -> str:
         return "[mm]" if self.unit_is_mm else "[m]"
-
-    def to_file(self, filename: str) -> None:
-        with open(filename, "w", encoding="utf-8") as file:
-            yaml.dump(self.to_dict(), file)
-
-    @classmethod
-    def from_config_dict(cls, config_dict: dict):
-        return field_extractor(
-            config_class=cls(),
-            config_dict=config_dict,
-            fill_missing_with={"default": None},
-        )
-
-    @classmethod
-    def from_file(cls, file: str):
-        return cls.from_config_dict(config_dict=yaml2dict(file))
 
     def reset(self):
         self.__init__()

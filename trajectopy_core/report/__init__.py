@@ -9,7 +9,7 @@ from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.report.components import histograms, line_plots, scatter_plots
 from trajectopy_core.report.data import ReportData
-from trajectopy_core.util.datahandling import image_to_base64, number_to_string
+from trajectopy_core.utils.datahandling import image_to_base64, number_to_string
 
 base_path = os.path.join(os.path.dirname(__file__))
 
@@ -64,6 +64,7 @@ def render_one_line_plots(report_data: ReportData) -> List[str]:
 
 
 def render_report(
+    *,
     ate_result: ATEResult,
     rpe_result: Optional[RPEResult] = None,
     max_data_size: int = 2000,
@@ -117,7 +118,7 @@ def render_report(
     return template.render(context)
 
 
-def write_report(output_file: str, report_text: str) -> None:
+def write_report(*, output_file: str, report_text: str) -> None:
     """
     Writes a report to the given output file.
 

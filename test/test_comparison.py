@@ -10,10 +10,9 @@ from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute, compare_trajectories_relative
 from trajectopy_core.evaluation.matching import match_trajectories
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
-from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
+from trajectopy_core.evaluation.settings import RelativeComparisonSettings, MatchingMethod, MatchingSettings
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.util.definitions import Unit
+from trajectopy_core.utils.definitions import Unit
 
 
 def compare_trajectories_abs(traj_ref: Trajectory, traj_test: Trajectory) -> ATEResult:

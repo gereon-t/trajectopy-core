@@ -7,15 +7,69 @@ mail@gtombrink.de
 import base64
 import logging
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, Tuple, Union
+from typing import Any, Callable, Dict, List, Tuple, Union
 
 import numpy as np
 import pandas as pd
 
-from trajectopy_core.approximation.util import skew_symmetric_matrix
-
 # logger configuration
 logger = logging.getLogger("root")
+
+
+@dataclass
+class Line3D:
+    """A 3D line defined by a mean point and a direction vector.
+
+    Attributes:
+        mean (np.ndarray): The mean point of the line.
+        direction (np.ndarray): The direction vector of the line.
+    """
+
+    # rest of the class implementation
+    mean: np.ndarray
+    direction: np.ndarray
+
+    @classmethod
+    def from_points(cls, points: np.ndarray) -> "Line3D":
+        """Create a 3D line from a set of points.
+
+        This method calculates the direction vector of the line
+        from the eigenvector corresponding to the largest eigenvalue
+        of the covariance matrix of the input points. The mean of the
+        points is used as the mean point of the line.
+
+        Args:
+            cls (Line3D): The class object.
+            points (np.ndarray): The input points.
+
+        Returns:
+            Line3D: A 3D line defined by a mean point and a direction vector.
+        """
+        cov_matrix = np.cov(points, rowvar=False)
+        direction = np.linalg.eigh(cov_matrix)[1][:, -1]
+
+        # mean of the points
+        mean = np.mean(points, axis=0)
+        return cls(mean=mean, direction=direction)
+
+    def evaluate_at(self, location: np.ndarray) -> List[float]:
+        """Evaluates the 3D line at a given location.
+
+        This method calculates the projection of the input location
+        onto the 3D line and returns the resulting point.
+
+        Args:
+            location (np.ndarray): The input location.
+
+        Returns:
+            list[float]: The resulting point on the 3D line.
+        """
+        tr = (
+            (location[0] - self.mean[0]) * self.direction[0]
+            + (location[1] - self.mean[1]) * self.direction[1]
+            + (location[2] - self.mean[2]) * self.direction[2]
+        ) * self.direction
+        return [self.mean[0] + tr[0], self.mean[1] + tr[1], self.mean[2] + tr[2]]
 
 
 @dataclass
@@ -362,6 +416,25 @@ def rot_from_vec(vec_a: np.ndarray, vec_b: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: The rotation matrix that rotates vector a to vector b.
     """
+
+    def skew_symmetric_matrix(vector: np.ndarray) -> np.ndarray:
+        """
+        Returns the skew-symmetric matrix of a 3D vector.
+
+        Parameters:
+        vector (np.ndarray): A numpy array of shape (3,) containing the 3D vector.
+
+        Returns:
+        np.ndarray: A numpy array of shape (3, 3) containing the skew-symmetric matrix.
+        """
+        return np.array(
+            [
+                [0, -vector[2], vector[1]],
+                [vector[2], 0, -vector[0]],
+                [-vector[1], vector[0], 0],
+            ]
+        )
+
     vec_a /= np.linalg.norm(vec_a)
     vec_b /= np.linalg.norm(vec_b)
 

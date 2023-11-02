@@ -11,15 +11,15 @@ from functools import cached_property
 from typing import Dict, List, Tuple, Union
 
 import numpy as np
+from rotationset import RotationSet
 from scipy.sparse import spdiags
+from spatialsorter import Sorting
 
+from trajectopy_core.alignment.settings import AlignmentSettings
 from trajectopy_core.evaluation.matching import match_trajectories
-from trajectopy_core.settings.alignment_settings import AlignmentSettings
-from trajectopy_core.settings.matching_settings import MatchingSettings
+from trajectopy_core.evaluation.settings import MatchingSettings
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.util.datahandling import gradient_3d
-from trajectopy_core.util.rotationset import RotationSet
-from trajectopy_core.util.spatialsorter import Sorting
+from trajectopy_core.utils.datahandling import gradient_3d
 
 logger = logging.getLogger("root")
 

@@ -4,7 +4,7 @@ import numpy as np
 
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.util.datahandling import shrink_data
+from trajectopy_core.utils.datahandling import shrink_data
 
 
 class ReportData:

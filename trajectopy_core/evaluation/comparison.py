@@ -8,16 +8,16 @@ import logging
 from typing import Dict, List, Tuple, Union
 
 import numpy as np
+from rotationset import RotationSet
+from spatialsorter import Sorting
 
-import trajectopy_core.util.datahandling as datahandling
+import trajectopy_core.utils.datahandling as datahandling
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.deviations import AbsoluteTrajectoryDeviations, RelativeTrajectoryDeviations
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
+from trajectopy_core.evaluation.settings import RelativeComparisonSettings
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.util.definitions import Unit
-from trajectopy_core.util.rotationset import RotationSet
-from trajectopy_core.util.spatialsorter import Sorting
+from trajectopy_core.utils.definitions import Unit
 
 logger = logging.getLogger("root")
 

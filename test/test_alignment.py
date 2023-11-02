@@ -8,15 +8,15 @@ from trajectopy_core.alignment.actions import align_trajectories
 from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.alignment.rotation_alignment import align_rotations
-from trajectopy_core.settings.alignment_settings import (
+from trajectopy_core.alignment.settings import (
     AlignmentEstimationSettings,
     AlignmentSettings,
     AlignmentStochastics,
 )
-from trajectopy_core.settings.matching_settings import MatchingSettings
+from trajectopy_core.evaluation.settings import MatchingSettings
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.util.definitions import Unit
-from trajectopy_core.util.rotationset import RotationSet
+from trajectopy_core.utils.definitions import Unit
+from rotationset import RotationSet
 
 
 def generate_transformation(

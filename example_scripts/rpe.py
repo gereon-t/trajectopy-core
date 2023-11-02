@@ -7,9 +7,8 @@ from rich.table import Table
 
 from trajectopy_core.evaluation.comparison import compare_trajectories_relative
 from trajectopy_core.evaluation.matching import match_trajectories
+from trajectopy_core.evaluation.settings import MatchingMethod, MatchingSettings, RelativeComparisonSettings
 from trajectopy_core.plotting.deviation_plot import plot_rpe
-from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
-from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
 from trajectopy_core.trajectory import Trajectory
 
 logging.basicConfig(

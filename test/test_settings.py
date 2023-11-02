@@ -1,19 +1,15 @@
 import unittest
 from pathlib import Path
 
-from trajectopy_core.settings.alignment_settings import (
+from trajectopy_core.alignment.settings import (
     AlignmentEstimationSettings,
     AlignmentPreprocessing,
     AlignmentSettings,
     AlignmentStochastics,
 )
-from trajectopy_core.settings.approximation_settings import ApproximationSettings
-from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
-from trajectopy_core.settings.core import Settings
-from trajectopy_core.settings.matching_settings import MatchingSettings
-from trajectopy_core.settings.plot_settings import PlotSettings
-from trajectopy_core.settings.processing_settings import ProcessingSettings
-from trajectopy_core.settings.sorting_settings import SortingSettings
+from trajectopy_core.evaluation.settings import RelativeComparisonSettings, MatchingSettings
+from trajectopy_core.plotting.settings import PlotSettings
+from yaml_dataclass import Settings
 
 
 class TestSettings(unittest.TestCase):
@@ -26,8 +22,8 @@ class TestSettings(unittest.TestCase):
     def settings_io_test(self, Settings: Settings) -> None:
         filename = f"./test/tmp/settings{TestSettings._file}.yaml"
         created_settings = Settings()
-        created_settings.to_file(filename)
-        imported_settings = Settings.from_file(filename)
+        created_settings.to_yaml(filename)
+        imported_settings = Settings.from_yaml(filename)
         self.assertTrue(imported_settings == created_settings)
         TestSettings._file += 1
 
@@ -46,17 +42,8 @@ class TestSettings(unittest.TestCase):
     def test_alignment_stochastics_settings(self) -> None:
         self.settings_io_test(AlignmentStochastics)
 
-    def test_approximation_settings(self) -> None:
-        self.settings_io_test(ApproximationSettings)
-
     def test_matching_settings(self) -> None:
         self.settings_io_test(MatchingSettings)
 
     def test_plot_settings(self) -> None:
         self.settings_io_test(PlotSettings)
-
-    def test_processing_settings(self) -> None:
-        self.settings_io_test(ProcessingSettings)
-
-    def test_sorting_settings(self) -> None:
-        self.settings_io_test(SortingSettings)

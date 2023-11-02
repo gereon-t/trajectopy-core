@@ -4,12 +4,11 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
-from dataclasses import dataclass, field
-from typing import Any, Dict, List
+from dataclasses import field
+from typing import List
 
 import numpy as np
-
-from trajectopy_core.settings.core import Settings, field_extractor
+from yaml_dataclass import Settings, dataclass
 
 METRIC_THRESHOLD = 1e-4
 TIME_THRESHOLD = 1e-4
@@ -22,21 +21,6 @@ class AlignmentPreprocessing(Settings):
     min_speed: float = 0.0
     time_start: float = 0.0
     time_end: float = 0.0
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "min_speed": self.min_speed,
-            "time_start": self.time_start,
-            "time_end": self.time_end,
-        }
-
-    @classmethod
-    def from_config_dict(cls, config_dict: Dict):
-        return field_extractor(
-            config_class=cls(),
-            config_dict=config_dict,
-            fill_missing_with={"default": 0.0},
-        )
 
 
 @dataclass
@@ -69,20 +53,6 @@ class AlignmentEstimationSettings(Settings):
 
     def __bool__(self) -> bool:
         return not self.all_lq_disabled
-
-    @classmethod
-    def from_config_dict(cls, config_dict: Dict):
-        return field_extractor(
-            config_class=cls(),
-            config_dict=config_dict,
-            fill_missing_with={
-                "default": True,
-                "helmert": False,
-                "leverarm": False,
-                "time_shift": False,
-                "sensor_rotation": False,
-            },
-        )
 
     @classmethod
     def from_components(
@@ -257,17 +227,6 @@ class AlignmentStochastics(Settings):
     var_speed_to: float = 1.0
     error_probability: float = 0.05
 
-    @classmethod
-    def from_config_dict(cls, config_dict: Dict):
-        return field_extractor(
-            config_class=cls(),
-            config_dict=config_dict,
-            fill_missing_with={
-                "default": 1.0,
-                "error_probability": 0.05,
-            },
-        )
-
 
 @dataclass
 class AlignmentSettings(Settings):
@@ -298,22 +257,3 @@ class AlignmentSettings(Settings):
 
     def __str__(self) -> str:
         return str(self.preprocessing) + str(self.estimation_of) + str(self.stochastics)
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "preprocessing": self.preprocessing.to_dict(),
-            "estimation_of": self.estimation_of.to_dict(),
-            "stochastics": self.stochastics.to_dict(),
-        }
-
-    @classmethod
-    def from_config_dict(cls, config_dict: dict):
-        preprocessing = AlignmentPreprocessing.from_config_dict(config_dict.get("preprocessing", {}))
-        estimation_of = AlignmentEstimationSettings.from_config_dict(config_dict.get("estimation_of", {}))
-        stochastics = AlignmentStochastics.from_config_dict(config_dict.get("stochastics", {}))
-
-        return cls(
-            preprocessing=preprocessing,
-            estimation_of=estimation_of,
-            stochastics=stochastics,
-        )
