@@ -3,20 +3,16 @@ from test.testdata import generated_trajectory
 from typing import Tuple
 
 import numpy as np
+from rotationset import RotationSet
 
-from trajectopy_core.alignment.actions import align_trajectories
+from trajectopy_core.alignment.actions import align_trajectories, apply_alignment
 from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.alignment.rotation_alignment import align_rotations
-from trajectopy_core.alignment.settings import (
-    AlignmentEstimationSettings,
-    AlignmentSettings,
-    AlignmentStochastics,
-)
+from trajectopy_core.alignment.settings import AlignmentEstimationSettings, AlignmentSettings, AlignmentStochastics
 from trajectopy_core.evaluation.settings import MatchingSettings
 from trajectopy_core.trajectory import Trajectory
 from trajectopy_core.utils.definitions import Unit
-from rotationset import RotationSet
 
 
 def generate_transformation(
@@ -82,7 +78,9 @@ class TestAlignment(unittest.TestCase):
             alignment_settings=AlignmentSettings(estimation_of=estimation_of),
             matching_settings=MatchingSettings(),
         )
-        aligned_trajectory = generated_trajectory.apply_alignment(alignment_result, inplace=False)
+        aligned_trajectory = apply_alignment(
+            trajectory=generated_trajectory, alignment_result=alignment_result, inplace=False
+        )
 
         np.testing.assert_allclose(transformed.pos.xyz, aligned_trajectory.pos.xyz, atol=1e-3, rtol=1e-3)
         np.testing.assert_allclose(
@@ -160,8 +158,10 @@ class TestAlignment(unittest.TestCase):
         )
         print(parameters)
 
-        transformed = generated_trajectory.apply_alignment(
-            AlignmentResult(position_parameters=parameters), inplace=False
+        transformed = apply_alignment(
+            trajectory=generated_trajectory,
+            alignment_result=AlignmentResult(position_parameters=parameters),
+            inplace=False,
         )
 
         estimation_of = AlignmentEstimationSettings(

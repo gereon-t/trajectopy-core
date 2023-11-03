@@ -9,7 +9,6 @@ from typing import Dict, List, Tuple, Union
 
 import numpy as np
 from rotationset import RotationSet
-from spatialsorter import Sorting
 
 import trajectopy_core.utils.datahandling as datahandling
 from trajectopy_core.evaluation.ate_result import ATEResult
@@ -60,30 +59,6 @@ def compare_trajectories_absolute(*, traj_test: Trajectory, traj_ref: Trajectory
     )
 
 
-def compare_trajectories_relative(
-    *,
-    traj_test: Trajectory,
-    traj_ref: Trajectory,
-    settings: RelativeComparisonSettings = RelativeComparisonSettings(),
-) -> RPEResult:
-    """This function compares two trajectories using the relative comparison method.
-
-
-    Args:
-        traj_test (Trajectory): Test trajectory.
-        traj_ref (Trajectory): Reference trajectory.
-        settings (ComparisonSettings): Comparison settings.
-
-    Returns:
-        RelativeTrajectoryDeviations: Relative trajectory deviations.
-    """
-    logger.info("Performing relative comparison")
-    traj_ref = traj_ref.set_sorting(sorting=Sorting.CHRONO, inplace=False)
-    traj_test = traj_test.set_sorting(sorting=Sorting.CHRONO, inplace=False)
-
-    return pairwise_comparison(traj_test=traj_test, traj_ref=traj_ref, settings=settings)
-
-
 def _get_pair_indices(distances: np.ndarray, settings: RelativeComparisonSettings, dist: float) -> np.ndarray:
     """Get indices of pose pairs for a given distance.
 
@@ -116,11 +91,11 @@ def _get_pair_indices(distances: np.ndarray, settings: RelativeComparisonSetting
     return np.c_[indices[:-1], indices[1:]]
 
 
-def pairwise_comparison(
-    *, traj_test: Trajectory, traj_ref: Trajectory, settings: RelativeComparisonSettings
+def compare_trajectories_relative(
+    *, traj_test: Trajectory, traj_ref: Trajectory, settings: RelativeComparisonSettings = RelativeComparisonSettings()
 ) -> RPEResult:
     """This function compares two trajectories using the relative comparison method."""
-
+    logger.info("Performing relative comparison")
     if settings.pair_min_distance > settings.pair_max_distance:
         raise ValueError("Maximum pose distance must be larger than minimum pose distance")
 

@@ -5,7 +5,7 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 import logging
-from typing import Union
+from typing import Union, List
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -16,6 +16,20 @@ from trajectopy_core.plotting.settings import PlotSettings
 
 # logger configuration
 logger = logging.getLogger("root")
+
+XLABEL_DICT = {"time": "time [s]", "arc_lengths": "trajectory length [m]"}
+UNIT_DICT = {"time": "s", "arc_lengths": "m"}
+
+
+def derive_xlabel_from_sortings(sort_by_list: List[str]) -> str:
+    if all(sorting == "arc_lengths" for sorting in sort_by_list):
+        return "trajectory length [m]"
+
+    if all(sorting == "time" for sorting in sort_by_list):
+        return "time [s]"
+
+    logger.warning("Data is diffently sorted, weird things might happen.")
+    return "time [s] / trajectory length [m]"
 
 
 def vertical_subplots(

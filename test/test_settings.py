@@ -1,15 +1,16 @@
 import unittest
 from pathlib import Path
 
+from yaml_dataclass import Settings
+
 from trajectopy_core.alignment.settings import (
     AlignmentEstimationSettings,
     AlignmentPreprocessing,
     AlignmentSettings,
     AlignmentStochastics,
 )
-from trajectopy_core.evaluation.settings import RelativeComparisonSettings, MatchingSettings
+from trajectopy_core.evaluation.settings import MatchingSettings, RelativeComparisonSettings
 from trajectopy_core.plotting.settings import PlotSettings
-from yaml_dataclass import Settings
 
 
 class TestSettings(unittest.TestCase):

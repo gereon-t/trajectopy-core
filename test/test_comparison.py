@@ -3,6 +3,7 @@ from test.testdata import generated_trajectory
 from test.util import random_number
 
 import numpy as np
+from trajectopy_core.alignment.actions import apply_alignment
 
 from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
 from trajectopy_core.alignment.result import AlignmentResult
@@ -10,7 +11,7 @@ from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute, compare_trajectories_relative
 from trajectopy_core.evaluation.matching import match_trajectories
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.evaluation.settings import RelativeComparisonSettings, MatchingMethod, MatchingSettings
+from trajectopy_core.evaluation.settings import MatchingMethod, MatchingSettings, RelativeComparisonSettings
 from trajectopy_core.trajectory import Trajectory
 from trajectopy_core.utils.definitions import Unit
 
@@ -48,8 +49,10 @@ class TestComparison(unittest.TestCase):
             lever_y=Parameter(value=random_number(min=-1, max=1), unit=Unit.METER),
             lever_z=Parameter(value=random_number(min=-1, max=1), unit=Unit.METER),
         )
-        transformed = generated_trajectory.apply_alignment(
-            AlignmentResult(position_parameters=parameters), inplace=False
+        transformed = apply_alignment(
+            trajectory=generated_trajectory,
+            alignment_result=AlignmentResult(position_parameters=parameters),
+            inplace=False,
         )
 
         deviations = compare_trajectories_abs(traj_ref=trajectory, traj_test=transformed)
@@ -66,8 +69,10 @@ class TestComparison(unittest.TestCase):
             sim_trans_y=Parameter(value=random_number(min=-1, max=1), unit=Unit.METER),
             sim_trans_z=Parameter(value=random_number(min=-1, max=1), unit=Unit.METER),
         )
-        transformed = generated_trajectory.apply_alignment(
-            AlignmentResult(position_parameters=parameters), inplace=False
+        transformed = apply_alignment(
+            trajectory=generated_trajectory,
+            alignment_result=AlignmentResult(position_parameters=parameters),
+            inplace=False,
         )
 
         deviations = compare_trajectories_abs(traj_ref=trajectory, traj_test=transformed)

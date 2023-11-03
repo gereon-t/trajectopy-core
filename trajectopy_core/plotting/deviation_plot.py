@@ -13,20 +13,24 @@ from matplotlib import colors
 from matplotlib.axes import Axes
 from matplotlib.collections import LineCollection, PolyCollection
 from matplotlib.figure import Figure
-from spatialsorter import Sorting
 
 import trajectopy_core.utils.datahandling as datahandling
 from trajectopy_core.evaluation.ate_result import ATEResult, DeviationCollection
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.plotting.heatmap import annotate_heatmap, heatmap
 from trajectopy_core.plotting.settings import PlotSettings
-from trajectopy_core.plotting.util import norm_hist, scatter_plotter, stair_hist, vertical_subplots
+from trajectopy_core.plotting.util import (
+    UNIT_DICT,
+    XLABEL_DICT,
+    derive_xlabel_from_sortings,
+    norm_hist,
+    scatter_plotter,
+    stair_hist,
+    vertical_subplots,
+)
 from trajectopy_core.utils.definitions import Unit
 
 logger = logging.getLogger("root")
-
-XLABEL_DICT = {Sorting.CHRONO: "time [s]", Sorting.SPATIAL: "trajectory length [m]"}
-UNIT_DICT = {Sorting.CHRONO: "s", Sorting.SPATIAL: "m"}
 
 
 def plot_combined_devs(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Figure:
@@ -48,7 +52,7 @@ def plot_combined_devs(devs: ATEResult, plot_settings: PlotSettings = PlotSettin
     return vertical_subplots(
         x_list=[devs.trajectory.function_of] * len(comb_devs),
         y_list=comb_devs,
-        xlabel=XLABEL_DICT[devs.trajectory.sorting],
+        xlabel=XLABEL_DICT[devs.trajectory.sort_by],
         ylabels=ylabels,
         plot_settings=plot_settings,
     )
@@ -67,7 +71,7 @@ def plot_raw_rotation_devs(devs: ATEResult, plot_settings: PlotSettings = PlotSe
     return vertical_subplots(
         x_list=[devs.trajectory.function_of] * len(vert_sp_data_rot),
         y_list=vert_sp_data_rot,
-        xlabel=XLABEL_DICT[devs.trajectory.sorting],
+        xlabel=XLABEL_DICT[devs.trajectory.sort_by],
         ylabels=ylabels,
         plot_settings=plot_settings,
     )
@@ -108,13 +112,13 @@ def plot_raw_position_devs(devs: ATEResult, plot_settings: PlotSettings = PlotSe
     return vertical_subplots(
         x_list=[devs.trajectory.function_of] * len(vert_sp_data_pos),
         y_list=vert_sp_data_pos,
-        xlabel=XLABEL_DICT[devs.trajectory.sorting],
+        xlabel=XLABEL_DICT[devs.trajectory.sort_by],
         ylabels=ylabels,
         plot_settings=plot_settings,
     )
 
 
-def plot_dof_dev(*, devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Figure:
+def plot_dof_dev(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Figure:
     fig = plt.figure(figsize=(12, 4))
 
     plot_position_dof(devs, plot_settings)
@@ -226,15 +230,15 @@ def plot_compact_deviations(devs: ATEResult, plot_settings: PlotSettings = PlotS
             np.rad2deg(comb_rot_rms),
         ]
         titles_rms = [
-            f"position rms ({plot_settings.rms_window_width:.2f} {UNIT_DICT[devs.trajectory.sorting]} window width)",
-            f"rotation rms ({plot_settings.rms_window_width:.2f} {UNIT_DICT[devs.trajectory.sorting]} window width)",
+            f"position rms ({plot_settings.rms_window_width:.2f} {UNIT_DICT[devs.trajectory.sort_by]} window width)",
+            f"rotation rms ({plot_settings.rms_window_width:.2f} {UNIT_DICT[devs.trajectory.sort_by]} window width)",
         ]
         c_labels_dev = [plot_settings.unit_str, "[°]"]
 
     else:
         data_rms_plot = [comb_pos_rms * plot_settings.unit_multiplier]
         titles_rms = [
-            f"position rms ({plot_settings.rms_window_width:.2f} {UNIT_DICT[devs.trajectory.sorting]} window width)"
+            f"position rms ({plot_settings.rms_window_width:.2f} {UNIT_DICT[devs.trajectory.sort_by]} window width)"
         ]
         c_labels_dev = [plot_settings.unit_str]
 
@@ -513,23 +517,12 @@ def plot_position_bias_heatmap(
     return pos_bias_fig
 
 
-def derive_xlabel_from_sortings(sorting_list: List[Sorting]) -> str:
-    if all(sorting == Sorting.SPATIAL for sorting in sorting_list):
-        return XLABEL_DICT[Sorting.SPATIAL]
-
-    if all(sorting == Sorting.CHRONO for sorting in sorting_list):
-        return XLABEL_DICT[Sorting.CHRONO]
-
-    logger.warning("Data is diffently sorted, weird things might happen.")
-    return f"{XLABEL_DICT[Sorting.CHRONO]} / {XLABEL_DICT[Sorting.SPATIAL]}"
-
-
 def plot_multiple_comb_deviations(
     deviation: Union[ATEResult, List[ATEResult]],
     plot_settings: PlotSettings = PlotSettings(),
 ) -> Figure:
     deviation_list = deviation if isinstance(deviation, list) else [deviation]
-    x_label = derive_xlabel_from_sortings([dev.trajectory.sorting for dev in deviation_list])
+    x_label = derive_xlabel_from_sortings([dev.trajectory.sort_by for dev in deviation_list])
 
     fig = plt.figure()
     ax_pos = plt.subplot(2, 1, 1)
@@ -599,7 +592,7 @@ def plot_multiple_deviations(
         deviation_collection.directed_pos_dev if plot_settings.show_directed_devs else deviation_collection.pos_dev
     )
 
-    x_label = derive_xlabel_from_sortings(sorting_list=deviation_collection.sortings)
+    x_label = derive_xlabel_from_sortings(deviation_collection.sort_by_list)
 
     xyz_dev_fig = _plot_components(
         x_list=deviation_collection.function_of,

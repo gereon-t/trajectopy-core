@@ -13,7 +13,6 @@ from typing import Dict, List, Tuple, Union
 import numpy as np
 from rotationset import RotationSet
 from scipy.sparse import spdiags
-from spatialsorter import Sorting
 
 from trajectopy_core.alignment.settings import AlignmentSettings
 from trajectopy_core.evaluation.matching import match_trajectories
@@ -52,9 +51,6 @@ class AlignmentData:
         by speed and resample both trajectories to
         the same sampling.
         """
-        self.traj_from.set_sorting(sorting=Sorting.CHRONO)
-        self.traj_to.set_sorting(sorting=Sorting.CHRONO)
-
         # speed filter
         self.traj_to.apply_index(self.traj_to.speed >= self.alignment_settings.preprocessing.min_speed)
         self.traj_from.apply_index(self.traj_from.speed >= self.alignment_settings.preprocessing.min_speed)

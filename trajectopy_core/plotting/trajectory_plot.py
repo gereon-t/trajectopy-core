@@ -64,13 +64,13 @@ def plot_xyz(trajectories: List[Trajectory]) -> Figure:
     for ax, label in zip(axs_xyz, get_axis_label(trajectories=trajectories)):
         ax.set_ylabel(label)
 
-    x_label = derive_xlabel_from_sortings([traj.sorting for traj in trajectories])
+    x_label = derive_xlabel_from_sortings([traj.sort_by for traj in trajectories])
     axs_xyz[-1].set_xlabel(x_label)
 
     legend_names = []
     for traj in trajectories:
         legend_names.append(traj.name)
-        xyz = traj.pos.xyz
+        xyz = traj.xyz
 
         # xyz fig
         for j, ax in enumerate(axs_xyz):
@@ -114,7 +114,7 @@ def get_axis_label(trajectories: List[Trajectory]) -> Tuple[str, str, str]:
 def plot_rpy(trajectories: List[Trajectory]) -> Union[Figure, None]:
     """Plots rpy coordinates of trajectories as subplots"""
     fig_rpy, axs_rpy = plt.subplots(3, 1, sharex=True)
-    x_label = derive_xlabel_from_sortings([traj.sorting for traj in trajectories])
+    x_label = derive_xlabel_from_sortings([traj.sort_by for traj in trajectories])
     axs_rpy[-1].set_xlabel(x_label)
 
     not_empty = False
@@ -123,7 +123,7 @@ def plot_rpy(trajectories: List[Trajectory]) -> Union[Figure, None]:
         # rpy fig
         if traj.rot and len(traj.rot) > 0:
             legend_names.append(traj.name)
-            rpy = traj.rot.as_euler(seq="xyz")
+            rpy = traj.rpy
             ylabels = ["roll [°]", "pitch [°]", "yaw [°]"]
             for j, (ax, yl) in enumerate(zip(axs_rpy, ylabels)):
                 ax.plot(traj.function_of, np.rad2deg(rpy[:, j]))

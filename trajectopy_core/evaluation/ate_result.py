@@ -12,7 +12,6 @@ import numpy as np
 import pandas as pd
 from pointset import PointSet
 from rotationset import RotationSet
-from spatialsorter import Sorting, complete_lap_dist
 
 import trajectopy_core.utils.datahandling as datahandling
 from trajectopy_core.evaluation.deviations import AbsoluteTrajectoryDeviations
@@ -45,16 +44,6 @@ class ATEResult:
             np.testing.assert_almost_equal(self_value, other_value, decimal=5)
 
         return True
-
-    def set_sorting(self, sorting: Sorting, inplace: bool = True):
-        if sorting == self.trajectory.sorting:
-            return self if inplace else copy.deepcopy(self)
-
-        sort_switing_index = self.trajectory.sort_switching_index
-        devs = self.apply_index(index=sort_switing_index, inplace=inplace)
-        devs.trajectory.sorting = sorting
-        self.trajectory.sort_index = np.array(sort_switing_index, dtype=int)
-        return devs
 
     @property
     def property_dict(self) -> Dict[str, str]:
@@ -150,27 +139,6 @@ class ATEResult:
             quat_filtered = dev_self.abs_dev.rot_dev.as_quat()[index, :]
             dev_self.abs_dev.rot_dev = RotationSet.from_quat(quat_filtered)
         return dev_self
-
-    def divide_into_laps(self) -> Union[List["ATEResult"], None]:
-        """
-        Divides the trajectory into laps and returns a list of deviations for each lap.
-        """
-        lap_indices = self.trajectory.lap_indices
-
-        if lap_indices is None:
-            return None
-
-        lap_list = []
-        chrono_tstamps = np.sort(self.trajectory.tstamps)
-        for i in range(len(lap_indices) - 1):
-            index = [
-                chrono_tstamps[lap_indices[i]] <= tstamps <= chrono_tstamps[lap_indices[i + 1] - 1]
-                for tstamps in self.trajectory.tstamps
-            ]
-            lap_deviations = self.apply_index(index=index, inplace=False).set_sorting(Sorting.SPATIAL)
-            lap_deviations.name = f" Lap {i+1}"
-            lap_list.append(lap_deviations)
-        return lap_list
 
     @property
     def pos_dev_close_to_zero(self) -> bool:
@@ -484,18 +452,11 @@ class ATEResult:
         else:
             rot_dev = None
 
-        if header_data.sorting == Sorting.SPATIAL:
-            sort_index = np.argsort(np.argsort(tstamps))
-        else:
-            sort_index = np.argsort(tstamps)
-
         trajectory = Trajectory(
             name=header_data.name,
             pos=pos,
             tstamps=tstamps,
             arc_lengths=arc_lengths,
-            sorting=header_data.sorting,
-            sort_index=sort_index,
         )
         ate_result = AbsoluteTrajectoryDeviations(pos_dev=pos_dev, directed_pos_dev=directed_pos_dev, rot_dev=rot_dev)
         return ATEResult(trajectory=trajectory, abs_dev=ate_result)
@@ -625,14 +586,9 @@ class DeviationCollection:
         self.rpy_rms = [
             [dev.rms_roll, dev.rms_pitch, dev.rms_yaw] for dev in deviations if dev.abs_dev.rot_dev is not None
         ]
-        self.complete = [complete_lap_dist(l) for l in self.xyz]
         self.names = [dev.name for dev in deviations]
-        self.sortings = [dev.trajectory.sorting for dev in deviations]
         self.function_of = [dev.trajectory.function_of for dev in deviations]
+        self.sort_by_list = [dev.trajectory.sort_by for dev in deviations]
 
     def __len__(self) -> int:
         return len(self.lengths)
-
-    @property
-    def all_sorted(self) -> bool:
-        return all(s == Sorting.SPATIAL for s in self.sortings)

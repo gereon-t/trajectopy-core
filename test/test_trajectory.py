@@ -5,9 +5,9 @@ from typing import Any
 
 import numpy as np
 from pointset import PointSet
+from rotationset import RotationSet
 
 from trajectopy_core.trajectory import Trajectory
-from rotationset import RotationSet
 
 
 class TestTrajectory(unittest.TestCase):
@@ -121,15 +121,9 @@ class TestTrajectory(unittest.TestCase):
         self.check_trajectory_attribute(trajectory.speed, target_length=target_length, target_type=np.ndarray)
         self.check_trajectory_attribute(trajectory.speed_3d, target_length=target_length, target_type=np.ndarray)
         self.check_trajectory_attribute(trajectory.arc_lengths, target_length=target_length, target_type=np.ndarray)
-        self.check_trajectory_attribute(trajectory.sort_index, target_length=target_length, target_type=np.ndarray)
-        self.check_trajectory_attribute(
-            trajectory.sort_switching_index,
-            target_length=target_length,
-            target_type=np.ndarray,
-        )
+
         self.check_trajectory_attribute(trajectory.idx_chrono, target_length=target_length, target_type=np.ndarray)
-        self.check_trajectory_attribute(trajectory.function_of, target_length=target_length, target_type=np.ndarray)
         self.check_trajectory_attribute(trajectory.se3, target_length=target_length, target_type=list)
         self.check_trajectory_attribute(trajectory.data_rate, target_length=0, target_type=float)
-        self.check_trajectory_attribute(trajectory.arc_length, target_length=0, target_type=float)
+        self.check_trajectory_attribute(trajectory.total_length, target_length=0, target_type=float)
         self.check_trajectory_attribute(trajectory.all, target_length=target_length, target_type=np.ndarray)

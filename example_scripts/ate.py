@@ -5,12 +5,17 @@ from rich.console import Console
 from rich.logging import RichHandler
 from rich.table import Table
 
-from trajectopy_core.alignment.actions import align_trajectories
+from trajectopy_core.alignment.actions import align_trajectories, apply_alignment
 from trajectopy_core.alignment.settings import AlignmentEstimationSettings, AlignmentSettings
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute
 from trajectopy_core.evaluation.matching import match_trajectories
 from trajectopy_core.evaluation.settings import MatchingMethod, MatchingSettings
-from trajectopy_core.plotting.deviation_plot import plot_compact_hist
+from trajectopy_core.plotting.deviation_plot import (
+    plot_compact_hist,
+    plot_combined_devs,
+    plot_dof_dev,
+    plot_raw_position_devs,
+)
 from trajectopy_core.trajectory import Trajectory
 
 logging.basicConfig(
@@ -51,7 +56,7 @@ def main():
         alignment_settings=alignment_settings,
         matching_settings=MatchingSettings(method=MatchingMethod.NEAREST_TEMPORAL),
     )
-    est_traj_aligned = est_traj.apply_alignment(alignment)
+    est_traj_aligned = apply_alignment(trajectory=est_traj, alignment_result=alignment, inplace=False)
 
     # Compute ATE
     ate_result = compare_trajectories_absolute(traj_ref=gt_traj, traj_test=est_traj_aligned)
@@ -59,6 +64,9 @@ def main():
 
     # Plot
     plot_compact_hist(ate_result)
+    plot_combined_devs(ate_result)
+    plot_dof_dev(ate_result)
+    plot_raw_position_devs(ate_result)
     plt.tight_layout()
     plt.show()
 

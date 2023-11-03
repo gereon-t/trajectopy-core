@@ -5,12 +5,15 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 import logging
+from typing import Tuple
+import numpy as np
 
 from rotationset import RotationSet
 
 from trajectopy_core.alignment.ghm.data import AlignmentData
 from trajectopy_core.alignment.ghm.estimation import Alignment
-from trajectopy_core.alignment.parameters import SensorRotationParameters
+from trajectopy_core.alignment.ghm.functional_model.equations import leverarm_time_component
+from trajectopy_core.alignment.parameters import AlignmentParameters, SensorRotationParameters
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.alignment.rotation_alignment import align_rotations
 from trajectopy_core.alignment.settings import AlignmentSettings
@@ -18,6 +21,82 @@ from trajectopy_core.evaluation.settings import MatchingSettings
 from trajectopy_core.trajectory import Trajectory
 
 logger = logging.getLogger("root")
+
+
+def apply_alignment(
+    *, trajectory: Trajectory, alignment_result: AlignmentResult, inplace: bool = True
+) -> "Trajectory":
+    """Transforms trajectory using alignment parameters.
+
+    After computing the alignment parameters needed to align
+    two trajectories, they can be applied to arbitrary trajectories.
+
+    Args:
+        alignment_result (AlignmentResult)
+        inplace (bool, optional): Perform in-place. Defaults to True.
+
+    Returns:
+        Trajectory: Aligned trajectory
+    """
+    trajectory = trajectory if inplace else trajectory.copy()
+
+    # leverarm and time
+    (
+        euler_x,
+        euler_y,
+        euler_z,
+        lever_x,
+        lever_y,
+        lever_z,
+    ) = _prepare_alignment_application(trajectory, alignment_result.position_parameters)
+
+    speed_3d = trajectory.speed_3d
+    speed_x, speed_y, speed_z = speed_3d[:, 0], speed_3d[:, 1], speed_3d[:, 2]
+
+    trafo_x, trafo_y, trafo_z = leverarm_time_component(
+        euler_x=euler_x,
+        euler_y=euler_y,
+        euler_z=euler_z,
+        lever_x=lever_x,
+        lever_y=lever_y,
+        lever_z=lever_z,
+        time_shift=alignment_result.position_parameters.time_shift.value,
+        speed_x=speed_x,
+        speed_y=speed_y,
+        speed_z=speed_z,
+    )
+    trajectory.pos.xyz += np.c_[trafo_x, trafo_y, trafo_z]
+
+    # similiarity transformation
+    trajectory.apply_transformation(alignment_result.position_parameters.sim3_matrix)
+
+    logger.info("Applied alignment parameters to positions.")
+
+    # sensor orientation
+    if trajectory.rot is not None:
+        trajectory.rot = alignment_result.rotation_parameters.rotation_set * trajectory.rot
+        logger.info("Applied alignment parameters to orientations.")
+
+    return trajectory
+
+
+def _prepare_alignment_application(
+    trajectory: Trajectory, alignment_parameters: AlignmentParameters
+) -> Tuple[float, ...]:
+    if trajectory.rot is not None:
+        rpy = trajectory.rot.as_euler("xyz", degrees=False)
+        euler_x, euler_y, euler_z = rpy[:, 0], rpy[:, 1], rpy[:, 2]
+        lever_x, lever_y, lever_z = (
+            alignment_parameters.lever_x.value,
+            alignment_parameters.lever_y.value,
+            alignment_parameters.lever_z.value,
+        )
+    else:
+        logger.error("Trajectory has no orientations. Cannot apply leverarm.")
+        euler_x, euler_y, euler_z = 0, 0, 0
+        lever_x, lever_y, lever_z = 0, 0, 0
+
+    return euler_x, euler_y, euler_z, lever_x, lever_y, lever_z
 
 
 def adopt_first_pose(*, traj_from: Trajectory, traj_to: Trajectory) -> Trajectory:

@@ -11,7 +11,6 @@ from datetime import datetime
 from typing import Callable, Dict, List, Union
 
 import numpy as np
-from spatialsorter import SORTING_DICT, Sorting
 
 from trajectopy_core.evaluation.settings import ComparisonMethod
 from trajectopy_core.utils.definitions import GPS_WEEK_ZERO, TIME_FORMAT_DICT, TimeFormat, Unit
@@ -92,10 +91,6 @@ class HeaderData:
     @property
     def rot_unit(self) -> str:
         return str(self.data.get("rot_unit", "rad"))
-
-    @property
-    def sorting(self) -> Sorting:
-        return SORTING_DICT[str(self.data.get("sorting", "chrono"))]
 
     @property
     def fields(self) -> List[str]:
