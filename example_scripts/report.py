@@ -2,7 +2,7 @@ import logging
 
 from rich.logging import RichHandler
 
-from trajectopy_core.alignment.actions import align_trajectories
+from trajectopy_core.alignment.actions import align_trajectories, apply_alignment
 from trajectopy_core.alignment.settings import AlignmentSettings
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute, compare_trajectories_relative
 from trajectopy_core.evaluation.matching import match_trajectories
@@ -34,7 +34,7 @@ def main():
         alignment_settings=alignment_settings,
         matching_settings=MatchingSettings(method=MatchingMethod.NEAREST_TEMPORAL),
     )
-    est_traj_aligned = est_traj.apply_alignment(alignment)
+    est_traj_aligned = apply_alignment(trajectory=est_traj, alignment_result=alignment)
 
     # Compute ATE
     ate_result = compare_trajectories_absolute(traj_ref=gt_traj, traj_test=est_traj_aligned)
