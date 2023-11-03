@@ -43,9 +43,9 @@ class AlignmentEstimationSettings(Settings):
     use_y_speed: bool = True
     use_z_speed: bool = True
 
-    lever_x: bool = True
-    lever_y: bool = True
-    lever_z: bool = True
+    lever_x: bool = False
+    lever_y: bool = False
+    lever_z: bool = False
 
     sensor_rotation: bool = False
 
