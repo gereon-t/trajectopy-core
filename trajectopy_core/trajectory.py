@@ -230,13 +230,26 @@ class Trajectory:
         sort_by = sort_by or self.sort_by
         if self.rot:
             dataframe = pd.DataFrame(
-                np.c_[self.tstamps, self.arc_lengths, self.pos.xyz, self.rot.as_quat()],
-                columns=["time", "arc_lengths", "pos_x", "pos_y", "pos_z", "rot_x", "rot_y", "rot_z", "rot_w"],
+                np.c_[self.tstamps, self.arc_lengths, self.pos.xyz, self.rot.as_quat(), self.speed_3d],
+                columns=[
+                    "time",
+                    "arc_lengths",
+                    "pos_x",
+                    "pos_y",
+                    "pos_z",
+                    "rot_x",
+                    "rot_y",
+                    "rot_z",
+                    "rot_w",
+                    "speed_x",
+                    "speed_y",
+                    "speed_z",
+                ],
             )
         else:
             dataframe = pd.DataFrame(
-                np.c_[self.tstamps, self.arc_lengths, self.pos.xyz],
-                columns=["time", "arc_lengths", "pos_x", "pos_y", "pos_z"],
+                np.c_[self.tstamps, self.arc_lengths, self.pos.xyz, self.speed_3d],
+                columns=["time", "arc_lengths", "pos_x", "pos_y", "pos_z", "speed_x", "speed_y", "speed_z"],
             )
 
         return dataframe.sort_values(by=sort_by)
