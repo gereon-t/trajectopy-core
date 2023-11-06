@@ -4,11 +4,11 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
-from dataclasses import field
+import json
+from dataclasses import dataclass, field
 from typing import List
-
 import numpy as np
-from yaml_dataclass import Settings, dataclass
+from trajectopy_core.settings.base import Settings
 
 METRIC_THRESHOLD = 1e-4
 TIME_THRESHOLD = 1e-4
@@ -21,6 +21,12 @@ class AlignmentPreprocessing(Settings):
     min_speed: float = 0.0
     time_start: float = 0.0
     time_end: float = 0.0
+
+    @staticmethod
+    def decoder(dct: dict):
+        obj = AlignmentPreprocessing()
+        obj.__dict__.update(dct)
+        return obj
 
 
 @dataclass
@@ -213,6 +219,12 @@ class AlignmentEstimationSettings(Settings):
     def lq_parameter_filter(self) -> List[bool]:
         return self.helmert_filter + [self.time_shift_enabled] + self.leverarm_filter
 
+    @staticmethod
+    def decoder(dct: dict):
+        obj = AlignmentEstimationSettings()
+        obj.__dict__.update(dct)
+        return obj
+
 
 @dataclass
 class AlignmentStochastics(Settings):
@@ -226,6 +238,12 @@ class AlignmentStochastics(Settings):
     var_yaw: float = float(np.deg2rad(1.0)) ** 2
     var_speed_to: float = 1.0
     error_probability: float = 0.05
+
+    @staticmethod
+    def decoder(dct: dict):
+        obj = AlignmentStochastics()
+        obj.__dict__.update(dct)
+        return obj
 
 
 @dataclass
@@ -257,3 +275,31 @@ class AlignmentSettings(Settings):
 
     def __str__(self) -> str:
         return str(self.preprocessing) + str(self.estimation_of) + str(self.stochastics)
+
+    # @classmethod
+    # def from_file(cls, path: str) -> "Settings":
+    #     with open(path, "r", encoding="utf-8") as f:
+    #         data = json.load(f)
+
+    #     preprocessing = AlignmentPreprocessing(**data["preprocessing"])
+    #     estimation_of = AlignmentEstimationSettings(**data["estimation_of"])
+    #     stochastics = AlignmentStochastics(**data["stochastics"])
+    #     metric_threshold = data["metric_threshold"]
+    #     time_threshold = data["time_threshold"]
+
+    #     return cls(
+    #         preprocessing=preprocessing,
+    #         estimation_of=estimation_of,
+    #         stochastics=stochastics,
+    #         metric_threshold=metric_threshold,
+    #         time_threshold=time_threshold,
+    #     )
+
+
+if __name__ == "__main__":
+    settings = AlignmentSettings()
+    settings.to_file("alignment_settings.json")
+    imported_settings = AlignmentSettings.from_file("alignment_settings.json")
+
+    assert settings == imported_settings
+    print(imported_settings)
