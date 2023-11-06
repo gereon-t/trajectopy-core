@@ -119,7 +119,8 @@ def plot_raw_position_devs(devs: ATEResult, plot_settings: PlotSettings = PlotSe
 
 
 def plot_dof_dev(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Figure:
-    fig = plt.figure(figsize=(12, 4), num=plot_settings.window_title)
+    fig = plt.figure(figsize=(12, 4))
+    plt.title(plot_settings.title)
 
     plot_position_dof(devs, plot_settings)
 
@@ -255,7 +256,8 @@ def plot_compact_hist(devs: ATEResult, plot_settings: PlotSettings = PlotSetting
     """
     Plot compact histograms of cross-track and rpy deviations
     """
-    fig = plt.figure(num=plot_settings.window_title)
+    fig = plt.figure()
+    plt.title(plot_settings.title)
     pos_ax = plt.subplot(2, 1, 1)
     plot_position_hist(devs, plot_settings)
     pos_ax.ticklabel_format(style="sci", axis="y", scilimits=(0, 0))
@@ -318,7 +320,8 @@ def plot_edf(
 ) -> Figure:
     deviation_list = deviation if isinstance(deviation, list) else [deviation]
 
-    fig = plt.figure(num=plot_settings.window_title)
+    fig = plt.figure()
+    plt.title(plot_settings.title)
     plot_position_edf(deviation_list, plot_settings)
     plot_rotation_edf(deviation_list)
 
@@ -362,7 +365,8 @@ def plot_bars(
     plot_settings: PlotSettings = PlotSettings(),
     mode: str = "positions",
 ) -> Figure:
-    fig, ax = plt.subplots(num=plot_settings.window_title)
+    fig, ax = plt.subplots()
+    fig.suptitle(plot_settings.title)
     bar_width = 0.9 / len(deviation_list)
     characteristics = ["Min", "Max", "Mean", "Median", "RMS", "STD"]
     unit = plot_settings.unit_str if mode == "positions" else "[°]"
@@ -423,7 +427,8 @@ def plot_rotation_rms_heatmap(
     if not deviation_collection.rpy_rms:
         return None
 
-    rpy_rms_fig, ax = plt.subplots(num=plot_settings.window_title)
+    rpy_rms_fig, ax = plt.subplots()
+    rpy_rms_fig.suptitle(plot_settings.title)
     ax.grid(False)
     im, _ = heatmap(
         np.rad2deg(np.array(deviation_collection.rpy_rms)),
@@ -447,7 +452,8 @@ def plot_position_rms_heatmap(
     )
 
     pos_labels = ["along rms", "cross rms", "vertical rms"] if plot_settings.show_directed_devs else ["x", "y", "z"]
-    pos_rms_fig, ax = plt.subplots(num=plot_settings.window_title)
+    pos_rms_fig, ax = plt.subplots()
+    pos_rms_fig.suptitle(plot_settings.title)
     ax.grid(False)
     im, _ = heatmap(
         np.array(pos_rms) * plot_settings.unit_multiplier,
@@ -480,7 +486,8 @@ def plot_rotation_bias_heatmap(
         return None
 
     # roll pitch yaw bias
-    rpy_bias_fig, ax = plt.subplots(num=plot_settings.window_title)
+    rpy_bias_fig, ax = plt.subplots()
+    rpy_bias_fig.suptitle(plot_settings.title)
     ax.grid(False)
     im, _ = heatmap(
         np.rad2deg(np.array(deviation_collection.rpy_bias)),
@@ -505,7 +512,8 @@ def plot_position_bias_heatmap(
     )
 
     pos_labels = ["along bias", "cross bias", "vertical bias"] if plot_settings.show_directed_devs else ["x", "y", "z"]
-    pos_bias_fig, ax = plt.subplots(num=plot_settings.window_title)
+    pos_bias_fig, ax = plt.subplots()
+    pos_bias_fig.suptitle(plot_settings.title)
     ax.grid(False)
     im, _ = heatmap(
         np.array(pos_bias) * plot_settings.unit_multiplier,
@@ -528,8 +536,9 @@ def plot_multiple_comb_deviations(
     deviation_list = deviation if isinstance(deviation, list) else [deviation]
     x_label = derive_xlabel_from_sortings([dev.trajectory.sort_by for dev in deviation_list])
 
-    fig = plt.figure(num=plot_settings.window_title)
-    ax_pos = plt.subplot(2, 1, 1, num=plot_settings.window_title)
+    fig = plt.figure()
+    plt.title(plot_settings.title)
+    ax_pos = plt.subplot(2, 1, 1)
     ax_pos.set_xlabel(x_label)
     ax_pos.set_ylabel(f"Deviation {plot_settings.unit_str}")
 
@@ -606,7 +615,7 @@ def plot_multiple_deviations(
         legend_list=deviation_collection.names,
         sharey=True,
         mm=plot_settings.unit_is_mm,
-        window_title=plot_settings.window_title,
+        window_title=plot_settings.title,
     )
 
     # rpy
@@ -619,7 +628,7 @@ def plot_multiple_deviations(
             legend_list=deviation_collection.names,
             sharey=True,
             deg=True,
-            window_title=plot_settings.window_title,
+            window_title=plot_settings.title,
         )
     else:
         rpy_dev_fig = None
@@ -627,7 +636,7 @@ def plot_multiple_deviations(
     return xyz_dev_fig, rpy_dev_fig
 
 
-def plot_rpe(devs: List[RPEResult]) -> Tuple[Figure, Figure]:
+def plot_rpe(devs: List[RPEResult], plot_settings: PlotSettings = PlotSettings()) -> Tuple[Figure, Figure]:
     """Plots metric and time RPE for each Deviation given in devs
 
     Args:
@@ -641,7 +650,9 @@ def plot_rpe(devs: List[RPEResult]) -> Tuple[Figure, Figure]:
         devs = [devs]
 
     fig_metric, (fig_pos_metric, fig_rot_metric) = plt.subplots(2, 1)
+    fig_metric.suptitle(plot_settings.title)
     fig_time, (fig_pos_time, fig_rot_time) = plt.subplots(2, 1)
+    fig_time.suptitle(plot_settings.title)
 
     fig_pos_metric.set_ylabel("Position RPE [%]")
     fig_pos_time.set_ylabel("Position RPE [m/s]")
@@ -775,7 +786,8 @@ def _plot_components(
     """
     Plots data for each lap for each component in x
     """
-    fig, axes = plt.subplots(nrows=y_list[0].shape[1], ncols=1, sharex=True, sharey=sharey, num=window_title)
+    fig, axes = plt.subplots(nrows=y_list[0].shape[1], ncols=1, sharex=True, sharey=sharey)
+    fig.suptitle(window_title)
     for j, (ax, yl) in enumerate(zip(axes, ylabels)):
         if j == y_list[0].shape[1] - 1:
             ax.set_xlabel(xlabel)

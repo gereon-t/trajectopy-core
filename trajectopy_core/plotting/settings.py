@@ -16,7 +16,7 @@ logger = logging.getLogger("root")
 class PlotSettings(Settings):
     """Dataclass defining plot configuration"""
 
-    window_title: str = "Trajectopy"
+    title: str = "Trajectopy"
     rms_window_width: float = 1.0
     grid_mp: float = 4.0
     always_show_zero: bool = True

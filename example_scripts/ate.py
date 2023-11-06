@@ -64,7 +64,7 @@ def main():
     console.print(dict_to_table(ate_result.property_dict))
 
     # Plot
-    plot_settings = PlotSettings(window_title="Custom Title")
+    plot_settings = PlotSettings(title="Custom Title")
     plot_compact_hist(ate_result, plot_settings)
     plot_combined_devs(ate_result)
     plot_dof_dev(ate_result)

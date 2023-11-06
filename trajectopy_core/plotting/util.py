@@ -45,9 +45,8 @@ def vertical_subplots(
     """
     Creates a vertical array of subplots containing data provided in vals
     """
-    fig, axes = plt.subplots(
-        nrows=len(y_list[0]), ncols=1, sharex=sharex, sharey=sharey, num=plot_settings.window_title
-    )
+    fig, axes = plt.subplots(nrows=len(y_list[0]), ncols=1, sharex=sharex, sharey=sharey)
+    fig.suptitle(plot_settings.title)
 
     if len(y_list[0]) == 1:
         axes = [axes]
@@ -158,13 +157,15 @@ def scatter_plotter(
     if plot_settings.scatter_rotate:
         xyz = [datahandling.rotate_to_main_axis(x_i - np.mean(x_i, axis=0)) + np.mean(x_i, axis=0) for x_i in xyz]
 
-    fig = plt.figure(figsize=(7.2, 4.45), num=plot_settings.window_title) if not separate and figure else None
+    fig = plt.figure(figsize=(7.2, 4.45)) if not separate and figure else None
+    plt.title(plot_settings.title)
 
     for i, (xyz_i, d, t, cl, xl_i, yl_i) in enumerate(zip(xyz, data, titles, c_labels, xlabels, ylabels)):
         if not separate and figure:
-            plt.subplot(nrows, ncols, i + 1, num=plot_settings.window_title)
+            plt.subplot(nrows, ncols, i + 1)
         elif figure:
-            plt.figure(figsize=(7.2, 4.45), num=plot_settings.window_title)
+            plt.figure(figsize=(7.2, 4.45))
+            plt.title(plot_settings.title)
         grid = datahandling.togrid(xyz=xyz_i, data=d, grid_mp=plot_settings.grid_mp)
 
         _colored_scatter_plot(
