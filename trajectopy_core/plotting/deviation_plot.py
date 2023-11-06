@@ -119,7 +119,7 @@ def plot_raw_position_devs(devs: ATEResult, plot_settings: PlotSettings = PlotSe
 
 
 def plot_dof_dev(devs: ATEResult, plot_settings: PlotSettings = PlotSettings()) -> Figure:
-    fig = plt.figure(figsize=(12, 4))
+    fig = plt.figure(figsize=(12, 4), num=plot_settings.window_title)
 
     plot_position_dof(devs, plot_settings)
 
@@ -255,7 +255,7 @@ def plot_compact_hist(devs: ATEResult, plot_settings: PlotSettings = PlotSetting
     """
     Plot compact histograms of cross-track and rpy deviations
     """
-    fig = plt.figure()
+    fig = plt.figure(num=plot_settings.window_title)
     pos_ax = plt.subplot(2, 1, 1)
     plot_position_hist(devs, plot_settings)
     pos_ax.ticklabel_format(style="sci", axis="y", scilimits=(0, 0))
@@ -318,7 +318,7 @@ def plot_edf(
 ) -> Figure:
     deviation_list = deviation if isinstance(deviation, list) else [deviation]
 
-    fig = plt.figure()
+    fig = plt.figure(num=plot_settings.window_title)
     plot_position_edf(deviation_list, plot_settings)
     plot_rotation_edf(deviation_list)
 
@@ -524,7 +524,7 @@ def plot_multiple_comb_deviations(
     deviation_list = deviation if isinstance(deviation, list) else [deviation]
     x_label = derive_xlabel_from_sortings([dev.trajectory.sort_by for dev in deviation_list])
 
-    fig = plt.figure()
+    fig = plt.figure(num=plot_settings.window_title)
     ax_pos = plt.subplot(2, 1, 1)
     ax_pos.set_xlabel(x_label)
     ax_pos.set_ylabel(f"Deviation {plot_settings.unit_str}")

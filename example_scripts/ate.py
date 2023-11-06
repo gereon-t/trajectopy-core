@@ -7,6 +7,7 @@ from rich.table import Table
 
 from trajectopy_core.alignment.actions import align_trajectories, apply_alignment
 from trajectopy_core.alignment.settings import AlignmentEstimationSettings, AlignmentSettings
+from trajectopy_core.plotting.settings import PlotSettings
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute
 from trajectopy_core.evaluation.matching import match_trajectories
 from trajectopy_core.evaluation.settings import MatchingMethod, MatchingSettings
@@ -63,7 +64,8 @@ def main():
     console.print(dict_to_table(ate_result.property_dict))
 
     # Plot
-    plot_compact_hist(ate_result)
+    plot_settings = PlotSettings(window_title="Custom Title")
+    plot_compact_hist(ate_result, plot_settings)
     plot_combined_devs(ate_result)
     plot_dof_dev(ate_result)
     plot_raw_position_devs(ate_result)
