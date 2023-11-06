@@ -16,10 +16,10 @@ def mplstyle_file_path() -> str:
     logger.info(
         "Using default settings for matplotlib style. You can use custom styles by creating a 'custom.mplstyle' file in the current directory."
     )
-    return "default.mplstyle"
+    return os.path.join(os.path.dirname(__file__), "default.mplstyle")
 
 
 base_path = os.path.join(os.path.dirname(__file__))
-MPL_STYLE_PATH = os.path.join(base_path, mplstyle_file_path())
+MPL_STYLE_PATH = mplstyle_file_path()
 plt.style.use(MPL_STYLE_PATH)
 logger.info("Using matplotlib style: %s", MPL_STYLE_PATH)
