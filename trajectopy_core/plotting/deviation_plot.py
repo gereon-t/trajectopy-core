@@ -505,7 +505,7 @@ def plot_position_bias_heatmap(
     )
 
     pos_labels = ["along bias", "cross bias", "vertical bias"] if plot_settings.show_directed_devs else ["x", "y", "z"]
-    pos_bias_fig, ax = plt.subplots(num=plot_settings.window_title, num=plot_settings.window_title)
+    pos_bias_fig, ax = plt.subplots(num=plot_settings.window_title)
     ax.grid(False)
     im, _ = heatmap(
         np.array(pos_bias) * plot_settings.unit_multiplier,
