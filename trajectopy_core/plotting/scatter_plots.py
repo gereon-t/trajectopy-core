@@ -6,17 +6,17 @@ from trajectopy_core.report.data import ReportData
 
 
 def render_pos_devs(report_data: ReportData) -> str:
-    comb_pos_devs = report_data.comb_pos_devs
+    comb_pos_devs = report_data.comb_dev_pos
 
     cbar_min = min(comb_pos_devs)
-    cbar_max = min(np.max(comb_pos_devs), cbar_min + np.std(comb_pos_devs) * report_data.max_std)
+    cbar_max = min(np.max(comb_pos_devs), cbar_min + np.std(comb_pos_devs) * report_data.settings.scatter_max_std)
 
     fig = go.Figure()
 
     fig.add_trace(
         go.Scatter(
-            x=report_data.x,
-            y=report_data.y,
+            x=report_data.pos_x,
+            y=report_data.pos_y,
             mode="markers",
             marker=dict(
                 color=comb_pos_devs,
@@ -38,20 +38,20 @@ def render_pos_devs(report_data: ReportData) -> str:
         scaleratio=1,
     )
 
-    return plot(fig, output_type="div")
+    return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())
 
 
 def render_rot_devs(report_data: ReportData) -> str:
-    comb_rot_devs = report_data.comb_rot_devs
+    comb_rot_devs = report_data.comb_dev_rot
 
     cbar_min = min(comb_rot_devs)
-    cbar_max = min(np.max(comb_rot_devs), cbar_min + np.std(comb_rot_devs) * report_data.max_std)
+    cbar_max = min(np.max(comb_rot_devs), cbar_min + np.std(comb_rot_devs) * report_data.settings.scatter_max_std)
 
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(
-            x=report_data.x,
-            y=report_data.y,
+            x=report_data.pos_x,
+            y=report_data.pos_y,
             mode="markers",
             marker=dict(
                 color=comb_rot_devs,
@@ -73,4 +73,4 @@ def render_rot_devs(report_data: ReportData) -> str:
         scaleratio=1,
     )
 
-    return plot(fig, output_type="div")
+    return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())

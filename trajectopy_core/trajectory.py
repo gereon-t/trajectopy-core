@@ -190,6 +190,13 @@ class Trajectory:
         return "s" if self.sort_by == "time" else "m"
 
     @property
+    def function_of_label(self) -> str:
+        """
+        Returns the label of the function of the trajectory
+        """
+        return "time [s]" if self.sort_by == "time" else "arc length [m]"
+
+    @property
     def xyz(self) -> np.ndarray:
         """
         Returns the xyz coordinates of the trajectory

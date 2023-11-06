@@ -15,7 +15,7 @@ class TestTrajectory(unittest.TestCase):
         trajectory_ref = open_loop_trajectory.copy()
         trajectory = open_loop_trajectory.copy()
         random_sampling = np.random.choice(
-            trajectory.idx_chrono,
+            np.arange(len(trajectory)),
             size=np.random.randint(1, len(trajectory) // 1.2),
             replace=False,
         )
@@ -92,7 +92,7 @@ class TestTrajectory(unittest.TestCase):
         trajectory = open_loop_trajectory.copy()
 
         random_sampling = np.random.choice(
-            trajectory.idx_chrono,
+            np.arange(len(trajectory)),
             size=np.random.randint(
                 int(len(trajectory) * 0.1),
                 max(
@@ -122,8 +122,6 @@ class TestTrajectory(unittest.TestCase):
         self.check_trajectory_attribute(trajectory.speed_3d, target_length=target_length, target_type=np.ndarray)
         self.check_trajectory_attribute(trajectory.arc_lengths, target_length=target_length, target_type=np.ndarray)
 
-        self.check_trajectory_attribute(trajectory.idx_chrono, target_length=target_length, target_type=np.ndarray)
         self.check_trajectory_attribute(trajectory.se3, target_length=target_length, target_type=list)
         self.check_trajectory_attribute(trajectory.data_rate, target_length=0, target_type=float)
         self.check_trajectory_attribute(trajectory.total_length, target_length=0, target_type=float)
-        self.check_trajectory_attribute(trajectory.all, target_length=target_length, target_type=np.ndarray)

@@ -16,8 +16,8 @@ from trajectopy_core.alignment.ghm.functional_model.equations import leverarm_ti
 from trajectopy_core.alignment.parameters import AlignmentParameters, SensorRotationParameters
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.alignment.rotation_alignment import align_rotations
-from trajectopy_core.alignment.settings import AlignmentSettings
-from trajectopy_core.evaluation.settings import MatchingSettings
+from trajectopy_core.settings.alignment import AlignmentSettings
+from trajectopy_core.settings.matching import MatchingSettings
 from trajectopy_core.trajectory import Trajectory
 
 logger = logging.getLogger("root")

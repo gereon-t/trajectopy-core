@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 import numpy as np
 
 from trajectopy_core.alignment.parameters import AlignmentParameters, SensorRotationParameters
-from trajectopy_core.alignment.settings import AlignmentEstimationSettings
+from trajectopy_core.settings.alignment import AlignmentEstimationSettings
 
 
 @dataclass

@@ -9,8 +9,8 @@ from trajectopy_core.alignment.actions import align_trajectories, apply_alignmen
 from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.alignment.rotation_alignment import align_rotations
-from trajectopy_core.alignment.settings import AlignmentEstimationSettings, AlignmentSettings, AlignmentStochastics
-from trajectopy_core.evaluation.settings import MatchingSettings
+from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings, AlignmentStochastics
+from trajectopy_core.settings.matching import MatchingSettings
 from trajectopy_core.trajectory import Trajectory
 from trajectopy_core.utils.definitions import Unit
 

@@ -26,13 +26,10 @@ class MatchingSettings(Settings):
     k_nearest: int = 10
 
     @staticmethod
-    def encoder(obj: "MatchingSettings"):
-        return {
-            "method": obj.method.value,
-            "max_time_diff": obj.max_time_diff,
-            "max_distance": obj.max_distance,
-            "k_nearest": obj.k_nearest,
-        }
+    def encoder(name: str, value: Any) -> Any:
+        if name == "method":
+            return value.value
+        return value
 
     @staticmethod
     def decoder(name: str, value: Any) -> Any:

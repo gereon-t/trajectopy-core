@@ -19,7 +19,7 @@ from trajectopy_core.alignment.direct.timeshift import direct_timeshift
 from trajectopy_core.alignment.ghm.data import AlignmentData
 from trajectopy_core.alignment.ghm.functional_model.interface import FunctionalRelationship
 from trajectopy_core.alignment.parameters import AlignmentParameters, HelmertTransformation, Leverarm, Parameter
-from trajectopy_core.alignment.settings import AlignmentEstimationSettings, AlignmentSettings
+from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings
 from trajectopy_core.utils.definitions import Unit
 from trajectopy_core.utils.printing import dict2table
 

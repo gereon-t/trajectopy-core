@@ -14,7 +14,7 @@ import trajectopy_core.utils.datahandling as datahandling
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.deviations import AbsoluteTrajectoryDeviations, RelativeTrajectoryDeviations
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.evaluation.settings import RelativeComparisonSettings
+from trajectopy_core.settings.comparison import RelativeComparisonSettings
 from trajectopy_core.trajectory import Trajectory
 from trajectopy_core.utils.definitions import Unit
 

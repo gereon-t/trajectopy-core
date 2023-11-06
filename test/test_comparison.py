@@ -9,9 +9,10 @@ from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute, compare_trajectories_relative
-from trajectopy_core.evaluation.matching import match_trajectories
+from trajectopy_core.matching import match_trajectories
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.evaluation.settings import MatchingMethod, MatchingSettings, RelativeComparisonSettings
+from trajectopy_core.settings.matching import MatchingMethod, MatchingSettings
+from trajectopy_core.settings.comparison import RelativeComparisonSettings
 from trajectopy_core.trajectory import Trajectory
 from trajectopy_core.utils.definitions import Unit
 

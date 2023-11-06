@@ -1,7 +1,0 @@
-{
-    "pair_min_distance": 100.0,
-    "pair_max_distance": 800.0,
-    "pair_distance_step": 100.0,
-    "pair_distance_unit": 3,
-    "use_all_pose_pairs": true
-}

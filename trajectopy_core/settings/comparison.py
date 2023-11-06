@@ -6,8 +6,26 @@ mail@gtombrink.de
 """
 from dataclasses import dataclass
 from typing import Any
+from enum import Enum, auto
 from trajectopy_core.settings.base import Settings
 from trajectopy_core.utils.definitions import Unit
+
+
+class ComparisonMethod(Enum):
+    ABSOLUTE = auto()
+    RELATIVE = auto()
+    UNKNOWN = auto()
+
+    @classmethod
+    def from_string(cls, string: str):
+        return comparison_method_from_string(string)
+
+
+def comparison_method_from_string(string: str) -> ComparisonMethod:
+    if "absolute" in string.lower():
+        return ComparisonMethod.ABSOLUTE
+
+    return ComparisonMethod.RELATIVE if "relative" in string.lower() else ComparisonMethod.UNKNOWN
 
 
 @dataclass
@@ -30,14 +48,10 @@ class RelativeComparisonSettings(Settings):
     use_all_pose_pairs: bool = True
 
     @staticmethod
-    def encoder(obj: "RelativeComparisonSettings"):
-        return {
-            "pair_min_distance": obj.pair_min_distance,
-            "pair_max_distance": obj.pair_max_distance,
-            "pair_distance_step": obj.pair_distance_step,
-            "pair_distance_unit": obj.pair_distance_unit.value,
-            "use_all_pose_pairs": obj.use_all_pose_pairs,
-        }
+    def encoder(name: str, value: Any) -> Any:
+        if name == "pair_distance_unit":
+            return value.value
+        return value
 
     @staticmethod
     def decoder(name: str, value: Any) -> Any:

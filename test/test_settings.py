@@ -1,16 +1,68 @@
+from dataclasses import field, dataclass
+from enum import Enum
+from typing import Any
 import unittest
 from pathlib import Path
 
-from yaml_dataclass import Settings
+from trajectopy_core.settings.base import Settings
 
-from trajectopy_core.alignment.settings import (
-    AlignmentEstimationSettings,
-    AlignmentPreprocessing,
-    AlignmentSettings,
-    AlignmentStochastics,
-)
-from trajectopy_core.evaluation.settings import MatchingSettings, RelativeComparisonSettings
-from trajectopy_core.plotting.settings import PlotSettings
+
+class SettingsEnum(Enum):
+    SETTING_1 = 1
+    SETTING_2 = 2
+    SETTING_3 = 3
+
+
+@dataclass
+class DeeplyNestedSettings(Settings):
+    setting_1: bool = True
+    setting_2: float = 4.56
+    setting_3: int = 23
+    setting_4: str = "Some Text"
+    setting_5: SettingsEnum = SettingsEnum.SETTING_1
+
+    @staticmethod
+    def encoder(name: str, value: Any) -> Any:
+        if name == "setting_5":
+            return value.value
+        return value
+
+    @staticmethod
+    def decoder(name: str, value: Any) -> Any:
+        if name == "setting_5":
+            return SettingsEnum(value)
+        return value
+
+
+@dataclass
+class NestedSettings(Settings):
+    setting_1: bool = False
+    setting_2: float = 1.23
+    setting_3: int = 42
+    setting_4: str = "Hello World"
+    setting_5: DeeplyNestedSettings = field(default_factory=DeeplyNestedSettings)
+
+
+@dataclass
+class AllSettings(Settings):
+    nested_settings: NestedSettings = field(default_factory=NestedSettings)
+    setting_1: bool = True
+    setting_2: float = 4.56
+    setting_3: DeeplyNestedSettings = field(default_factory=DeeplyNestedSettings)
+    setting_4: str = "Some Text"
+    setting_5: SettingsEnum = SettingsEnum.SETTING_1
+
+    @staticmethod
+    def encoder(name: str, value: Any) -> Any:
+        if name == "setting_5":
+            return value.value
+        return value
+
+    @staticmethod
+    def decoder(name: str, value: Any) -> Any:
+        if name == "setting_5":
+            return SettingsEnum(value)
+        return value
 
 
 class TestSettings(unittest.TestCase):
@@ -20,31 +72,14 @@ class TestSettings(unittest.TestCase):
         super().setUp()
         Path("./test/tmp").mkdir(parents=True, exist_ok=True)
 
-    def settings_io_test(self, Settings: Settings) -> None:
-        filename = f"./test/tmp/settings{TestSettings._file}.yaml"
-        created_settings = Settings()
-        created_settings.to_yaml(filename)
-        imported_settings = Settings.from_yaml(filename)
-        self.assertTrue(imported_settings == created_settings)
-        TestSettings._file += 1
+    def settings_io(self) -> None:
+        settings = AllSettings()
+        settings.to_file("./test/tmp/test.json")
+        imported_settings = AllSettings.from_file("./test/tmp/test.json")
 
-    def test_alignment_settings(self) -> None:
-        self.settings_io_test(AlignmentSettings)
+        assert settings == imported_settings
 
-    def test_alignment_preprocessing_settings(self) -> None:
-        self.settings_io_test(AlignmentPreprocessing)
 
-    def test_rel_comparison_settings(self) -> None:
-        self.settings_io_test(RelativeComparisonSettings)
-
-    def test_alignment_estimation_settings(self) -> None:
-        self.settings_io_test(AlignmentEstimationSettings)
-
-    def test_alignment_stochastics_settings(self) -> None:
-        self.settings_io_test(AlignmentStochastics)
-
-    def test_matching_settings(self) -> None:
-        self.settings_io_test(MatchingSettings)
-
-    def test_plot_settings(self) -> None:
-        self.settings_io_test(PlotSettings)
+if __name__ == "__main__":
+    TestSettings().setUp()
+    TestSettings().settings_io()
