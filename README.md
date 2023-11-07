@@ -286,7 +286,7 @@ Furthermore, the user can choose to either use consecutive pose pairs (non-overl
 
 ### Report Settings
 
-## Visualization Settings
+#### Visualization Settings
 
 - `downsample_size` (integer): The downsample size for data visualization. To prevent unresponsive and overly large html reports, the data can be downsampled before visualization. The downsample size defines the maximum number of values after downsampling. If set to 0 or -1, no downsampling is performed. A downsample_size larger than the number of values in the trajectory will result in no downsampling.
 - `scatter_max_std` (float): The upper colorbar limit is set to the mean plus this value times the standard deviation of the data. This is useful to prevent outliers from dominating the colorbar.
@@ -300,7 +300,7 @@ Furthermore, the user can choose to either use consecutive pose pairs (non-overl
 - `scatter_mode` (string): The mode for scatter plot visualization, often "markers".
 - `scatter_colorscale` (string): The colorscale for scatter plots, Default: "RdYlBu_r".
 
-## Position Units and Names
+#### Position Units and Names
 
 - `pos_x_name` (string): Name for the X-axis position. Default: "x".
 - `pos_y_name` (string): Name for the Y-axis position. Default: "y".
@@ -309,14 +309,14 @@ Furthermore, the user can choose to either use consecutive pose pairs (non-overl
 - `pos_y_unit` (string): Unit for the Y-axis position, Default: "m".
 - `pos_z_unit` (string): Unit for the Z-axis position, Default: "m".
 
-## Rotation Units and Names
+#### Rotation Units and Names
 
 - `rot_x_name` (string): Name for the roll rotation. Default: "roll".
 - `rot_y_name` (string): Name for the pitch rotation. Default: "pitch".
 - `rot_z_name` (string): Name for the yaw rotation. Default: "yaw".
 - `rot_unit` (string): Unit symbol for rotation. Default: "°".
 
-## Export Settings
+#### Export Settings
 
 - `single_plot_export` (object): `ExportSettings` for exporting single plots.
 - `two_subplots_export` (object): `ExportSettings` for exporting two subplots.
@@ -326,7 +326,7 @@ Furthermore, the user can choose to either use consecutive pose pairs (non-overl
 - `three_subplots_height` (integer): Height for three subplots exports in pixels. Default: 750.
 
 
-### Export Settings
+#### Export Settings
 
 - `format` (string): The export format. Choices: "png", "svg", "jpeg", "webp". Default: "png".
 - `height` (integer): The export height in pixels. Default: 500.
