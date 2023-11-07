@@ -17,10 +17,10 @@ def render_pos_devs(report_data: ReportData) -> str:
         go.Scatter(
             x=report_data.pos_x,
             y=report_data.pos_y,
-            mode="markers",
+            mode=report_data.settings.scatter_mode,
             marker=dict(
                 color=comb_pos_devs,
-                colorscale="RdYlBu_r",
+                colorscale=report_data.settings.scatter_colorscale,
                 colorbar=dict(title=f"[{report_data.ate_unit}]"),
                 cmin=cbar_min,
                 cmax=cbar_max,
@@ -29,8 +29,8 @@ def render_pos_devs(report_data: ReportData) -> str:
     )
 
     fig.update_layout(
-        xaxis=dict(title="x [m]"),
-        yaxis=dict(title="y [m]"),
+        xaxis=dict(title=f"{report_data.settings.pos_x_name} [{report_data.settings.pos_x_unit}]"),
+        yaxis=dict(title=f"{report_data.settings.pos_y_name} [{report_data.settings.pos_y_unit}]"),
         title="Position Deviations",
     )
     fig.update_yaxes(
@@ -38,7 +38,7 @@ def render_pos_devs(report_data: ReportData) -> str:
         scaleratio=1,
     )
 
-    return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())
+    return plot(fig, output_type="div", config=report_data.settings.single_plot_export.to_config())
 
 
 def render_rot_devs(report_data: ReportData) -> str:
@@ -52,11 +52,11 @@ def render_rot_devs(report_data: ReportData) -> str:
         go.Scatter(
             x=report_data.pos_x,
             y=report_data.pos_y,
-            mode="markers",
+            mode=report_data.settings.scatter_mode,
             marker=dict(
                 color=comb_rot_devs,
-                colorscale="RdYlBu_r",
-                colorbar=dict(title="[deg]"),
+                colorscale=report_data.settings.scatter_colorscale,
+                colorbar=dict(title=f"[{report_data.settings.rot_unit}]"),
                 cmin=cbar_min,
                 cmax=cbar_max,
             ),
@@ -64,8 +64,8 @@ def render_rot_devs(report_data: ReportData) -> str:
     )
 
     fig.update_layout(
-        xaxis=dict(title="x [m]"),
-        yaxis=dict(title="y [m]"),
+        xaxis=dict(title=f"{report_data.settings.pos_x_name} [{report_data.settings.pos_x_unit}]"),
+        yaxis=dict(title=f"{report_data.settings.pos_y_name} [{report_data.settings.pos_y_unit}]"),
         title="Rotation Deviations",
     )
     fig.update_yaxes(
@@ -73,4 +73,4 @@ def render_rot_devs(report_data: ReportData) -> str:
         scaleratio=1,
     )
 
-    return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())
+    return plot(fig, output_type="div", config=report_data.settings.single_plot_export.to_config())

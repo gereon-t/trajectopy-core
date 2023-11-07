@@ -14,151 +14,224 @@ def render_dev_edf(report_data: ReportData) -> str:
 
     sorted_comb_pos_dev = np.sort(report_data.comb_dev_pos)
     pos_norm_cdf = np.arange(len(sorted_comb_pos_dev)) / float(len(sorted_comb_pos_dev))
-    fig.add_trace(go.Scatter(x=sorted_comb_pos_dev, y=pos_norm_cdf, mode="lines", name="position"), row=1, col=1)
+    fig.add_trace(
+        go.Scatter(x=sorted_comb_pos_dev, y=pos_norm_cdf, mode=report_data.settings.plot_mode, name="position"),
+        row=1,
+        col=1,
+    )
 
     if report_data.has_ate_orientation:
         sorted_comb_rot_dev = np.sort(report_data.comb_dev_rot)
         rot_norm_cdf = np.arange(len(sorted_comb_rot_dev)) / float(len(sorted_comb_rot_dev))
-        fig.add_trace(go.Scatter(x=sorted_comb_rot_dev, y=rot_norm_cdf, mode="lines", name="rotation"), row=2, col=1)
-        fig.update_xaxes(title_text="[deg]", row=2, col=1)
+        fig.add_trace(
+            go.Scatter(x=sorted_comb_rot_dev, y=rot_norm_cdf, mode=report_data.settings.plot_mode, name="rotation"),
+            row=2,
+            col=1,
+        )
+        fig.update_xaxes(title_text=f"[{report_data.settings.rot_unit}]", row=2, col=1)
         fig.update_yaxes(title_text="CDF", row=2, col=1)
 
-    fig.update_layout(title="Cummulative Probability", height=540 if report_data.has_ate_orientation else 400)
+    if report_data.has_ate_orientation:
+        height = report_data.settings.two_subplots_height
+        config = report_data.settings.two_subplots_export.to_config()
+    else:
+        height = report_data.settings.single_plot_height
+        config = report_data.settings.single_plot_export.to_config()
+
+    fig.update_layout(title="Cummulative Probability", height=height)
     fig.update_xaxes(title_text=f"[{report_data.ate_unit}]", row=1, col=1)
     fig.update_yaxes(title_text="CDF", row=1, col=1)
 
-    return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())
+    return plot(fig, output_type="div", config=config)
 
 
 def render_pos_time_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=report_data.pos_x, mode="lines+markers", name="x"),
+        go.Scatter(
+            x=report_data.function_of,
+            y=report_data.pos_x,
+            mode=report_data.settings.plot_mode,
+            name=report_data.settings.pos_x_name,
+        ),
         row=1,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=report_data.pos_y, mode="lines+markers", name="y"),
+        go.Scatter(
+            x=report_data.function_of,
+            y=report_data.pos_y,
+            mode=report_data.settings.plot_mode,
+            name=report_data.settings.pos_y_name,
+        ),
         row=2,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=report_data.pos_z, mode="lines+markers", name="z"),
+        go.Scatter(
+            x=report_data.function_of,
+            y=report_data.pos_z,
+            mode=report_data.settings.plot_mode,
+            name=report_data.settings.pos_z_name,
+        ),
         row=3,
         col=1,
     )
 
-    fig.update_layout(title="Position Components", height=750)
+    fig.update_layout(title="Position Components", height=report_data.settings.three_subplots_height)
 
     fig.update_xaxes(title_text=report_data.function_of_label, row=3, col=1)
-    fig.update_yaxes(title_text="[m]", row=1, col=1)
-    fig.update_yaxes(title_text="[m]", row=2, col=1)
-    fig.update_yaxes(title_text="[m]", row=3, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.settings.pos_x_unit}]", row=1, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.settings.pos_y_unit}]", row=2, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.settings.pos_z_unit}]", row=3, col=1)
 
-    return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())
+    return plot(fig, output_type="div", config=report_data.settings.three_subplots_export.to_config())
 
 
 def render_rot_time_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=report_data.roll, mode="lines+markers", name="roll"),
+        go.Scatter(
+            x=report_data.function_of,
+            y=report_data.roll,
+            mode=report_data.settings.plot_mode,
+            name=report_data.settings.rot_x_name,
+        ),
         row=1,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=report_data.pitch, mode="lines+markers", name="pitch"),
+        go.Scatter(
+            x=report_data.function_of,
+            y=report_data.pitch,
+            mode=report_data.settings.plot_mode,
+            name=report_data.settings.rot_y_name,
+        ),
         row=2,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=report_data.yaw, mode="lines+markers", name="yaw"),
+        go.Scatter(
+            x=report_data.function_of,
+            y=report_data.yaw,
+            mode=report_data.settings.plot_mode,
+            name=report_data.settings.rot_z_name,
+        ),
         row=3,
         col=1,
     )
 
-    fig.update_layout(title="Rotation Components", height=750)
+    fig.update_layout(title="Rotation Components", height=report_data.settings.three_subplots_height)
 
     fig.update_xaxes(title_text=report_data.function_of_label, row=3, col=1)
-    fig.update_yaxes(title_text="[deg]", row=1, col=1)
-    fig.update_yaxes(title_text="[deg]", row=2, col=1)
-    fig.update_yaxes(title_text="[deg]", row=3, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.settings.rot_unit}]", row=1, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.settings.rot_unit}]", row=2, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.settings.rot_unit}]", row=3, col=1)
 
-    return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())
+    return plot(fig, output_type="div", config=report_data.settings.three_subplots_export.to_config())
 
 
 def render_dev_pos_time_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
         go.Scatter(
-            x=report_data.function_of, y=report_data.pos_dev_x, mode="lines+markers", name=report_data.pos_dev_x_name
+            x=report_data.function_of,
+            y=report_data.pos_dev_x,
+            mode=report_data.settings.plot_mode,
+            name=report_data.pos_dev_x_name,
         ),
         row=1,
         col=1,
     )
     fig.add_trace(
         go.Scatter(
-            x=report_data.function_of, y=report_data.pos_dev_y, mode="lines+markers", name=report_data.pos_dev_y_name
+            x=report_data.function_of,
+            y=report_data.pos_dev_y,
+            mode=report_data.settings.plot_mode,
+            name=report_data.pos_dev_y_name,
         ),
         row=2,
         col=1,
     )
     fig.add_trace(
         go.Scatter(
-            x=report_data.function_of, y=report_data.pos_dev_z, mode="lines+markers", name=report_data.pos_dev_z_name
+            x=report_data.function_of,
+            y=report_data.pos_dev_z,
+            mode=report_data.settings.plot_mode,
+            name=report_data.pos_dev_z_name,
         ),
         row=3,
         col=1,
     )
 
-    fig.update_layout(title="Position Deviations per Direction", height=750)
+    fig.update_layout(title="Position Deviations per Direction", height=report_data.settings.three_subplots_height)
 
     fig.update_xaxes(title_text=report_data.function_of_label, row=3, col=1)
     fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=1, col=1)
     fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=2, col=1)
     fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=3, col=1)
 
-    return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())
+    return plot(fig, output_type="div", config=report_data.settings.three_subplots_export.to_config())
 
 
 def render_dev_rot_time_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
 
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=report_data.rot_dev_x, mode="lines+markers", name="roll"),
+        go.Scatter(
+            x=report_data.function_of,
+            y=report_data.rot_dev_x,
+            mode=report_data.settings.plot_mode,
+            name=report_data.settings.rot_x_name,
+        ),
         row=1,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=report_data.rot_dev_y, mode="lines+markers", name="pitch"),
+        go.Scatter(
+            x=report_data.function_of,
+            y=report_data.rot_dev_y,
+            mode=report_data.settings.plot_mode,
+            name=report_data.settings.rot_y_name,
+        ),
         row=2,
         col=1,
     )
     fig.add_trace(
-        go.Scatter(x=report_data.function_of, y=report_data.rot_dev_z, mode="lines+markers", name="yaw"),
+        go.Scatter(
+            x=report_data.function_of,
+            y=report_data.rot_dev_z,
+            mode=report_data.settings.plot_mode,
+            name=report_data.settings.rot_z_name,
+        ),
         row=3,
         col=1,
     )
 
-    fig.update_layout(title="Rotation Deviations per Axis", height=750)
+    fig.update_layout(title="Rotation Deviations per Axis", height=report_data.settings.three_subplots_height)
     fig.update_xaxes(title_text=report_data.function_of_label, row=3, col=1)
-    fig.update_yaxes(title_text="[deg]", row=1, col=1)
-    fig.update_yaxes(title_text="[deg]", row=2, col=1)
-    fig.update_yaxes(title_text="[deg]", row=3, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.settings.rot_unit}]", row=1, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.settings.rot_unit}]", row=2, col=1)
+    fig.update_yaxes(title_text=f"[{report_data.settings.rot_unit}]", row=3, col=1)
 
-    return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())
+    return plot(fig, output_type="div", config=report_data.settings.three_subplots_export.to_config())
 
 
 def render_dev_sum_line_plot(report_data: ReportData) -> str:
     if report_data.has_ate_orientation:
         fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
+        config = report_data.settings.two_subplots_export.to_config()
+        height = report_data.settings.two_subplots_height
     else:
         fig = make_subplots(rows=1, cols=1)
+        config = report_data.settings.single_plot_export.to_config()
+        height = report_data.settings.single_plot_height
 
     fig.add_trace(
         go.Scatter(
             x=report_data.function_of,
             y=report_data.comb_dev_pos,
-            mode="lines+markers",
+            mode=report_data.settings.plot_mode,
             name="position",
         ),
         row=1,
@@ -170,20 +243,20 @@ def render_dev_sum_line_plot(report_data: ReportData) -> str:
             go.Scatter(
                 x=report_data.function_of,
                 y=report_data.comb_dev_rot,
-                mode="lines+markers",
+                mode=report_data.settings.plot_mode,
                 name="rotation",
             ),
             row=2,
             col=1,
         )
-        fig.update_yaxes(title_text="[deg]", row=2, col=1)
+        fig.update_yaxes(title_text=f"[{report_data.settings.rot_unit}]", row=2, col=1)
 
-    fig.update_layout(title="Trajectory Deviations", height=540 if report_data.has_ate_orientation else 400)
+    fig.update_layout(title="Trajectory Deviations", height=height)
 
     fig.update_xaxes(title_text=report_data.function_of_label, row=2 if report_data.has_ate_orientation else 1, col=1)
     fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=1, col=1)
 
-    return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())
+    return plot(fig, output_type="div", config=config)
 
 
 def render_rpe(report_data: ReportData) -> str:
@@ -196,7 +269,7 @@ def render_rpe(report_data: ReportData) -> str:
         go.Scatter(
             x=rpe_result.mean_pair_distances,
             y=rpe_result.pos_dev_mean,
-            mode="lines+markers",
+            mode=report_data.settings.plot_mode,
             name="position",
             error_y=dict(
                 type="data",
@@ -213,7 +286,7 @@ def render_rpe(report_data: ReportData) -> str:
             go.Scatter(
                 x=rpe_result.mean_pair_distances,
                 y=np.rad2deg(rpe_result.rot_dev_mean),
-                mode="lines+markers",
+                mode=report_data.settings.plot_mode,
                 name="rotation",
                 error_y=dict(
                     type="data",
@@ -226,10 +299,16 @@ def render_rpe(report_data: ReportData) -> str:
         )
         fig.update_yaxes(title_text=f"[{rpe_result.rot_drift_unit}]", row=2, col=1)
 
-    fig.update_layout(title="Relative Pose Error", height=540 if rpe_result.has_rot_dev else 400)
+        height = report_data.settings.two_subplots_height
+        config = report_data.settings.two_subplots_export.to_config()
+    else:
+        height = report_data.settings.single_plot_height
+        config = report_data.settings.single_plot_export.to_config()
+
+    fig.update_layout(title="Relative Pose Error", height=height)
     fig.update_yaxes(title_text=f"[{rpe_result.pos_drift_unit}]", row=1, col=1)
     fig.update_xaxes(
         title_text=f"Pose Distance [{rpe_result.pair_distance_unit}]", row=2 if rpe_result.has_rot_dev else 1, col=1
     )
 
-    return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())
+    return plot(fig, output_type="div", config=config)

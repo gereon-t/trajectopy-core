@@ -118,6 +118,7 @@ def render_report(
         "icon": icon,
         "igg": igg,
         "uni_bonn": uni_bonn,
+        "rot_unit": report_data.settings.rot_unit,
     }
 
     return template.render(context)
