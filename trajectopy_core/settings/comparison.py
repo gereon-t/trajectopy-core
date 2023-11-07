@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import Any
 from enum import Enum, auto
 from trajectopy_core.settings.base import Settings
-from trajectopy_core.utils.definitions import Unit
+from trajectopy_core.definitions import Unit
 
 
 class ComparisonMethod(Enum):

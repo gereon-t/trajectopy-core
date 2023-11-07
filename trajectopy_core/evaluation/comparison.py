@@ -10,13 +10,13 @@ from typing import Dict, List, Tuple, Union
 import numpy as np
 from rotationset import RotationSet
 
-import trajectopy_core.utils.datahandling as datahandling
+from trajectopy_core.evaluation.utils import nearest_point
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.deviations import AbsoluteTrajectoryDeviations, RelativeTrajectoryDeviations
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.settings.comparison import RelativeComparisonSettings
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.utils.definitions import Unit
+from trajectopy_core.definitions import Unit
 
 logger = logging.getLogger("root")
 
@@ -259,7 +259,7 @@ def _along_track_dev(*, p: np.ndarray, line_pts: List, is_last: bool) -> float:
     """
     a = line_pts[0]
     b = line_pts[1]
-    p_nearest, t = datahandling.nearest_point(p=p, line_pts=line_pts)
+    p_nearest, t = nearest_point(p=p, line_pts=line_pts)
 
     if not is_last:
         return np.sign(t) * np.linalg.norm(p_nearest - a)
@@ -277,7 +277,7 @@ def _cross_track_dev(*, p: np.ndarray, line_pts: List, z_slope_dist: bool = Fals
     """
     a = line_pts[0]
     b = line_pts[1]
-    p_nearest, _ = datahandling.nearest_point(p=p, line_pts=line_pts)
+    p_nearest, _ = nearest_point(p=p, line_pts=line_pts)
 
     # Determine the sign (left or right of the approximation).
     # It is important that the normal vector is always constructed

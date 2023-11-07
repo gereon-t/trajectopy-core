@@ -56,7 +56,7 @@ def render_rot_devs(report_data: ReportData) -> str:
             marker=dict(
                 color=comb_rot_devs,
                 colorscale="RdYlBu_r",
-                colorbar=dict(title="[°]"),
+                colorbar=dict(title="[deg]"),
                 cmin=cbar_min,
                 cmax=cbar_max,
             ),

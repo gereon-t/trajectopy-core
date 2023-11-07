@@ -33,3 +33,25 @@ class AlignmentResult:
         assert self.estimation_of == other.estimation_of
 
         return True
+
+    def to_file(self, filename: str):
+        """
+        Save the result to a file.
+
+        Args:
+            filename (str): Path to the file.
+        """
+        raise NotImplementedError
+
+    @classmethod
+    def from_file(cls, filename: str):
+        """
+        Load the result from a file.
+
+        Args:
+            filename (str): Path to the file.
+
+        Returns:
+            AlignmentResult: The loaded result.
+        """
+        raise NotImplementedError

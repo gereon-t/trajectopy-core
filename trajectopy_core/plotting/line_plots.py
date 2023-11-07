@@ -194,13 +194,13 @@ def render_rpe(report_data: ReportData) -> str:
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
     fig.add_trace(
         go.Scatter(
-            x=rpe_result.mean_distances,
-            y=rpe_result.mean_pos_devs,
+            x=rpe_result.mean_pair_distances,
+            y=rpe_result.pos_dev_mean,
             mode="lines+markers",
             name="position",
             error_y=dict(
                 type="data",
-                array=rpe_result.pos_stds,
+                array=rpe_result.pos_std,
                 visible=True,
             ),
         ),
@@ -211,13 +211,13 @@ def render_rpe(report_data: ReportData) -> str:
     if rpe_result.has_rot_dev:
         fig.add_trace(
             go.Scatter(
-                x=rpe_result.mean_distances,
-                y=np.rad2deg(rpe_result.mean_rot_devs),
+                x=rpe_result.mean_pair_distances,
+                y=np.rad2deg(rpe_result.rot_dev_mean),
                 mode="lines+markers",
                 name="rotation",
                 error_y=dict(
                     type="data",
-                    array=np.rad2deg(rpe_result.rot_stds),
+                    array=np.rad2deg(rpe_result.rot_std),
                     visible=True,
                 ),
             ),
@@ -229,7 +229,7 @@ def render_rpe(report_data: ReportData) -> str:
     fig.update_layout(title="Relative Pose Error", height=540 if rpe_result.has_rot_dev else 400)
     fig.update_yaxes(title_text=f"[{rpe_result.pos_drift_unit}]", row=1, col=1)
     fig.update_xaxes(
-        title_text=f"Pose Distance [{rpe_result.pose_distance_unit}]", row=2 if rpe_result.has_rot_dev else 1, col=1
+        title_text=f"Pose Distance [{rpe_result.pair_distance_unit}]", row=2 if rpe_result.has_rot_dev else 1, col=1
     )
 
     return plot(fig, output_type="div", config=report_data.settings.png_export.to_config())

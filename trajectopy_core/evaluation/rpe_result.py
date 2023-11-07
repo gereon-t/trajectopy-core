@@ -11,8 +11,8 @@ import numpy as np
 import pandas as pd
 
 from trajectopy_core.evaluation.deviations import RelativeTrajectoryDeviations
-from trajectopy_core.io.trajectory_io import read_data
-from trajectopy_core.utils.definitions import Unit
+from trajectopy_core.io.header import HeaderData
+from trajectopy_core.definitions import Unit
 
 
 class RPEResult:
@@ -47,10 +47,10 @@ class RPEResult:
 
     @property
     def step(self) -> float:
-        return np.mean(np.diff(self.mean_distances)) if len(self.mean_distances) > 1 else 0.0
+        return np.mean(np.diff(self.mean_pair_distances)) if len(self.mean_pair_distances) > 1 else 0.0
 
     @property
-    def pose_distance_unit(self) -> str:
+    def pair_distance_unit(self) -> str:
         return "m" if self.rpe_dev.pair_distance_unit == Unit.METER else "s"
 
     @property
@@ -73,68 +73,68 @@ class RPEResult:
         return [len(values) for values in self.rpe_dev.pair_distance.values() if values]
 
     @property
-    def mean_distances(self) -> List[float]:
+    def mean_pair_distances(self) -> List[float]:
         return self.compute_metric(key="pair_distance", func=np.mean)
 
     @property
     def rpe_pos(self) -> float:
-        return float(np.mean(self.mean_pos_devs))
+        return float(np.mean(self.pos_dev_mean))
 
     @property
     def rpe_rot(self) -> float:
         """Returns the average rotation drift in radians per 100 meters."""
-        return np.mean(self.mean_rot_devs)
+        return np.mean(self.rot_dev_mean)
 
     @property
-    def pos_stds(self) -> List[float]:
+    def pos_std(self) -> List[float]:
         return self.compute_metric(key="pos_dev", func=np.std, factor=self.drift_factor)
 
     @property
-    def rot_stds(self) -> List[float]:
+    def rot_std(self) -> List[float]:
         if not self.has_rot_dev:
             return []
 
         return self.compute_metric(key="rot_dev", func=np.std, factor=self.drift_factor)
 
     @property
-    def mean_pos_devs(self) -> List[float]:
+    def pos_dev_mean(self) -> List[float]:
         return self.compute_metric(key="pos_dev", func=np.mean, factor=self.drift_factor)
 
     @property
-    def min_pos_devs(self) -> List[float]:
+    def pos_dev_min(self) -> List[float]:
         return self.compute_metric(key="pos_dev", func=np.min, factor=self.drift_factor)
 
     @property
-    def max_pos_devs(self) -> List[float]:
+    def pos_dev_max(self) -> List[float]:
         return self.compute_metric(key="pos_dev", func=np.max, factor=self.drift_factor)
 
     @property
-    def median_pos_devs(self) -> List[float]:
+    def pos_dev_median(self) -> List[float]:
         return self.compute_metric(key="pos_dev", func=np.median, factor=self.drift_factor)
 
     @property
-    def mean_rot_devs(self) -> List[float]:
+    def rot_dev_mean(self) -> List[float]:
         if not self.has_rot_dev:
             return []
 
         return self.compute_metric(key="rot_dev", func=np.mean, factor=self.drift_factor)
 
     @property
-    def min_rot_devs(self) -> List[float]:
+    def rot_dev_min(self) -> List[float]:
         if not self.has_rot_dev:
             return []
 
         return self.compute_metric(key="rot_dev", func=np.min, factor=self.drift_factor)
 
     @property
-    def max_rot_devs(self) -> List[float]:
+    def rot_dev_max(self) -> List[float]:
         if not self.has_rot_dev:
             return []
 
         return self.compute_metric(key="rot_dev", func=np.max, factor=self.drift_factor)
 
     @property
-    def median_rot_devs(self) -> List[float]:
+    def rot_dev_median(self) -> List[float]:
         if not self.has_rot_dev:
             return []
 
@@ -153,11 +153,11 @@ class RPEResult:
         return ret_list
 
     @property
-    def all_distances(self) -> List[float]:
+    def all_pair_distances(self) -> List[float]:
         return self.get_all(key="pair_distance")
 
     @property
-    def all_pos_devs(self) -> List[float]:
+    def pos_dev_all(self) -> List[float]:
         return self.get_all(key="pos_dev")
 
     @property
@@ -167,8 +167,8 @@ class RPEResult:
     @property
     def dynamic_pos_dict(self) -> Dict[str, str]:
         return {
-            f"Average position drift at {dist:.3f} (avg) {self.pose_distance_unit}": f"{dev:.3f} {self.pos_drift_unit}"
-            for dist, dev in zip(self.mean_distances, self.mean_pos_devs)
+            f"Average position drift at {dist:.3f} (avg) {self.pair_distance_unit}": f"{dev:.3f} {self.pos_drift_unit}"
+            for dist, dev in zip(self.mean_pair_distances, self.pos_dev_mean)
         }
 
     @property
@@ -177,8 +177,8 @@ class RPEResult:
             return {}
 
         return {
-            f"Average rotation drift at {dist:.3f} (avg) {self.pose_distance_unit}": f"{np.rad2deg(dev):.3f} {self.rot_drift_unit}"
-            for dist, dev in zip(self.mean_distances, self.mean_rot_devs)
+            f"Average rotation drift at {dist:.3f} (avg) {self.pair_distance_unit}": f"{np.rad2deg(dev):.3f} {self.rot_drift_unit}"
+            for dist, dev in zip(self.mean_pair_distances, self.rot_dev_mean)
         }
 
     @property
@@ -195,10 +195,10 @@ class RPEResult:
         }
         dynamic_pos_dict = self.dynamic_pos_dict
         static_pos_dict = {
-            "Maximum Position Drift": f"{np.max(self.max_pos_devs):.3f} {self.pos_drift_unit}",
-            "Minimum Position Drift": f"{np.min(self.min_pos_devs):.3f} {self.pos_drift_unit}",
+            "Maximum Position Drift": f"{np.max(self.pos_dev_max):.3f} {self.pos_drift_unit}",
+            "Minimum Position Drift": f"{np.min(self.pos_dev_min):.3f} {self.pos_drift_unit}",
             "Average Position Drift": f"{self.rpe_pos:.3f} {self.pos_drift_unit}",
-            "Median Position Drift": f"{np.median(self.median_pos_devs):.3f} {self.pos_drift_unit}",
+            "Median Position Drift": f"{np.median(self.pos_dev_median):.3f} {self.pos_drift_unit}",
         }
 
         pos_dict = basic_dict.copy()
@@ -210,26 +210,29 @@ class RPEResult:
 
         dynamic_rot_dict = self.dynamic_rot_dict
         static_rot_dict = {
-            "Maximum Rotation Drift": f"{np.rad2deg(np.max(self.max_rot_devs)):.3f} {self.rot_drift_unit}",
-            "Minimum Rotation Drift": f"{np.rad2deg(np.min(self.min_rot_devs)):.3f} {self.rot_drift_unit}",
+            "Maximum Rotation Drift": f"{np.rad2deg(np.max(self.rot_dev_max)):.3f} {self.rot_drift_unit}",
+            "Minimum Rotation Drift": f"{np.rad2deg(np.min(self.rot_dev_min)):.3f} {self.rot_drift_unit}",
             "Average Rotation Drift": f"{np.rad2deg(self.rpe_rot):.3f} {self.rot_drift_unit}",
-            "Median Rotation Drift": f"{np.rad2deg(np.median(self.median_rot_devs)):.3f} {self.rot_drift_unit}",
+            "Median Rotation Drift": f"{np.rad2deg(np.median(self.rot_dev_median)):.3f} {self.rot_drift_unit}",
         }
         pos_dict.update(dynamic_rot_dict)
         pos_dict.update(static_rot_dict)
         return pos_dict
 
+    @property
+    def columns(self) -> List[str]:
+        if self.has_rot_dev:
+            return ["pair_distance", "pos_dev", "rot_dev"]
+
+        return ["pair_distance", "pos_dev"]
+
     def to_dataframe(self) -> pd.DataFrame:
         if self.has_rot_dev:
             return pd.DataFrame(
-                np.c_[self.all_distances, self.all_pos_devs, self.all_rot_devs],
-                columns=["pair_distance", "pos_dev", "rot_dev"],
+                np.c_[self.all_pair_distances, self.pos_dev_all, self.all_rot_devs], columns=self.columns
             )
         else:
-            return pd.DataFrame(
-                np.c_[self.all_distances, self.all_pos_devs],
-                columns=["pair_distance", "pos_dev"],
-            )
+            return pd.DataFrame(np.c_[self.all_pair_distances, self.pos_dev_all], columns=self.columns)
 
     def to_file(self, filename: str) -> None:
         with open(filename, "a", encoding="utf-8", newline="") as file:
@@ -238,12 +241,13 @@ class RPEResult:
             writer = csv.writer(file)
             file.write("#num_pairs ")
             writer.writerow(self.num_pairs)
-        self.to_dataframe().to_csv(filename, header=False, index=False, mode="a", float_format="%.12f")
+        self.to_dataframe().to_csv(filename, index=False, mode="a", float_format="%.12f")
 
     @classmethod
     def from_file(cls, filename: str):
         """Reads a set of relative trajectory deviations from a file."""
-        header_data, deviation_data = read_data(filename=filename)
+        header_data = HeaderData.from_file(filename)
+        deviation_data = pd.read_csv(filename, comment="#")
 
         pos_dev: Dict[float, List[float]] = {}
         rot_dev: Dict[float, List[float]] = {}
@@ -251,12 +255,15 @@ class RPEResult:
 
         last_index = 0
         for index in header_data.num_pairs:
-            dev_block = deviation_data[last_index : last_index + index, :]
-            mean_dist = np.mean(dev_block[:, 0])
+            dev_block = deviation_data.iloc[last_index : last_index + index, :]
+            pair_distances = dev_block["pair_distance"].to_numpy(dtype=float)
+            pos_devs = dev_block["pos_dev"].to_numpy(dtype=float)
+            rot_devs = dev_block["rot_dev"].to_numpy(dtype=float) if "rot_dev" in deviation_data.columns else []
 
-            pair_distance[mean_dist] = list(dev_block[:, 0])
-            pos_dev[mean_dist] = list(dev_block[:, 1])
-            rot_dev[mean_dist] = list(dev_block[:, 2]) if dev_block.shape[1] > 2 else []
+            mean_dist = np.mean(pair_distances)
+            pair_distance[mean_dist] = list(pair_distances)
+            pos_dev[mean_dist] = list(pos_devs)
+            rot_dev[mean_dist] = list(rot_devs)
 
             last_index += index
 

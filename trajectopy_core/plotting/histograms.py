@@ -30,7 +30,7 @@ def render_rot_devs(report_data: ReportData) -> str:
 
     fig.update_layout(
         title="Rotation Deviations",
-        xaxis=dict(title="Absolute Rotation Error [°]"),
+        xaxis=dict(title="Absolute Rotation Error [deg]"),
         yaxis=dict(title="Count"),
         barmode="overlay",
         bargap=0.1,

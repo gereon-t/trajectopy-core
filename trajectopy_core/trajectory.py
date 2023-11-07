@@ -15,7 +15,7 @@ from rotationset import RotationSet
 from scipy.spatial.transform import Slerp
 
 import trajectopy_core.io.trajectory_io as trajectory_io
-import trajectopy_core.utils.datahandling as datahandling
+from trajectopy_core.utils import gradient_3d, common_time_span, lengths_from_xyz
 
 # logger configuration
 logger = logging.getLogger("root")
@@ -58,7 +58,7 @@ class Trajectory:
         if speed_3d is not None and len(speed_3d) == len(self.pos):
             self._speed_3d = speed_3d
         else:
-            self._speed_3d = datahandling.gradient_3d(xyz=self.pos.to_local(inplace=False).xyz, tstamps=self.tstamps)
+            self._speed_3d = gradient_3d(xyz=self.pos.to_local(inplace=False).xyz, tstamps=self.tstamps)
             logger.info("Speeds were not provided or had wrong dimensions. Speeds were computed instead.")
 
         if arc_lengths is not None and len(arc_lengths) == len(self.pos):
@@ -122,7 +122,7 @@ class Trajectory:
         )
 
     def init_arc_lengths(self):
-        return datahandling.lengths_from_xyz(self.pos.to_local(inplace=False).xyz)
+        return lengths_from_xyz(self.pos.to_local(inplace=False).xyz)
 
     def copy(self) -> "Trajectory":
         """
@@ -356,7 +356,7 @@ class Trajectory:
         if self._speed_3d is not None:
             return self._speed_3d
 
-        return datahandling.gradient_3d(xyz=self.pos.to_local(inplace=False).xyz, tstamps=self.tstamps)
+        return gradient_3d(xyz=self.pos.to_local(inplace=False).xyz, tstamps=self.tstamps)
 
     @speed_3d.setter
     def speed_3d(self, speed_3d: np.ndarray) -> None:
@@ -419,7 +419,7 @@ class Trajectory:
 
         traj_self._interpolate_positions(tstamps_cropped)  # pylint: disable=protected-access
         traj_self._interpolate_rotations(tstamps_cropped)  # pylint: disable=protected-access
-        traj_self.speed_3d = datahandling.gradient_3d(xyz=traj_self.pos.xyz, tstamps=tstamps_cropped)
+        traj_self.speed_3d = gradient_3d(xyz=traj_self.pos.xyz, tstamps=tstamps_cropped)
         traj_self.arc_lengths = np.interp(tstamps_cropped, traj_self.tstamps, traj_self.arc_lengths)
         traj_self.tstamps = tstamps_cropped
 
@@ -510,7 +510,7 @@ class Trajectory:
             Trajectory: Intersected trajectory
         """
         traj_self = self if inplace else self.copy()
-        time_span = datahandling.common_time_span(tstamps1=tstamps, tstamps2=traj_self.tstamps)
+        time_span = common_time_span(tstamps1=tstamps, tstamps2=traj_self.tstamps)
 
         if time_span is None:
             raise ValueError("intersect_both: Timespans do not overlap!")

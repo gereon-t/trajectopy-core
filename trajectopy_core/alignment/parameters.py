@@ -13,8 +13,8 @@ import pandas as pd
 from rotationset import RotationSet
 
 from trajectopy_core.settings.alignment import AlignmentEstimationSettings
-from trajectopy_core.utils.definitions import UNIT_FORMAT_RULES, Unit
-from trajectopy_core.utils.printing import list2box
+from trajectopy_core.definitions import UNIT_FORMAT_RULES, Unit
+from trajectopy_core.alignment.utils import list2box
 
 
 class AlignmentParametersError(Exception):

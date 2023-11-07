@@ -8,7 +8,7 @@ import numpy as np
 from rotationset import RotationSet
 
 from trajectopy_core.alignment.parameters import HelmertTransformation, Parameter
-from trajectopy_core.utils.definitions import Unit
+from trajectopy_core.definitions import Unit
 
 
 def direct_helmert_transformation(

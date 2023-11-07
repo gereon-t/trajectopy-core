@@ -13,7 +13,7 @@ from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.plotting import histograms, line_plots, scatter_plots
 from trajectopy_core.report.data import ReportData
 from trajectopy_core.settings.report import ReportSettings
-from trajectopy_core.utils.datahandling import image_to_base64, number_to_string
+from trajectopy_core.report.utils import image_to_base64, number_to_string
 
 base_path = os.path.join(os.path.dirname(__file__))
 
@@ -105,8 +105,8 @@ def render_report(
 
     context = {
         "title": ate_result.name,
-        "ate_pos": number_to_string(ate_result.ate_pos),
-        "ate_rot": number_to_string(np.rad2deg(ate_result.ate_rot)),
+        "ate_pos": number_to_string(ate_result.pos_ate),
+        "ate_rot": number_to_string(np.rad2deg(ate_result.rot_ate)),
         "rpe_pos": number_to_string(rpe_result.rpe_pos) if rpe_result is not None else "-",
         "rpe_rot": number_to_string(np.rad2deg(rpe_result.rpe_rot)) if rpe_result is not None else "-",
         "rpe_pos_drift_unit": rpe_result.pos_drift_unit if rpe_result is not None else "-",

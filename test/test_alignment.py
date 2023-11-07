@@ -12,7 +12,7 @@ from trajectopy_core.alignment.rotation_alignment import align_rotations
 from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings, AlignmentStochastics
 from trajectopy_core.settings.matching import MatchingSettings
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.utils.definitions import Unit
+from trajectopy_core.definitions import Unit
 
 
 def generate_transformation(

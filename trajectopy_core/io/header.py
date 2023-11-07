@@ -13,7 +13,7 @@ from typing import Callable, Dict, List, Union
 import numpy as np
 
 from trajectopy_core.settings.comparison import ComparisonMethod
-from trajectopy_core.utils.definitions import GPS_WEEK_ZERO, TIME_FORMAT_DICT, TimeFormat, Unit
+from trajectopy_core.definitions import GPS_WEEK_ZERO, TIME_FORMAT_DICT, TimeFormat, Unit
 
 logger = logging.getLogger("root")
 

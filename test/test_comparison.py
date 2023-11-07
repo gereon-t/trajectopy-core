@@ -14,7 +14,7 @@ from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.settings.matching import MatchingMethod, MatchingSettings
 from trajectopy_core.settings.comparison import RelativeComparisonSettings
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.utils.definitions import Unit
+from trajectopy_core.definitions import Unit
 
 
 def compare_trajectories_abs(traj_ref: Trajectory, traj_test: Trajectory) -> ATEResult:
@@ -58,9 +58,9 @@ class TestComparison(unittest.TestCase):
 
         deviations = compare_trajectories_abs(traj_ref=trajectory, traj_test=transformed)
 
-        np.testing.assert_almost_equal(deviations.bias_along, parameters.lever_x.value)
-        np.testing.assert_almost_equal(deviations.bias_cross_h, parameters.lever_y.value)
-        np.testing.assert_almost_equal(deviations.bias_cross_v, parameters.lever_z.value)
+        np.testing.assert_almost_equal(deviations.pos_bias_along, parameters.lever_x.value)
+        np.testing.assert_almost_equal(deviations.pos_bias_cross_h, parameters.lever_y.value)
+        np.testing.assert_almost_equal(deviations.pos_bias_cross_v, parameters.lever_z.value)
 
     def test_xyz_deviations(self) -> None:
         trajectory = generated_trajectory.copy()
@@ -78,6 +78,6 @@ class TestComparison(unittest.TestCase):
 
         deviations = compare_trajectories_abs(traj_ref=trajectory, traj_test=transformed)
 
-        np.testing.assert_almost_equal(-deviations.bias_x, parameters.sim_trans_x.value)
-        np.testing.assert_almost_equal(-deviations.bias_y, parameters.sim_trans_y.value)
-        np.testing.assert_almost_equal(-deviations.bias_z, parameters.sim_trans_z.value)
+        np.testing.assert_almost_equal(-deviations.pos_bias_x, parameters.sim_trans_x.value)
+        np.testing.assert_almost_equal(-deviations.pos_bias_y, parameters.sim_trans_y.value)
+        np.testing.assert_almost_equal(-deviations.pos_bias_z, parameters.sim_trans_z.value)

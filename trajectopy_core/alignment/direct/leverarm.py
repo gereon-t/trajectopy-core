@@ -12,7 +12,7 @@ from scipy.sparse import spdiags
 
 from trajectopy_core.alignment.parameters import Leverarm, Parameter
 from trajectopy_core.alignment.utils import least_squares
-from trajectopy_core.utils.definitions import Unit
+from trajectopy_core.definitions import Unit
 
 # logger configuration
 logger = logging.getLogger("root")
