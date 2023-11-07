@@ -12,10 +12,7 @@
     <a href="https://www.gug.uni-bonn.de/en/"><img src=.images/uni-bonn.svg height="50"/></a>
     <a href="https://www.gug.uni-bonn.de/en/"><img src=.images/igg.png height="50"/></a>
 
-#### Trajectopy is a toolbox for empirical trajectory evaluation. 
-
-This is the core implementation of Trajectopy without any PyQt dependencies. For advanced functionality and an intuitive graphical user interface, see [https://github.com/gereon-t/trajectopy](https://github.com/gereon-t/trajectopy).
-    
+#### Trajectopy is a toolbox for empirical trajectory evaluation.     
 </div>
 
 
@@ -23,21 +20,20 @@ This is the core implementation of Trajectopy without any PyQt dependencies. For
 
 Trajectopy offers a range of features, including:
 
-- Alignment Algorithm: An advanced algorithm that can be tailored to the specific application and supports a similarity transformation, a leverarm and a time shift estimation.
-- Comparison Metrics: Absolute and relative comparison metrics that can be computed using various pose-matching methods
-- Data Import/Export: Support for importing and exporting data, ensuring compatibility with your existing workflows.
-- Customizable Visualization: A flexible visualization that allows users to customize plot styles, tailoring the output to their specific needs.
-- HTML report generation ([Demo](https://htmlpreview.github.io/?https://github.com/gereon-t/trajectopy-core/blob/feature/example_data/report.html))
+- Absolute Trajectory Error (__ATE__) computation
+
+- Relative Pose Error (__RPE__) computation with distance- or time-based pose-pair selection
+
+- Trajectory __alignment__ using least squares adjustment theory and up to 14 parameters (i.e. similarity transformation, lever arm, time shift, sensor rotation)
+
+- Customizable __HTML report__ generation ([Demo](https://htmlpreview.github.io/?https://github.com/gereon-t/trajectopy-core/blob/feature/example_data/report.html))
 
 ## Table of Contents
 - [Installation](#installation)
 - [Exemplary Evaluation](#exemplary-evaluation)
 - [Importing Trajectories](#importing-trajectories)
-- [Aligning Trajectories](#aligning-trajectories)
-- [Comparing Trajectories](#comparing-trajectories)
-- [Spatial Sorting](#spatial-sorting-experimental)
-- [Approximation](#approximation)
-- [Plotting](#plotting)
+- [Processing Options](#processing-options)
+- [Processing Settings](#processing-settings)
 
 
 ## Installation
@@ -84,14 +80,7 @@ pip install trajectopy-core
 ### Or using the repository:
 
 ```console
-git clone https://github.com/gereon-t/trajectopy-core.git
-```
-```console
-cd trajectopy-core
-```
-
-```console
-poetry install
+pip install git+https://github.com/gereon-t/trajectopy-core.git@main
 ```
 
 ## Exemplary Evaluation
@@ -102,70 +91,38 @@ This section shows how to use trajectopy to evaluate two trajectories. The examp
 
     
 ```python
-from trajectopy_core.evaluation.comparison import compare_trajectories_absolute
-from trajectopy_core.alignment.actions import align_trajectories
-from trajectopy_core.settings.alignment_settings import AlignmentSettings
-from trajectopy_core.settings.matching_settings import MatchingMethod, MatchingSettings
+from trajectopy_core.pipelines import ate
+from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.trajectory import Trajectory
 
+# Import
 gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
 est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
 
+# default settings
+settings = ProcessingSettings()
 
-# align
-alignment_settings = AlignmentSettings()  # Default settings
-alignment = align_trajectories(
-    traj_from=est_traj,
-    traj_to=gt_traj,
-    alignment_settings=alignment_settings,
-    matching_settings=MatchingSettings(method=MatchingMethod.NEAREST_TEMPORAL),
-)
-est_traj_aligned = est_traj.apply_alignment(alignment)
-
-ate_result = compare_trajectories_absolute(traj_ref=gt_traj, traj_test=est_traj_aligned)
+ate_result = ate(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
 
 ```
-
-Plotted ATE result:
-
-![](.images/ate.png)
 
 ### Relative Pose Error (RPE)
 
 ```python
-from trajectopy_core.evaluation.comparison import compare_trajectories_relative
-from trajectopy_core.settings.comparison_settings import RelativeComparisonSettings
+from trajectopy_core.pipelines import rpe
+from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.trajectory import Trajectory
 
+# Import
 gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
 est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
 
-# compute RPE
-settings = RelativeComparisonSettings()  # Default settings
-rpe_result = compare_trajectories_relative(traj_ref=gt_traj, traj_test=est_traj, settings=settings)
+# default settings
+settings = ProcessingSettings()
+
+rpe_result = rpe(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
 
 ```
-
-Plotted RPE result:
-
-![](.images/rpe.png)
-
-### Trajectory Plotting
-
-```python
-from matplotlib import pyplot as plt
-from trajectopy_core.plotting.trajectory_plot import plot_trajectories
-from trajectopy_core.trajectory import Trajectory
-
-gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
-est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
-
-plot_trajectories([gt_traj, est_traj], dim=2)
-plt.show()
-```
-
-![](.images/plot.png)
-
 
 
 ## Importing Trajectories
@@ -193,60 +150,108 @@ Below you can find a table of all allowed header entries and their meaning.
 | #time_offset | Offset in seconds that is applied to the imported timestamps. Default: 0.0 |
 | #datetime_format | Format of the datetimes. Only relevant if "time_format" is "datetime". Default: "%Y-%m-%d %H:%M:%S.%f" |
 | #datetime_timezone | Time zone of the timestamps. During import, all timestamps are converted to UTC considering the input time zone. Choices: [Time zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) or "GPS" |
-| #sorting | Sorting of the input data. Choices: "chrono": Chronologically sorted data (usually the case), "spatial": Spatially sorted data, i.e. along the arc length. Default: "chrono" |
 | #state | States describing what processing steps the data already has passed. States: "approximated", "interpolated", "intersected", "aligned", "matched", "sorting_known" |
 
 **New since 0.9.2**: Experimental ROS bag support for geometry_msgs/msg/PoseStamped messages. Files must have a ".bag" extension. Poses must have positions and orientations. One file can contain multiple trajectories published under different topics.
 
-## Aligning Trajectories
+# Processing Options
 
-The trajectories to be compared could be defined in different coordinate systems and/or refer to different positions on the same platform due to different mounting positions. There may also be a small synchronization offset. To solve this problem, trajectopy provides functionality to align two trajectories using least squares adjustment theory. This allows estimation of up to 11 parameters, all of which can be turned on or off individually to tailor the alignment to the sensor modalities.
+Trajectopy offers a range of processing options that can be applied to the imported trajectories. These options are:
 
-### Alignment Settings
-
-| Setting | Description |
+| Option | Description |
 |---|---|
-| Minimum Speed | If set to a value larger than 0.0, only poses with a speed higher than the specified value are used for alignment. This is only relevant for the time shift estimation where higher speed usually lead to better results. |
-| Time Start, Time End | Time range given in seconds relative to the start of the trajectory that should be aligned. If set to non-zero values, only poses in the specified time span are used for alignment. |
-| Error Probability | Used for stochastic tests. During the alignment, the functional relationship and the stochastic model are tested for consistency. Besides a global test, there are also tests for each observation group. Observation groups are:  xy_from, z_from, xy_to, z_to, roll_pitch, yaw, speed. |
-| Observation Standard Deviations | Standard deviations of the trajectory data involved. |
-| Estimation Of | Toggle for individual parameters that should be estimated. Furthermore, the user can specify which components of the 3d speed vector should be used for time shift estimation. |
-
-Parameters that can be estimated:
-- Similarity x translation
-- Similarity y translation
-- Similarity z translation
-- Similarity x rotation
-- Similarity y rotation
-- Similarity z rotation
-- Similarity scale
-- (small) Time shift
-- Lever arm x
-- Lever arm y
-- Lever arm z
-- Sensor rotation (experimental): Use this, if both sensors are mounted on the platform with different orientations
-
-Both trajectories should be roughly synchronized to improve trajectory matching before alignment.
-
-In addition to least squares alignment, you can also perform a basic trajectory alignment by aligning only the first pose.
+| Matching | Matching of two trajectories to establish pose-to-pose correspondencies. After matching both trajectories will have the same number of poses. You can choose from different matching methods in the MatchingSettings. |
+| Alignment | Alignment of two trajectories using least squares adjustment. The implemented approach can handle a similarity transformation (translation, rotation, scale), a lever arm (3d vector), and a time shift (scalar). Each parameter can be included or exluded from the adjustment depending on the individual sensor modalities using the AlignmentSettings. In addition, preprocessing steps and stochastics can also be configured. |
+| Comparison | Comparison of two trajectories using absolute (ATE) and relative (RPE) metrics. The relative comparison can be configured using the RelativeComparisonSettings. |
+| Report Generation | Generation of a HTML report containing all results. The apperance of the report can be customized using the ReportSettings |
 
 
-## Comparing Trajectories
+# Processing Settings
 
-This toolbox allows the comparison of two trajectories using absolute and relative metrics. Before comparison, both trajectories to be compared must be matched. After this, either absolute or relative metrics can be computed. If both trajectory are defined in different coordinate systems, it is recommended to align them accordingly.
+## Alignment Settings
 
-### Matching
+### Preprocessing Settings
 
-There are three different types of trajectory matching implemented in trajectopy:
-* Matching via interpolation: Poses are matched by interpolating one trajectory onto the timestamps of the other.
-* Matching via Nearest Temporal Neighbor: Poses are matched using their timestamps while considering some pre-defined tolerance.
-* Matching via Nearest Spatial Neighbor: Poses are matched using their nearest neighbors while considering some pre-defined distance tolerance.
+- `min_speed` (float): Only poses with a speed above this threshold are considered for alignment.
+- `time_start` (float): Only poses with a timestamp above this threshold are considered for alignment. The timestamp is given in seconds and is relative to the first timestamp of both matched trajectories.
+- `time_end` (float): Only poses with a timestamp below this threshold are considered for alignment. The timestamp is given in seconds and is relative to the first timestamp of both matched trajectories.
 
-### Absolute
+### Estimation Settings
 
-This metric is often referred to as Absolute Trajectory Error (ATE). It measures the translational and rotational difference between two matched poses. By default, trajectopy splits the deviations into vertical cross-track, horizontal cross-track, and along-track deviations to simplify interpretation. This behavior can be turned off.
+- `trans_x` (boolean): Enable or disable x-translation of the similarity transformation.
+- `trans_y` (boolean): Enable or disable y-translation of the similarity transformation.
+- `trans_z` (boolean): Enable or disable z-translation of the similarity transformation.
+- `rot_x` (boolean): Enable or disable rotation around the X-axis of the similarity transformation.
+- `rot_y` (boolean): Enable or disable rotation around the Y-axis of the similarity transformation.
+- `rot_z` (boolean): Enable or disable rotation around the Z-axis of the similarity transformation.
+- `scale` (boolean): Enable or disable scaling of the similarity transformation.
+- `time_shift` (boolean): Enable or disable the estimation of time shift.
+- `use_x_speed` (boolean): Enable or disable the use of X-axis speed for time shift estimation.
+- `use_y_speed` (boolean): Enable or disable the use of Y-axis speed for time shift estimation.
+- `use_z_speed` (boolean): Enable or disable the use of Z-axis speed for time shift estimation.
+- `lever_x` (boolean): Enable or disable estimation of lever arm in the X-axis.
+- `lever_y` (boolean): Enable or disable estimation of lever arm in the Y-axis.
+- `lever_z` (boolean): Enable or disable estimation of lever arm in the Z-axis.
+- `sensor_rotation` (boolean): Enable or disable estimation of sensor rotation. Independent of the least squares adjustment, a constant rotational offset can be computed between the rotations of both trajectories.
+- `auto_update` (boolean): If set to `True`, the estimation settings are automatically updated and parameters are disabled if they are not significant (experimental).
 
-### Relative
+### Stochastics Settings
+
+- `var_xy_from` (float): Variance for XY source position components in meters^2.
+- `var_z_from` (float): Variance for Z source position component in meters^2.
+- `var_xy_to` (float): Variance for XY target position components in meters^2.
+- `var_z_to` (float): Variance for Z target position component in meters^2.
+- `var_roll_pitch` (float): Variance for roll and pitch in radians^2.
+- `var_yaw` (float): Variance for yaw in radians^2.
+- `var_speed_to` (float): Variance for platform speed in (meters per second)^2.
+- `error_probability` (float): Probability of error used for stochastic testing.
+
+### Threshold Settings
+
+- `metric_threshold` (float): Iteration threshold for the least squares adjustment regarding the metric parameters.
+- `time_threshold` (float): Iteration threshold for the least squares adjustment regarding the time shift parameter.
+
+
+## Matching Settings
+
+- `method` (integer): The method used for trajectory matching. Choices: `MatchingMethod.NEAREST_SPATIAL`, `MatchingMethod.NEAREST_TEMPORAL`, `MatchingMethod.INTERPOLATION`, `MatchingMethod.NEAREST_SPATIAL_INTERPOLATED`. The methods are described below.
+- `max_time_diff` (float): Maximum allowed time difference when matching two trajectories using their timestamps.
+- `max_distance` (float): Maximum allowed distance between matched positions during spatial matching.
+- `k_nearest` (integer): The number of nearest neighbors to consider during spatial interpolation matching.
+
+### Matching Methods
+
+#### Nearest Spatial
+
+This method matches two trajectories by finding the nearest pose in the target trajectory for each pose in the source trajectory. The distance between two poses is computed using the Euclidean distance between their positions.
+
+#### Nearest Temporal
+
+This method matches two trajectories by finding the nearest pose in the target trajectory for each pose in the source trajectory. The distance between two poses is computed using the absolute time difference between their timestamps.
+
+#### Interpolation
+
+This method matches two trajectories by interpolating the timestamps of one trajectory to the timestamps of the other trajectory. The position is linear for both positions and rotations (SLERP).
+
+#### Nearest Spatial Interpolated
+
+This method matches both trajectories spatially by requesting the nearest k positions from the reference trajectory for each pose in the test trajectory. Then, an interpolation is performed using a 3d line fit of the k nearest positions. After this operation, both trajectories will have the length of the test trajectory. This method does not support rotation matching.
+
+
+## Relative Comparison Settings
+
+- `pair_min_distance` (float): Minimum pose pair distance to be considered during RPE (Relative Pose Error) computation.
+
+- `pair_max_distance` (float): Maximum pose pair distance to be considered during RPE computation.
+
+- `pair_distance_step` (float): Step in which the pose pair distance increases.
+
+- `pair_distance_unit` (Unit): Unit of the pose pair distance. Choices: `Unit.METER`, `Unit.SECOND`.
+
+- `use_all_pose_pairs` (boolean): If enabled, overlapping pose pairs will be used for relative metrics calculation.
+
+
+#### RPE Background
 
 For this metric, relative pose-pair differences are compared. The distance between two poses can be specified by the user and can be either time- or distance-based. The comparison involves finding pose pairs separated by a specific distance or time interval, computing the relative translation and rotation between the reference and estimated pose pairs, and calculating the translational and rotational difference normalized by the distance or time that separated the poses.
 
@@ -279,67 +284,51 @@ Results in pose distances: [100 m, 200 m, 300 m, 400 m, 500 m, 600 m, 700 m, 800
 
 Furthermore, the user can choose to either use consecutive pose pairs (non-overlapping) or all posible pairs (overlapping).
 
-### Comparison Settings
+### Report Settings
 
-| Setting | Description |
-|---|---|
-| Maximum Time Difference (Temporal Matching) [s] | Maximum allowed time difference when matching two trajectories using their timestamps |
-| Maximum Distance (Spatial Matching) [m] | During spatial matching, positions are matched using a nearest neighbor approach. This parameter sets the maximum allowed distance between matched positions. |
-| Minimum pose distance | Minimum pose pair distance to be considered during RPE computation. Default: 100 |
-| Maximum pose distance | Maximum pose pair distance to be considered during RPE computation. Default: 800 |
-| Distance step | Step in which the pose distance increases. Default: 100 |
-| Distance unit | Unit of the pose distance. Either meter or second. Default: meter |
-| Use all pairs | If toggled, overlapping pairs will be used for relative metrics |
+## Visualization Settings
 
-## Spatial Sorting (Experimental)
+- `downsample_size` (integer): The downsample size for data visualization. To prevent unresponsive and overly large html reports, the data can be downsampled before visualization. The downsample size defines the maximum number of values after downsampling. If set to 0 or -1, no downsampling is performed. A downsample_size larger than the number of values in the trajectory will result in no downsampling.
+- `scatter_max_std` (float): The upper colorbar limit is set to the mean plus this value times the standard deviation of the data. This is useful to prevent outliers from dominating the colorbar.
+- `ate_unit_is_mm` (boolean): If true, ATE (Absolute Trajectory Error) unit is in millimeters.
+- `directed_ate` (boolean): If true, ATE position deviations are divided into along-track, cross-track (horizontal) and cross-track (vertical directions).
+- `histogram_opacity` (float): Opacity of histograms for overlay visualization.
+- `histogram_bargap` (float): Gap between histogram bars in overlay mode.
+- `histogram_barmode` (string): The mode for histogram bars, usually set to "overlay".
+- `histogram_yaxis_title` (string): Title for the y-axis in histograms.
+- `plot_mode` (string): The mode for plot visualization, typically "lines+markers".
+- `scatter_mode` (string): The mode for scatter plot visualization, often "markers".
+- `scatter_colorscale` (string): The colorscale for scatter plots, Default: "RdYlBu_r".
 
-When dealing with repeated trajectories, it may be useful to spatially sort the trajectory for further analysis ([Tombrink et al. 2023](https://www.degruyter.com/document/doi/10.1515/jag-2022-0027/pdf)). This reconstructs the point order as a function of the trajectory length. Trajectopy uses a combination of an iterative voxel-based moving least-squares approximation and a minimum spanning tree to solve this problem.
+## Position Units and Names
 
-The point cloud is divided into voxels of a given size. Then, for each point, a number of neighboring voxels are requested. A 3D line is estimated using the points within these voxels. Finally, the current point is projected onto the line to obtain the approximated point. The spatial sorting of this Moving-Least-Squares (MLS) approximation is reconstructed using a minimum spanning tree. Depending on the algorithm, colinear points are discarded in this step.
+- `pos_x_name` (string): Name for the X-axis position. Default: "x".
+- `pos_y_name` (string): Name for the Y-axis position. Default: "y".
+- `pos_z_name` (string): Name for the Z-axis position. Default: "z".
+- `pos_x_unit` (string): Unit for the X-axis position, Default: "m".
+- `pos_y_unit` (string): Unit for the Y-axis position, Default: "m".
+- `pos_z_unit` (string): Unit for the Z-axis position, Default: "m".
 
-### Sorting Settings
+## Rotation Units and Names
 
-| Setting | Description |
-|---|---|
-| Voxel size [m] | Size of the voxel grid used for moving-least-squares approximation |
-| k-nearest | Number of voxels used for MLS |
-| Movement threshold [m] | MLS will be performed iteratively until the points move less than this specified threshold. |
+- `rot_x_name` (string): Name for the roll rotation. Default: "roll".
+- `rot_y_name` (string): Name for the pitch rotation. Default: "pitch".
+- `rot_z_name` (string): Name for the yaw rotation. Default: "yaw".
+- `rot_unit` (string): Unit symbol for rotation. Default: "°".
 
-## Approximation
+## Export Settings
 
-The trajectory can be approximated using piecewise cubic polynomials for the positions and sliding window based smoothing for the rotations. All observations are assumed to be of equal uncertainty and uncorrelated. The window sizes and the minimum number of observations that should be within an interval can be set by the user.
+- `single_plot_export` (object): `ExportSettings` for exporting single plots.
+- `two_subplots_export` (object): `ExportSettings` for exporting two subplots.
+- `three_subplots_export` (object): `ExportSettings` for exporting three subplots.
+- `single_plot_height` (integer): Height for single plot exports in pixels. Default: 450.
+- `two_subplots_height` (integer): Height for two subplots exports in pixels. Default: 540.
+- `three_subplots_height` (integer): Height for three subplots exports in pixels. Default: 750.
 
-### Approximation Settings
 
-| Setting | Description |
-|---|---|
-| Window size (Positions) [m] | The x,y and z- position data is split up into intervals of a size set by this parameter. In each interval, a cubic polynomial approximates the data as best as possible while ensuring C1 continuity.|
-| Minimum observation per interval | Minimum number of observations that should be in one interval. Intervals are merged to meet this requirement |
-| Rotation Approximation Technique | Either sliding window based approach or (experimental) lap interpolation (only possible for spatially sorted trajectories) |
-| Windows size (Rotations) [m] | Sliding window size used for computing the moving-average rotations |
+### Export Settings
 
-## Plotting
-
-### Custom Matplotlib Style
-
-You can use a custom plotting style by placing a `custom.mplstyle` file in the directory you launched trajectopy in. For instructions on how to define custom plotting styles, please see https://matplotlib.org/stable/tutorials/introductory/customizing.html.
-Below you can see the default style of trajectopy
-```python
-figure.figsize: 8, 6
-figure.facecolor: white
-font.size: 14
-font.family: serif
-axes.prop_cycle: cycler("color", ["1E88E5", "#FFC107", "#004D40", "#D81B60", "#2bd2bb", "#a3bbf1", "#3c41fd", "#cc5510", "#3b0732", "#88122b", "#bccb70", "dc9c54"])
-axes.facecolor: E2E2E2
-axes.edgecolor: white
-axes.grid: True
-grid.color: white
-grid.linewidth: 0.3
-axes.grid.which: major
-axes.axisbelow: True
-legend.facecolor: white
-lines.linestyle: -
-lines.marker: .
-savefig.dpi: 1500
-savefig.format: pdf
-```
+- `format` (string): The export format. Choices: "png", "svg", "jpeg", "webp". Default: "png".
+- `height` (integer): The export height in pixels. Default: 500.
+- `width` (integer): The export width in pixels. Default: 800.
+- `scale` (integer): The export scale. Default: 6.
