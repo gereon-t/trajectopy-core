@@ -32,6 +32,7 @@ class ReportSettings(Settings):
     scatter_max_std: float = 4.0
     ate_unit_is_mm: bool = False
     directed_ate: bool = True
+    histogram_opacity: float = 0.7
     png_export: PNGExportSettings = field(default_factory=PNGExportSettings)
 
 
