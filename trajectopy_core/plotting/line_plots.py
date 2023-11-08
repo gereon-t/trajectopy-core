@@ -14,7 +14,7 @@ from trajectopy_core.report.data import ReportData
 
 
 def render_dev_edf(report_data: ReportData) -> str:
-    if report_data.has_ate_orientation:
+    if report_data.has_ate_rot:
         fig = make_subplots(rows=2, cols=1)
     else:
         fig = make_subplots(rows=1, cols=1)
@@ -27,7 +27,7 @@ def render_dev_edf(report_data: ReportData) -> str:
         col=1,
     )
 
-    if report_data.has_ate_orientation:
+    if report_data.has_ate_rot:
         sorted_comb_rot_dev = np.sort(report_data.comb_dev_rot)
         rot_norm_cdf = np.arange(len(sorted_comb_rot_dev)) / float(len(sorted_comb_rot_dev))
         fig.add_trace(
@@ -38,7 +38,7 @@ def render_dev_edf(report_data: ReportData) -> str:
         fig.update_xaxes(title_text=f"[{report_data.settings.rot_unit}]", row=2, col=1)
         fig.update_yaxes(title_text="CDF", row=2, col=1)
 
-    if report_data.has_ate_orientation:
+    if report_data.has_ate_rot:
         height = report_data.settings.two_subplots_height
         config = report_data.settings.two_subplots_export.to_config()
     else:
@@ -225,7 +225,7 @@ def render_dev_rot_plot(report_data: ReportData) -> str:
 
 
 def render_dev_comb_plot(report_data: ReportData) -> str:
-    if report_data.has_ate_orientation:
+    if report_data.has_ate_rot:
         fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
         config = report_data.settings.two_subplots_export.to_config()
         height = report_data.settings.two_subplots_height
@@ -245,7 +245,7 @@ def render_dev_comb_plot(report_data: ReportData) -> str:
         col=1,
     )
 
-    if report_data.has_ate_orientation:
+    if report_data.has_ate_rot:
         fig.add_trace(
             go.Scatter(
                 x=report_data.function_of,
@@ -260,7 +260,7 @@ def render_dev_comb_plot(report_data: ReportData) -> str:
 
     fig.update_layout(title="Trajectory Deviations", height=height)
 
-    fig.update_xaxes(title_text=report_data.function_of_label, row=2 if report_data.has_ate_orientation else 1, col=1)
+    fig.update_xaxes(title_text=report_data.function_of_label, row=2 if report_data.has_ate_rot else 1, col=1)
     fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=1, col=1)
 
     return plot(fig, output_type="div", config=config)

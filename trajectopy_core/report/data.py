@@ -7,7 +7,7 @@ mail@gtombrink.de
 
 from dataclasses import field, dataclass
 from functools import cached_property
-from typing import Optional
+from typing import List, Optional
 
 import numpy as np
 
@@ -47,7 +47,7 @@ class ReportData:
         return "mm" if self.settings.ate_unit_is_mm else "m"
 
     @property
-    def has_ate_orientation(self) -> bool:
+    def has_ate_rot(self) -> bool:
         return self.ate_result.has_orientation
 
     @property
@@ -162,3 +162,34 @@ class ReportData:
             raise ValueError("ATE result has no orientation.")
 
         return np.rad2deg(shrink_data(self.ate_result.rot_dev_z, self.settings.downsample_size))
+
+
+@dataclass
+class ReportDataCollection:
+    """
+    Class to store multiple ReportData objects in a list
+    """
+
+    items: List[ReportData]
+
+    @property
+    def has_ate_rot(self) -> bool:
+        return any(item.has_ate_rot for item in self.items)
+
+    @property
+    def has_rpe(self) -> bool:
+        return any(item.has_rpe for item in self.items)
+
+    @property
+    def has_rpe_rot(self) -> bool:
+        if not self.has_rpe:
+            return False
+
+        rpe_results = [item.rpe_result for item in self.items]
+        return any(result.has_rot_dev for result in rpe_results)
+
+    def get_ate_results(self, rot_required: bool = False) -> list[ATEResult]:
+        return [item.ate_result for item in self.items if not rot_required or item.has_ate_rot]
+
+    def get_rpe_results(self, rot_required: bool = False) -> list[RPEResult]:
+        return [item.rpe_result for item in self.items if not rot_required or item.rpe_result.has_rot_dev]

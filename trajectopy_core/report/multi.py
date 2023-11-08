@@ -14,7 +14,7 @@ import jinja2
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.plotting import multi_line_plots, bar_plots
-from trajectopy_core.report.data import ReportData
+from trajectopy_core.report.data import ReportData, ReportDataCollection
 from trajectopy_core.settings.report import ReportSettings
 from trajectopy_core.report.utils import TEMPLATES_PATH, convert_images_to_base64
 
@@ -22,15 +22,22 @@ from trajectopy_core.report.utils import TEMPLATES_PATH, convert_images_to_base6
 logger = logging.getLogger("root")
 
 
-def render_one_line_plots(report_data: List[ReportData]) -> List[str]:
-    return [
-        multi_line_plots.render_dev_comb_plot(report_data),
-        multi_line_plots.render_rpe(report_data),
-        bar_plots.render_pos_bar_plot(report_data),
-        multi_line_plots.render_dev_pos_plot(report_data),
-        multi_line_plots.render_dev_rot_plot(report_data),
-        multi_line_plots.render_dev_edf(report_data),
+def render_one_line_plots(report_data_collection: ReportDataCollection) -> List[str]:
+    one_line_plots = [
+        multi_line_plots.render_dev_comb_plot(report_data_collection),
+        bar_plots.render_multi_pos_bar_plot(report_data_collection),
+        multi_line_plots.render_dev_pos_plot(report_data_collection),
+        multi_line_plots.render_dev_edf(report_data_collection),
     ]
+
+    if report_data_collection.has_ate_rot:
+        one_line_plots.insert(2, bar_plots.render_multi_rot_bar_plot(report_data_collection))
+        multi_line_plots.render_dev_rot_plot(report_data_collection)
+
+    if report_data_collection.has_rpe:
+        one_line_plots.insert(1, multi_line_plots.render_rpe(report_data_collection))
+
+    return one_line_plots
 
 
 def render_multi_report(
@@ -54,17 +61,23 @@ def render_multi_report(
     template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("multi_template.html")
     igg, uni_bonn, icon = convert_images_to_base64()
 
-    rpy_available = any(rpe_results) if rpe_results is not None else False
-    report_data = [
-        ReportData(ate_result=ate_result, rpe_result=rpe_result, settings=report_settings)
-        for ate_result, rpe_result in zip(ate_results, rpe_results)
-    ]
+    rpe_available = any(rpe_results) if rpe_results is not None else False
 
-    one_line_plots = render_one_line_plots(report_data)
+    if not rpe_available:
+        rpe_results = [None] * len(ate_results)
+
+    report_data_collection = ReportDataCollection(
+        [
+            ReportData(ate_result=ate_result, rpe_result=rpe_result, settings=report_settings)
+            for ate_result, rpe_result in zip(ate_results, rpe_results)
+        ]
+    )
+
+    one_line_plots = render_one_line_plots(report_data_collection)
 
     context = {
         "title": "Trajectory Comparison",
-        "rpe_available": rpy_available,
+        "rpe_available": rpe_available,
         "one_line_plots": one_line_plots,
         "icon": icon,
         "igg": igg,

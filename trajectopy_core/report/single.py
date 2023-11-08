@@ -14,7 +14,7 @@ import numpy as np
 
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.plotting import histograms, line_plots, scatter_plots
+from trajectopy_core.plotting import bar_plots, histograms, line_plots, scatter_plots
 from trajectopy_core.report.data import ReportData
 from trajectopy_core.settings.report import ReportSettings
 from trajectopy_core.report.utils import image_to_base64, number_to_string
@@ -41,7 +41,7 @@ def convert_images_to_base64() -> Tuple[str, str, str]:
 def render_side_by_side_plots(report_data: ReportData) -> List[str]:
     side_by_side_plots = [scatter_plots.render_pos_devs(report_data)]
 
-    if not report_data.has_ate_orientation:
+    if not report_data.has_ate_rot:
         return side_by_side_plots
 
     side_by_side_plots.append(scatter_plots.render_rot_devs(report_data))
@@ -58,6 +58,7 @@ def render_one_line_plots(report_data: ReportData) -> List[str]:
     one_line_plots.extend(
         (
             histograms.render_pos_devs(report_data),
+            bar_plots.render_pos_bar_plot(report_data),
             line_plots.render_dev_edf(report_data),
             line_plots.render_dev_comb_plot(report_data),
             line_plots.render_dev_pos_plot(report_data),
@@ -66,10 +67,11 @@ def render_one_line_plots(report_data: ReportData) -> List[str]:
 
     one_line_plots.append(line_plots.render_pos_plot(report_data))
 
-    if not report_data.has_ate_orientation:
+    if not report_data.has_ate_rot:
         return one_line_plots
 
     one_line_plots.insert(2, histograms.render_rot_devs(report_data))
+    one_line_plots.insert(4, bar_plots.render_rot_bar_plot(report_data))
     one_line_plots.insert(len(one_line_plots) - 1, line_plots.render_dev_rot_plot(report_data))
     one_line_plots.append(line_plots.render_rot_plot(report_data))
 
@@ -111,8 +113,8 @@ def render_single_report(
         "title": ate_result.name,
         "ate_pos": number_to_string(ate_result.pos_ate),
         "ate_rot": number_to_string(np.rad2deg(ate_result.rot_ate)),
-        "rpe_pos": number_to_string(rpe_result.rpe_pos) if rpe_result is not None else "-",
-        "rpe_rot": number_to_string(np.rad2deg(rpe_result.rpe_rot)) if rpe_result is not None else "-",
+        "rpe_pos": number_to_string(rpe_result.pos_rpe) if rpe_result is not None else "-",
+        "rpe_rot": number_to_string(np.rad2deg(rpe_result.rot_rpe)) if rpe_result is not None else "-",
         "rpe_pos_drift_unit": rpe_result.pos_drift_unit if rpe_result is not None else "-",
         "rpe_rot_drift_unit": rpe_result.rot_drift_unit if rpe_result is not None else "-",
         "ate_pos_unit": report_data.ate_unit,

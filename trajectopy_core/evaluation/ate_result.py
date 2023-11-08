@@ -49,7 +49,7 @@ class ATEResult:
             "Median position deviation [m]": f"{self.pos_dev_median:.4f}",
             "Minimum position deviation [m]": f"{self.pos_dev_min:.4f}",
             "RMS Position [m]": f"{self.pos_dev_rms:.4f}",
-            "STD Position [m]": f"{self.pos_std:.4f}",
+            "STD Position [m]": f"{self.pos_dev_std:.4f}",
             "Bias X [m]": f"{self.pos_bias_x:.4f}",
             "Bias Y [m]": f"{self.pos_bias_y:.4f}",
             "Bias Z [m]": f"{self.pos_bias_z:.4f}",
@@ -74,8 +74,8 @@ class ATEResult:
             "Minimum rotation deviation [°]": f"{np.rad2deg(self.rot_dev_min):.4f}"
             if self.abs_dev.rot_dev is not None
             else "-",
-            "RMS Rotation [°]": f"{np.rad2deg(self.rot_rms):.4f}" if self.abs_dev.rot_dev is not None else "-",
-            "STD Rotation [°]": f"{np.rad2deg(self.rot_std):.4f}" if self.abs_dev.rot_dev is not None else "-",
+            "RMS Rotation [°]": f"{np.rad2deg(self.rot_dev_rms):.4f}" if self.abs_dev.rot_dev is not None else "-",
+            "STD Rotation [°]": f"{np.rad2deg(self.rot_dev_std):.4f}" if self.abs_dev.rot_dev is not None else "-",
             "RMS Roll [°]": f"{np.rad2deg(self.rot_rms_x):.4f}" if self.abs_dev.rot_dev is not None else "-",
             "RMS Pitch [°]": f"{np.rad2deg(self.rot_rms_y):.4f}" if self.abs_dev.rot_dev is not None else "-",
             "RMS Yaw [°]": f"{np.rad2deg(self.rot_rms_z):.4f}" if self.abs_dev.rot_dev is not None else "-",
@@ -255,21 +255,21 @@ class ATEResult:
         return np.median(self.pos_dev_comb)
 
     @property
-    def pos_std(self) -> float:
+    def pos_dev_std(self) -> float:
         """
         Returns std of 3d position deviations
         """
         return np.std(self.pos_dev_comb)
 
     @property
-    def rot_rms(self) -> float:
+    def rot_dev_rms(self) -> float:
         """
         Returns RMS of rotations
         """
         return rms(self.rot_dev_comb) if self.abs_dev.rot_dev is not None else 0.0
 
     @property
-    def rot_std(self) -> float:
+    def rot_dev_std(self) -> float:
         """
         Returns STD of rotations
         """

@@ -77,11 +77,11 @@ class RPEResult:
         return self.compute_metric(key="pair_distance", func=np.mean)
 
     @property
-    def rpe_pos(self) -> float:
+    def pos_rpe(self) -> float:
         return float(np.mean(self.pos_dev_mean))
 
     @property
-    def rpe_rot(self) -> float:
+    def rot_rpe(self) -> float:
         """Returns the average rotation drift in radians per 100 meters."""
         return np.mean(self.rot_dev_mean)
 
@@ -197,7 +197,7 @@ class RPEResult:
         static_pos_dict = {
             "Maximum Position Drift": f"{np.max(self.pos_dev_max):.3f} {self.pos_drift_unit}",
             "Minimum Position Drift": f"{np.min(self.pos_dev_min):.3f} {self.pos_drift_unit}",
-            "Average Position Drift": f"{self.rpe_pos:.3f} {self.pos_drift_unit}",
+            "Average Position Drift": f"{self.pos_rpe:.3f} {self.pos_drift_unit}",
             "Median Position Drift": f"{np.median(self.pos_dev_median):.3f} {self.pos_drift_unit}",
         }
 
@@ -212,7 +212,7 @@ class RPEResult:
         static_rot_dict = {
             "Maximum Rotation Drift": f"{np.rad2deg(np.max(self.rot_dev_max)):.3f} {self.rot_drift_unit}",
             "Minimum Rotation Drift": f"{np.rad2deg(np.min(self.rot_dev_min)):.3f} {self.rot_drift_unit}",
-            "Average Rotation Drift": f"{np.rad2deg(self.rpe_rot):.3f} {self.rot_drift_unit}",
+            "Average Rotation Drift": f"{np.rad2deg(self.rot_rpe):.3f} {self.rot_drift_unit}",
             "Median Rotation Drift": f"{np.rad2deg(np.median(self.rot_dev_median)):.3f} {self.rot_drift_unit}",
         }
         pos_dict.update(dynamic_rot_dict)
