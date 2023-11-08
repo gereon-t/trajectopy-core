@@ -1,3 +1,10 @@
+"""
+Trajectopy - Trajectory Evaluation in Python
+
+Gereon Tombrink, 2023
+mail@gtombrink.de
+"""
+
 import numpy as np
 import plotly.graph_objects as go
 from plotly.offline import plot
@@ -45,7 +52,7 @@ def render_dev_edf(report_data: ReportData) -> str:
     return plot(fig, output_type="div", config=config)
 
 
-def render_pos_time_plot(report_data: ReportData) -> str:
+def render_pos_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
         go.Scatter(
@@ -88,7 +95,7 @@ def render_pos_time_plot(report_data: ReportData) -> str:
     return plot(fig, output_type="div", config=report_data.settings.three_subplots_export.to_config())
 
 
-def render_rot_time_plot(report_data: ReportData) -> str:
+def render_rot_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
         go.Scatter(
@@ -131,7 +138,7 @@ def render_rot_time_plot(report_data: ReportData) -> str:
     return plot(fig, output_type="div", config=report_data.settings.three_subplots_export.to_config())
 
 
-def render_dev_pos_time_plot(report_data: ReportData) -> str:
+def render_dev_pos_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
         go.Scatter(
@@ -174,7 +181,7 @@ def render_dev_pos_time_plot(report_data: ReportData) -> str:
     return plot(fig, output_type="div", config=report_data.settings.three_subplots_export.to_config())
 
 
-def render_dev_rot_time_plot(report_data: ReportData) -> str:
+def render_dev_rot_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
 
     fig.add_trace(
@@ -217,7 +224,7 @@ def render_dev_rot_time_plot(report_data: ReportData) -> str:
     return plot(fig, output_type="div", config=report_data.settings.three_subplots_export.to_config())
 
 
-def render_dev_sum_line_plot(report_data: ReportData) -> str:
+def render_dev_comb_plot(report_data: ReportData) -> str:
     if report_data.has_ate_orientation:
         fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
         config = report_data.settings.two_subplots_export.to_config()

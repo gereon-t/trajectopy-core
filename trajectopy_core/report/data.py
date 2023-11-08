@@ -1,3 +1,10 @@
+"""
+Trajectopy - Trajectory Evaluation in Python
+
+Gereon Tombrink, 2023
+mail@gtombrink.de
+"""
+
 from dataclasses import field, dataclass
 from functools import cached_property
 from typing import Optional
@@ -30,6 +37,10 @@ class ReportData:
         if self.settings.ate_unit_is_mm:
             self.ate_result.abs_dev.pos_dev *= 1000.0
             self.ate_result.abs_dev.directed_pos_dev *= 1000.0
+
+    @property
+    def short_name(self) -> str:
+        return self.ate_result.name.split("vs")[0]
 
     @property
     def ate_unit(self) -> str:

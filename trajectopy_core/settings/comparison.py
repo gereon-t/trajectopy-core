@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 from dataclasses import dataclass
 from typing import Any
 from enum import Enum, auto

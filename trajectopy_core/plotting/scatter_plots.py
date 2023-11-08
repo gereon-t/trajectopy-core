@@ -1,3 +1,10 @@
+"""
+Trajectopy - Trajectory Evaluation in Python
+
+Gereon Tombrink, 2023
+mail@gtombrink.de
+"""
+
 import numpy as np
 import plotly.graph_objects as go
 from plotly.offline import plot

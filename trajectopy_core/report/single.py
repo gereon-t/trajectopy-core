@@ -1,12 +1,16 @@
+"""
+Trajectopy - Trajectory Evaluation in Python
+
+Gereon Tombrink, 2023
+mail@gtombrink.de
+"""
+
 import logging
 import os
 from typing import List, Optional, Tuple
 
 import jinja2
 import numpy as np
-
-import tempfile
-import webbrowser
 
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
@@ -55,37 +59,37 @@ def render_one_line_plots(report_data: ReportData) -> List[str]:
         (
             histograms.render_pos_devs(report_data),
             line_plots.render_dev_edf(report_data),
-            line_plots.render_dev_sum_line_plot(report_data),
-            line_plots.render_dev_pos_time_plot(report_data),
+            line_plots.render_dev_comb_plot(report_data),
+            line_plots.render_dev_pos_plot(report_data),
         )
     )
 
-    one_line_plots.append(line_plots.render_pos_time_plot(report_data))
+    one_line_plots.append(line_plots.render_pos_plot(report_data))
 
     if not report_data.has_ate_orientation:
         return one_line_plots
 
     one_line_plots.insert(2, histograms.render_rot_devs(report_data))
-    one_line_plots.insert(len(one_line_plots) - 1, line_plots.render_dev_rot_time_plot(report_data))
-    one_line_plots.append(line_plots.render_rot_time_plot(report_data))
+    one_line_plots.insert(len(one_line_plots) - 1, line_plots.render_dev_rot_plot(report_data))
+    one_line_plots.append(line_plots.render_rot_plot(report_data))
 
     return one_line_plots
 
 
-def render_report(
+def render_single_report(
     *,
     ate_result: ATEResult,
     rpe_result: Optional[RPEResult] = None,
     report_settings: ReportSettings = ReportSettings(),
 ) -> str:
     """
-    Renders a html report string.
+    Renders a html report string of a single trajectory comparison.
 
     Args:
         ate_result (ATEResult): The absolute trajectory error result
         rpe_result (Optional[RPEResult]): The relative pose error result
         max_std (float): The upper bound of scatter plot colorbars is set to max_std * std of the data
-        mm (bool): If True, the ATE result will be multiplied by 1000 and the unit will be changed to mm
+        report_settings (ReportSettings): The report settings
 
     Returns:
         str: The html report string
@@ -122,32 +126,3 @@ def render_report(
     }
 
     return template.render(context)
-
-
-def write_report(*, output_file: str, report_text: str) -> None:
-    """
-    Writes a report to the given output file.
-
-    Args:
-
-        output_file (str): The output file path
-
-    """
-    logger.info("Writing report to %s", output_file)
-    with open(output_file, "w", encoding="utf-8") as f:
-        f.write(report_text)
-
-
-def show_report(report_text: str) -> None:
-    """
-    Shows a report in the browser.
-
-    Args:
-
-        report_text (str): The report string
-
-    """
-
-    with tempfile.NamedTemporaryFile("w", delete=False, suffix=".html", encoding="utf-8") as f:
-        f.write(report_text)
-        webbrowser.open("file://" + os.path.realpath(f.name))

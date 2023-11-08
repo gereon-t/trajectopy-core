@@ -1,9 +1,9 @@
 import logging
 
 from trajectopy_core.pipelines import ate, rpe
-from trajectopy_core.report import render_report, show_report
+from trajectopy_core.report.single import render_single_report
+from trajectopy_core.report.utils import show_report
 from trajectopy_core.settings.processing import ProcessingSettings
-from trajectopy_core.settings.report import ReportSettings
 from trajectopy_core.trajectory import Trajectory
 
 logging.basicConfig(
@@ -24,9 +24,7 @@ def main():
     ate_result = ate(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
     rpe_result = rpe(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
 
-    report = render_report(
-        ate_result=ate_result, rpe_result=rpe_result, report_settings=ReportSettings(directed_ate=True, rot_unit="deg")
-    )
+    report = render_single_report(ate_result=ate_result, rpe_result=rpe_result)
     show_report(report_text=report)
 
 
