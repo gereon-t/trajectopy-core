@@ -218,14 +218,42 @@ class AlignmentEstimationSettings(Settings):
 class AlignmentStochastics(Settings):
     """Dataclass defining alignment stochastics configuration"""
 
-    var_xy_from: float = 1.0
-    var_z_from: float = 1.0
-    var_xy_to: float = 1.0
-    var_z_to: float = 1.0
-    var_roll_pitch: float = float(np.deg2rad(1.0)) ** 2
-    var_yaw: float = float(np.deg2rad(1.0)) ** 2
-    var_speed_to: float = 1.0
+    std_xy_from: float = 1.0
+    std_z_from: float = 1.0
+    std_xy_to: float = 1.0
+    std_z_to: float = 1.0
+    std_roll_pitch: float = float(np.deg2rad(1.0))
+    std_yaw: float = float(np.deg2rad(1.0))
+    std_speed_to: float = 1.0
     error_probability: float = 0.05
+
+    @property
+    def var_xy_from(self) -> float:
+        return self.std_xy_from**2
+
+    @property
+    def var_z_from(self) -> float:
+        return self.std_z_from**2
+
+    @property
+    def var_xy_to(self) -> float:
+        return self.std_xy_to**2
+
+    @property
+    def var_z_to(self) -> float:
+        return self.std_z_to**2
+
+    @property
+    def var_roll_pitch(self) -> float:
+        return self.std_roll_pitch**2
+
+    @property
+    def var_yaw(self) -> float:
+        return self.std_yaw**2
+
+    @property
+    def var_speed_to(self) -> float:
+        return self.std_speed_to**2
 
 
 @dataclass

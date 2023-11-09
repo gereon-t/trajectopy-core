@@ -24,7 +24,7 @@ Trajectopy offers a range of features, including:
 
 - Relative Pose Error (__RPE__) computation with distance- or time-based pose-pair selection
 
-- Trajectory __alignment__ using least squares adjustment theory and up to 14 parameters (i.e. similarity transformation, lever arm, time shift, sensor rotation)
+- Trajectory __alignment__ using least squares adjustment theory and up to 11 parameters (i.e. similarity transformation, lever arm, time shift)
 
 - Customizable __HTML report__ generation ([Demo](https://htmlpreview.github.io/?https://github.com/gereon-t/trajectopy-core/blob/feature/example_data/report.html))
 
@@ -127,7 +127,7 @@ rpe_result = rpe(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settin
 
 ## Importing Trajectories
 
-Trajectory files must be ASCII files with a csv-like layout, by default, trajectopy filters for the ".traj" extension. The default column structure that can be read without any configuration is the following:
+Trajectory files must be ASCII files with a csv-like layout. The default column structure that can be read without any configuration is the following:
 
 | time | position x | position y | position z | quaternion x | quaternion y | quaternion z | quaternion w |
 |---|---|---|---|---|---|---|---|
@@ -140,7 +140,7 @@ Below you can find a table of all allowed header entries and their meaning.
 
 | Header | Description  |
 |---|---|
-| #name | The name provided here is displayed in the table view and in plots of the trajectory |
+| #name | The name provided here is displayed in plots of the trajectory |
 | #epsg | [EPSG Code](https://epsg.io/) of the datum of the input positions. Required, if geodetic datum transformations are desired. Default: 0, meaning local coordinates without any known geodetic datum |
 | #fields | Describes the columns of the ASCII trajectory file. Separated with commas. <table>  <thead>  <th>field name</th>  <th>Meaning</th>  </tr>  </thead>  <tbody>  <tr>  <td>t</td>  <td>time</td>  </tr>  <tr>  <td>l</td>  <td>arc lengths in meters</td>  </tr>  <tr>  <td>px</td>  <td>position x / lat (degrees only)</td>  </tr>  <tr>  <td>py</td>  <td>position y / lon (degrees only) </td>  </tr>  <tr>  <td>pz</td>  <td>position z</td>  </tr> <tr>  <td>qx</td>  <td>quaternion x</td>  </tr> <tr>  <td>qy</td>  <td>quaternion y</td>  </tr> <tr>  <td>qz</td>  <td>quaternion z</td>  </tr> <tr>  <td>qw</td>  <td>quaternion w</td>  </tr> </tr> <tr>  <td>ex</td>  <td>euler angle x</td>  </tr> </tr> <tr>  <td>ey</td>  <td>euler angle y</td>  </tr> </tr> <tr>  <td>ez</td>  <td>euler angle z</td>  </tr> </tr> <tr>  <td>vx</td>  <td>speed x</td>  </tr> </tr> <tr>  <td>vy</td>  <td>speed y</td>  </tr> </tr> <tr>  <td>vz</td>  <td>speed z</td>  </tr> </tr> </tbody>  </table> Example: "#fields t,px,py,pz" Note: The only column that is allowed to appear multiple times is the "t" column. |
 | #delimiter | Delimiter used to separate the columns within the file. Default: "," |
@@ -150,7 +150,6 @@ Below you can find a table of all allowed header entries and their meaning.
 | #time_offset | Offset in seconds that is applied to the imported timestamps. Default: 0.0 |
 | #datetime_format | Format of the datetimes. Only relevant if "time_format" is "datetime". Default: "%Y-%m-%d %H:%M:%S.%f" |
 | #datetime_timezone | Time zone of the timestamps. During import, all timestamps are converted to UTC considering the input time zone. Choices: [Time zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) or "GPS" |
-| #state | States describing what processing steps the data already has passed. States: "approximated", "interpolated", "intersected", "aligned", "matched", "sorting_known" |
 
 **New since 0.9.2**: Experimental ROS bag support for geometry_msgs/msg/PoseStamped messages. Files must have a ".bag" extension. Poses must have positions and orientations. One file can contain multiple trajectories published under different topics.
 
@@ -160,10 +159,10 @@ Trajectopy offers a range of processing options that can be applied to the impor
 
 | Option | Description |
 |---|---|
-| Matching | Matching of two trajectories to establish pose-to-pose correspondencies. After matching both trajectories will have the same number of poses. You can choose from different matching methods in the MatchingSettings. |
-| Alignment | Alignment of two trajectories using least squares adjustment. The implemented approach can handle a similarity transformation (translation, rotation, scale), a lever arm (3d vector), and a time shift (scalar). Each parameter can be included or exluded from the adjustment depending on the individual sensor modalities using the AlignmentSettings. In addition, preprocessing steps and stochastics can also be configured. |
-| Comparison | Comparison of two trajectories using absolute (ATE) and relative (RPE) metrics. The relative comparison can be configured using the RelativeComparisonSettings. |
-| Report Generation | Generation of a HTML report containing all results. The apperance of the report can be customized using the ReportSettings |
+| Matching | Matching of two trajectories to establish pose-to-pose correspondencies. After matching both trajectories will have the same number of poses. You can choose from different matching methods in the `MatchingSettings`. |
+| Alignment | Alignment of two trajectories using least squares adjustment. The implemented approach can handle a similarity transformation (translation, rotation, scale), a lever arm (3d vector), and a time shift (scalar). Each parameter can be included or exluded from the adjustment depending on the individual sensor modalities using the `AlignmentSettings`. In addition, preprocessing steps and stochastics can also be configured. |
+| Comparison | Comparison of two trajectories using absolute (ATE) and relative (RPE) metrics. The relative comparison can be configured using the `RelativeComparisonSettings`. |
+| Report Generation | Generation of a HTML report containing all results. The apperance of the report can be customized using the `ReportSettings` |
 
 
 # Processing Settings
@@ -173,8 +172,8 @@ Trajectopy offers a range of processing options that can be applied to the impor
 ### Preprocessing Settings
 
 - `min_speed` (float): Only poses with a speed above this threshold are considered for alignment.
-- `time_start` (float): Only poses with a timestamp above this threshold are considered for alignment. The timestamp is given in seconds and is relative to the first timestamp of both matched trajectories.
-- `time_end` (float): Only poses with a timestamp below this threshold are considered for alignment. The timestamp is given in seconds and is relative to the first timestamp of both matched trajectories.
+- `time_start` (float): Only poses with a timestamp above this threshold are considered for alignment. The timestamp is given in seconds and is relative to the first common timestamp of both matched trajectories.
+- `time_end` (float): Only poses with a timestamp below this threshold are considered for alignment. The timestamp is given in seconds and is relative to the first common timestamp of both matched trajectories.
 
 ### Estimation Settings
 
@@ -192,21 +191,23 @@ Trajectopy offers a range of processing options that can be applied to the impor
 - `lever_x` (boolean): Enable or disable estimation of lever arm in the X-axis.
 - `lever_y` (boolean): Enable or disable estimation of lever arm in the Y-axis.
 - `lever_z` (boolean): Enable or disable estimation of lever arm in the Z-axis.
-- `sensor_rotation` (boolean): Enable or disable estimation of sensor rotation. Independent of the least squares adjustment, a constant rotational offset can be computed between the rotations of both trajectories.
+- `sensor_rotation` (boolean): Enable or disable estimation of sensor rotation. Independent of the least squares adjustment, a constant rotational offset can be computed between the rotations of both trajectories after the alignment.
 - `auto_update` (boolean): If set to `True`, the estimation settings are automatically updated and parameters are disabled if they are not significant (experimental).
 
 ### Stochastics Settings
 
-- `var_xy_from` (float): Variance for XY source position components in meters^2.
-- `var_z_from` (float): Variance for Z source position component in meters^2.
-- `var_xy_to` (float): Variance for XY target position components in meters^2.
-- `var_z_to` (float): Variance for Z target position component in meters^2.
-- `var_roll_pitch` (float): Variance for roll and pitch in radians^2.
-- `var_yaw` (float): Variance for yaw in radians^2.
-- `var_speed_to` (float): Variance for platform speed in (meters per second)^2.
+- `std_xy_from` (float): Standard deviation of XY source position components in meters.
+- `std_z_from` (float): Standard deviation of Z source position component in meters.
+- `std_xy_to` (float): Standard deviation of XY target position components in meters.
+- `std_z_to` (float): Standard deviation of Z target position component in meters.
+- `std_roll_pitch` (float): Standard deviation of roll and pitch in radians.
+- `std_yaw` (float): Standard deviation of yaw in radians.
+- `std_speed_to` (float): Standard deviation of platform speed in (meters per second).
 - `error_probability` (float): Probability of error used for stochastic testing.
 
 ### Threshold Settings
+
+Usually, these settings can be left at their default values.
 
 - `metric_threshold` (float): Iteration threshold for the least squares adjustment regarding the metric parameters.
 - `time_threshold` (float): Iteration threshold for the least squares adjustment regarding the time shift parameter.
@@ -214,7 +215,7 @@ Trajectopy offers a range of processing options that can be applied to the impor
 
 ## Matching Settings
 
-- `method` (integer): The method used for trajectory matching. Choices: `MatchingMethod.NEAREST_SPATIAL`, `MatchingMethod.NEAREST_TEMPORAL`, `MatchingMethod.INTERPOLATION`, `MatchingMethod.NEAREST_SPATIAL_INTERPOLATED`. The methods are described below.
+- `method` (`MatchingMethod`): The method used for trajectory matching. Choices: `MatchingMethod.NEAREST_SPATIAL`, `MatchingMethod.NEAREST_TEMPORAL`, `MatchingMethod.INTERPOLATION`, `MatchingMethod.NEAREST_SPATIAL_INTERPOLATED`. The methods are described below.
 - `max_time_diff` (float): Maximum allowed time difference when matching two trajectories using their timestamps.
 - `max_distance` (float): Maximum allowed distance between matched positions during spatial matching.
 - `k_nearest` (integer): The number of nearest neighbors to consider during spatial interpolation matching.
@@ -227,11 +228,11 @@ This method matches two trajectories by finding the nearest pose in the target t
 
 #### Nearest Temporal
 
-This method matches two trajectories by finding the nearest pose in the target trajectory for each pose in the source trajectory. The distance between two poses is computed using the absolute time difference between their timestamps.
+This method matches two trajectories using their timestamps by finding the nearest timestamp in the target trajectory for each timestamp in the source trajectory.
 
 #### Interpolation
 
-This method matches two trajectories by interpolating the timestamps of one trajectory to the timestamps of the other trajectory. The position is linear for both positions and rotations (SLERP).
+This method matches two trajectories by interpolating the timestamps of one trajectory to the timestamps of the other trajectory. The interpolation is linear for both positions and rotations (SLERP).
 
 #### Nearest Spatial Interpolated
 
@@ -246,7 +247,7 @@ This method matches both trajectories spatially by requesting the nearest k posi
 
 - `pair_distance_step` (float): Step in which the pose pair distance increases.
 
-- `pair_distance_unit` (Unit): Unit of the pose pair distance. Choices: `Unit.METER`, `Unit.SECOND`.
+- `pair_distance_unit` (`Unit`): Unit of the pose pair distance. Choices: `Unit.METER`, `Unit.SECOND`.
 
 - `use_all_pose_pairs` (boolean): If enabled, overlapping pose pairs will be used for relative metrics calculation.
 
@@ -288,16 +289,16 @@ Furthermore, the user can choose to either use consecutive pose pairs (non-overl
 
 #### Visualization Settings
 
-- `downsample_size` (integer): The downsample size for data visualization. To prevent unresponsive and overly large html reports, the data can be downsampled before visualization. The downsample size defines the maximum number of values after downsampling. If set to 0 or -1, no downsampling is performed. A downsample_size larger than the number of values in the trajectory will result in no downsampling.
-- `scatter_max_std` (float): The upper colorbar limit is set to the mean plus this value times the standard deviation of the data. This is useful to prevent outliers from dominating the colorbar.
-- `ate_unit_is_mm` (boolean): If true, ATE (Absolute Trajectory Error) unit is in millimeters.
-- `directed_ate` (boolean): If true, ATE position deviations are divided into along-track, cross-track (horizontal) and cross-track (vertical directions).
-- `histogram_opacity` (float): Opacity of histograms for overlay visualization.
-- `histogram_bargap` (float): Gap between histogram bars in overlay mode.
-- `histogram_barmode` (string): The mode for histogram bars, usually set to "overlay".
-- `histogram_yaxis_title` (string): Title for the y-axis in histograms.
-- `plot_mode` (string): The mode for plot visualization, typically "lines+markers".
-- `scatter_mode` (string): The mode for scatter plot visualization, often "markers".
+- `downsample_size` (integer): The downsample size for data visualization. To prevent unresponsive and overly large html reports, the data can be downsampled before visualization. Downsampling is done by grouping multiple values into one using averaging. The downsample size defines the maximum number of values after downsampling. If set to 0 or -1, no downsampling is performed. A downsample_size larger than the number of values in the trajectory will result in no downsampling. Default: 2000
+- `scatter_max_std` (float): The upper colorbar limit is set to the mean plus this value times the standard deviation of the data. This is useful to prevent outliers from dominating the colorbar. Default: 4.0
+- `ate_unit_is_mm` (boolean): If true, ATE (Absolute Trajectory Error) unit is in millimeters. Default: False
+- `directed_ate` (boolean): If true, ATE position deviations are divided into along-track, cross-track (horizontal) and cross-track (vertical directions). Default: True
+- `histogram_opacity` (float): Opacity of histograms for overlay visualization. Default 0.6
+- `histogram_bargap` (float): Gap between histogram bars in overlay mode. Default: 0.1
+- `histogram_barmode` (string): The mode for histogram bars. Default: "overlay"
+- `histogram_yaxis_title` (string): Title for the y-axis in histograms. Default: "Count"
+- `plot_mode` (string): The mode for plot visualization. Default: "lines+markers"
+- `scatter_mode` (string): The mode for scatter plot visualization. Default: "markers"
 - `scatter_colorscale` (string): The colorscale for scatter plots, Default: "RdYlBu_r".
 
 #### Position Units and Names
