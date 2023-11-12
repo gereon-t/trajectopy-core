@@ -3,7 +3,7 @@ from test.testdata import generated_trajectory
 from typing import Tuple
 
 import numpy as np
-from rotationset import RotationSet
+from trajectopy_core.rotationset import RotationSet
 
 from trajectopy_core.alignment.actions import align_trajectories, apply_alignment
 from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter

@@ -11,7 +11,7 @@ from typing import List, Tuple, Union
 import numpy as np
 import pandas as pd
 from pointset import PointSet
-from rotationset import RotationSet
+from trajectopy_core.rotationset import RotationSet
 
 from trajectopy_core.io.header import HeaderData
 from trajectopy_core.io.utils import get_rot_matrix

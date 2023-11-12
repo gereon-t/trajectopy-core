@@ -8,7 +8,7 @@ import logging
 from typing import Tuple
 import numpy as np
 
-from rotationset import RotationSet
+from trajectopy_core.rotationset import RotationSet
 
 from trajectopy_core.alignment.ghm.data import AlignmentData
 from trajectopy_core.alignment.ghm.estimation import Alignment

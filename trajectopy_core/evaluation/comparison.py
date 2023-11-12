@@ -8,7 +8,7 @@ import logging
 from typing import Dict, List, Tuple, Union
 
 import numpy as np
-from rotationset import RotationSet
+from trajectopy_core.rotationset import RotationSet
 
 from trajectopy_core.evaluation.utils import nearest_point
 from trajectopy_core.evaluation.ate_result import ATEResult

@@ -11,7 +11,7 @@ from functools import cached_property
 from typing import Dict, List, Tuple, Union
 
 import numpy as np
-from rotationset import RotationSet
+from trajectopy_core.rotationset import RotationSet
 from scipy.sparse import spdiags
 
 from trajectopy_core.settings.alignment import AlignmentSettings

@@ -10,7 +10,7 @@ from typing import Dict, List
 
 import numpy as np
 import pandas as pd
-from rotationset import RotationSet
+from trajectopy_core.rotationset import RotationSet
 
 from trajectopy_core.settings.alignment import AlignmentEstimationSettings
 from trajectopy_core.definitions import UNIT_FORMAT_RULES, Unit

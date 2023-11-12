@@ -5,7 +5,7 @@ from typing import Any
 
 import numpy as np
 from pointset import PointSet
-from rotationset import RotationSet
+from trajectopy_core.rotationset import RotationSet
 
 from trajectopy_core.trajectory import Trajectory
 
