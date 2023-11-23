@@ -1,5 +1,4 @@
 import logging
-
 from trajectopy_core.pipelines import ate, rpe
 from trajectopy_core.report.single import render_single_report
 from trajectopy_core.report.utils import show_report, write_report
@@ -28,7 +27,7 @@ def main():
     report_settings = ReportSettings(scatter_axis_order="xz", ate_unit_is_mm=True)
     report = render_single_report(ate_result=ate_result, rpe_result=rpe_result, report_settings=report_settings)
     # write_report(output_file="report.html", report_text=report)
-    show_report(report_text=report)
+    # show_report(report_text=report)
 
 
 if __name__ == "__main__":

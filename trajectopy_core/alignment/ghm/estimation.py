@@ -257,6 +257,7 @@ class Alignment:
                 break
 
             group_global_tests: Dict[str, bool] = {}
+            group_variance_factors = []
             for group_key in self.data.variance_groups:
                 group_variances = np.c_[self.data.get_var_group(key=group_key)]
                 group_residuals = np.c_[self.data.get_res_group(key=group_key)]
@@ -276,38 +277,41 @@ class Alignment:
                 logger.info("Adjusted variance for group %s by factor %.3f", group_key, group_variance_factor)
 
                 group_global_tests[group_key] = group_global_test
+                group_variance_factors.append(group_variance_factor)
 
-            if variances_changed := any(not value for _, value in group_global_tests.items()):
+            if any((abs(factor - 1)) > 0.2 for factor in group_variance_factors):
                 logger.info(
                     "Group variances changed. Reestimating parameters (%i/%i).",
                     cnt,
                     max_iterations,
                 )
                 self._estimate_parameters()
+            else:
+                logger.info("Finished with variance component estimation.")
+                break
 
             cnt += 1
 
-        logger.info("Finished with variance component estimation.")
         logging.info(dict2table(group_global_tests, title="Group Stochastic Test Results"))
         return group_global_tests
 
-    def variance_estimation(self, at_least_once: bool = False) -> None:
+    def variance_estimation(self) -> None:
         """
         Tests the consistency of the functional and stochastic model and
         adjusts the variance vector if necessary.
         """
         cnt = 0
         max_iterations = 5
-        global_test_result = self._global_test(variance=self.variance_factor, redundancy=self.redundancy)
-        while not global_test_result or at_least_once:
+
+        while abs(self.variance_factor - 1) > 0.2:
             logger.info("Adjusting variance vector (%i/%i).", cnt, max_iterations)
             self.data._var_vector *= self.variance_factor
             self._estimate_parameters()
-            global_test_result = self._global_test(variance=self.variance_factor, redundancy=self.redundancy)
-            at_least_once = False
             if cnt > max_iterations:
-                logging.warning("Breaking out of global test loop.")
+                logging.warning("Breaking out of global variance estimation loop.")
                 break
+
+        self._global_test(variance=self.variance_factor, redundancy=self.redundancy)
 
     def _global_test(self, variance: float, redundancy: int, description: str = "global") -> bool:
         tau = variance * redundancy
