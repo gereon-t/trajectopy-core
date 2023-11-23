@@ -267,17 +267,15 @@ class Alignment:
                     np.sum(group_residuals * np.reciprocal(group_variances) * group_residuals) / group_redundancy
                 )
 
-                group_global_test = self._global_test(variance=group_variance_factor, redundancy=group_redundancy)
+                group_global_test = self._global_test(
+                    variance=group_variance_factor, redundancy=group_redundancy, description=group_key
+                )
 
                 # global test for group
                 self.data.set_var_group(values=group_variances * group_variance_factor, key=group_key)
                 logger.info("Adjusted variance for group %s by factor %.3f", group_key, group_variance_factor)
 
                 group_global_tests[group_key] = group_global_test
-                logger.debug(
-                    "Group global tests: %s\n:",
-                    dict2table(group_global_tests, title="Group Global Tests"),
-                )
 
             if variances_changed := any(not value for _, value in group_global_tests.items()):
                 logger.info(
@@ -289,8 +287,8 @@ class Alignment:
 
             cnt += 1
 
-        logger.debug("Finished with variance component estimation.")
-        logging.debug(dict2table(group_global_tests, title="Group Global Test Results"))
+        logger.info("Finished with variance component estimation.")
+        logging.info(dict2table(group_global_tests, title="Group Stochastic Test Results"))
         return group_global_tests
 
     def variance_estimation(self, at_least_once: bool = True) -> None:
@@ -302,7 +300,7 @@ class Alignment:
         max_iterations = 5
         global_test_result = self._global_test(variance=self.variance_factor, redundancy=self.redundancy)
         while not global_test_result or at_least_once:
-            logger.info("Global test rejected. Adjusting variance vector (%i/%i).", cnt, max_iterations)
+            logger.info("Adjusting variance vector (%i/%i).", cnt, max_iterations)
             self.data._var_vector *= self.variance_factor
             self._estimate_parameters()
             global_test_result = self._global_test(variance=self.variance_factor, redundancy=self.redundancy)
@@ -311,14 +309,13 @@ class Alignment:
                 logging.warning("Breaking out of global test loop.")
                 break
 
-        logger.debug("Global test result %s:", global_test_result)
-
-    def _global_test(self, variance: float, redundancy: int) -> bool:
+    def _global_test(self, variance: float, redundancy: int, description: str = "global") -> bool:
         tau = variance * redundancy
         quantile = chi2.ppf(1 - self.settings.stochastics.error_probability, redundancy)
 
-        logger.debug(
-            "Global test passed: %s, quantile: %.3f, test value: %.3f, variance factor: %.3f",
+        logger.info(
+            "Stochastic test passed (%s): %s, quantile: %.3f, test value: %.3f, variance factor: %.3f",
+            description,
             str(tau <= quantile),
             quantile,
             tau,
