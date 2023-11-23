@@ -4,6 +4,7 @@ from trajectopy_core.pipelines import ate, rpe
 from trajectopy_core.report.single import render_single_report
 from trajectopy_core.report.utils import show_report, write_report
 from trajectopy_core.settings.processing import ProcessingSettings
+from trajectopy_core.settings.report import ReportSettings
 from trajectopy_core.trajectory import Trajectory
 
 logging.basicConfig(
@@ -24,7 +25,8 @@ def main():
     ate_result = ate(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
     rpe_result = rpe(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
 
-    report = render_single_report(ate_result=ate_result, rpe_result=rpe_result)
+    report_settings = ReportSettings(scatter_axis_order="xy")
+    report = render_single_report(ate_result=ate_result, rpe_result=rpe_result, report_settings=report_settings)
     # write_report(output_file="report.html", report_text=report)
     show_report(report_text=report)
 

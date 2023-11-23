@@ -42,6 +42,8 @@ class ReportSettings(Settings):
 
     scatter_mode: str = "markers"
     scatter_colorscale: str = "RdYlBu_r"
+    scatter_axis_order: str = "xy"
+    scatter_marker_size: int = 5
 
     pos_x_name: str = "x"
     pos_y_name: str = "y"
