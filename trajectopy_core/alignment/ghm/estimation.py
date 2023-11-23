@@ -291,7 +291,7 @@ class Alignment:
         logging.info(dict2table(group_global_tests, title="Group Stochastic Test Results"))
         return group_global_tests
 
-    def variance_estimation(self, at_least_once: bool = True) -> None:
+    def variance_estimation(self, at_least_once: bool = False) -> None:
         """
         Tests the consistency of the functional and stochastic model and
         adjusts the variance vector if necessary.
