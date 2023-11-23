@@ -25,7 +25,7 @@ def main():
     ate_result = ate(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
     rpe_result = rpe(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
 
-    report_settings = ReportSettings(scatter_axis_order="xy")
+    report_settings = ReportSettings(scatter_axis_order="xz", ate_unit_is_mm=True)
     report = render_single_report(ate_result=ate_result, rpe_result=rpe_result, report_settings=report_settings)
     # write_report(output_file="report.html", report_text=report)
     show_report(report_text=report)
