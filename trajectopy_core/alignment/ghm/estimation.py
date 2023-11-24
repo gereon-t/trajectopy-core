@@ -12,7 +12,9 @@ from numpy import matlib
 from scipy.sparse import csc_matrix
 from scipy.sparse.linalg import spsolve
 from scipy.stats.distributions import chi2
-
+from scipy.sparse import spdiags
+from scipy.sparse import diags
+from scipy.sparse.linalg import inv
 from trajectopy_core.alignment.direct.helmert_transformation import direct_helmert_transformation
 from trajectopy_core.alignment.direct.leverarm import direct_leverarm
 from trajectopy_core.alignment.direct.timeshift import direct_timeshift
@@ -143,8 +145,12 @@ class Alignment:
         return self._est_params
 
     @property
+    def num_of_equations(self) -> int:
+        return self.data.number_of_epochs * 3
+
+    @property
     def redundancy(self) -> int:
-        return len(self.data.obs_vector) - self._est_params.num_enabled
+        return self.num_of_equations - self._est_params.num_enabled
 
     def init_parameters(self) -> AlignmentParameters:
         """This method computes initial parameters
@@ -250,7 +256,7 @@ class Alignment:
         """
         variances_changed = True
         cnt = 0
-        max_iterations = 5
+        max_iterations = 25
         while variances_changed:
             if cnt > max_iterations:
                 logging.warning("Breaking out of variance component estimation loop.")
@@ -258,12 +264,23 @@ class Alignment:
 
             group_global_tests: Dict[str, bool] = {}
             group_variance_factors = []
+            group_reds = {
+                "XY_FROM": self.xy_from_red,
+                "Z_FROM": self.z_from_red,
+                "XY_TO": self.xy_to_red,
+                "Z_TO": self.z_to_red,
+                "ROLL_PITCH": self.roll_pitch_red,
+                "YAW": self.yaw_red,
+                "SPEED": self.speed_red,
+            }
             for group_key in self.data.variance_groups:
                 group_variances = np.c_[self.data.get_var_group(key=group_key)]
                 group_residuals = np.c_[self.data.get_res_group(key=group_key)]
-                group_redundancy = (
-                    group_residuals.size
-                )  # here I take a shortcut (If there are a lot of observations, the redundancy can be approximated by the number of observations)
+                # group_redundancy = (
+                #     group_residuals.size
+                # )  # here I take a shortcut (If there are a lot of observations, the redundancy can be approximated by the number of observations)
+
+                group_redundancy = group_reds[group_key]
                 group_variance_factor = (
                     np.sum(group_residuals * np.reciprocal(group_variances) * group_residuals) / group_redundancy
                 )
@@ -279,7 +296,7 @@ class Alignment:
                 group_global_tests[group_key] = group_global_test
                 group_variance_factors.append(group_variance_factor)
 
-            if any((abs(factor - 1)) > 0.2 for factor in group_variance_factors):
+            if any((abs(factor - 1)) > 0.1 for factor in group_variance_factors):
                 logger.info(
                     "Group variances changed. Reestimating parameters (%i/%i).",
                     cnt,
@@ -367,6 +384,34 @@ class Alignment:
             correlates_k = -spsolve(bbt, a_design @ delta_params + contradiction_w)
             self.data.res_vector = self.data.sigma_ll @ b_cond.T @ correlates_k
 
+            q_22 = -inv(a_design.T @ spsolve(bbt, a_design))
+            q_12 = -spsolve(bbt, a_design @ q_22)
+            q_21 = q_12.T
+            q_11 = spsolve(
+                bbt, spdiags(np.ones(a_design.shape[0]), 0, a_design.shape[0], a_design.shape[0]) - a_design @ q_21
+            )
+            red_components = (
+                self.data.sigma_ll @ b_cond.T @ q_11 @ b_cond @ self.data.sigma_ll
+            ).diagonal() * np.reciprocal(self.data.var_vector)
+
+            self.xy_from_red = sum(red_components[0 :: self.data.num_obs_per_epoch]) + sum(
+                red_components[1 :: self.data.num_obs_per_epoch]
+            )
+            self.z_from_red = sum(red_components[2 :: self.data.num_obs_per_epoch])
+            self.xy_to_red = sum(red_components[3 :: self.data.num_obs_per_epoch]) + sum(
+                red_components[4 :: self.data.num_obs_per_epoch]
+            )
+            self.z_to_red = sum(red_components[5 :: self.data.num_obs_per_epoch])
+            self.roll_pitch_red = sum(red_components[6 :: self.data.num_obs_per_epoch]) + sum(
+                red_components[7 :: self.data.num_obs_per_epoch]
+            )
+            self.yaw_red = sum(red_components[8 :: self.data.num_obs_per_epoch])
+            self.speed_red = (
+                sum(red_components[9 :: self.data.num_obs_per_epoch])
+                + sum(red_components[10 :: self.data.num_obs_per_epoch])
+                + sum(red_components[11 :: self.data.num_obs_per_epoch])
+            )
+
             # update
             self._est_params.values_enabled += delta_params
             contradiction_w = self._auto_functional_relationship() - b_cond @ self.data.res_vector.ravel()
@@ -389,6 +434,8 @@ class Alignment:
         if a_design.shape[1] == 1:
             return -(a_design.T @ spsolve(bbt, contradiction_w)) / (a_design.T @ spsolve(bbt, a_design))
 
+        # quasi vermittelnd
+        # spsolve(-a_design.T @ spsolve(bbt, -a_design), -a_design.T @ spsolve(bbt, contradiction_w))
         return -spsolve(
             a_design.T @ spsolve(bbt, a_design),
             a_design.T @ spsolve(bbt, contradiction_w),
@@ -586,13 +633,13 @@ class Alignment:
 
         # row indices
         # [0,0,0,0,0,0; 1,1,1,1,1,1; 2,2,2,2,2,2; 3,3,3,3,3,3; ...]
-        row_idx = np.repeat(np.arange(0, self.data.number_of_epochs * 3, 1), self.data.num_obs_per_epoch)
+        row_idx = np.repeat(np.arange(0, self.num_of_equations, 1), self.data.num_obs_per_epoch)
 
         # column indices [0,1,2,3,4,5; 6,7,8,9,10,11; 12,13,14,15,16,17; ...]
         col_idx_matrix = (
             matlib.repmat(
                 np.arange(0, self.data.num_obs_per_epoch),
-                self.data.number_of_epochs * 3,
+                self.num_of_equations,
                 1,
             )
             + np.repeat(
