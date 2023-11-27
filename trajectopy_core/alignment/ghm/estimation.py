@@ -13,7 +13,6 @@ from scipy.sparse import csc_matrix
 from scipy.sparse.linalg import spsolve
 from scipy.stats.distributions import chi2
 from scipy.sparse import spdiags
-from scipy.sparse import diags
 from scipy.sparse.linalg import inv
 from trajectopy_core.alignment.direct.helmert_transformation import direct_helmert_transformation
 from trajectopy_core.alignment.direct.leverarm import direct_leverarm
@@ -67,6 +66,7 @@ class Alignment:
         self._est_params = self.init_parameters()
         self._has_results = False
         self._converged = False
+        self._group_redundancies = {}
 
         logger.info("Initialized Alignment!")
         logger.info(self)
@@ -124,7 +124,10 @@ class Alignment:
             return AlignmentParameters()
 
         self._estimate_parameters()
-        self.variance_component_estimation()
+
+        if self.data.alignment_settings.stochastics.variance_component_estimation:
+            self.variance_component_estimation()
+
         self.variance_estimation()
 
         if not self._converged:
@@ -143,6 +146,10 @@ class Alignment:
     @property
     def est_params(self) -> AlignmentParameters:
         return self._est_params
+
+    @property
+    def group_redundancies(self) -> Dict[str, bool]:
+        return self._group_redundancies
 
     @property
     def num_of_equations(self) -> int:
@@ -264,23 +271,12 @@ class Alignment:
 
             group_global_tests: Dict[str, bool] = {}
             group_variance_factors = []
-            group_reds = {
-                "XY_FROM": self.xy_from_red,
-                "Z_FROM": self.z_from_red,
-                "XY_TO": self.xy_to_red,
-                "Z_TO": self.z_to_red,
-                "ROLL_PITCH": self.roll_pitch_red,
-                "YAW": self.yaw_red,
-                "SPEED": self.speed_red,
-            }
+
             for group_key in self.data.variance_groups:
                 group_variances = np.c_[self.data.get_var_group(key=group_key)]
                 group_residuals = np.c_[self.data.get_res_group(key=group_key)]
-                # group_redundancy = (
-                #     group_residuals.size
-                # )  # here I take a shortcut (If there are a lot of observations, the redundancy can be approximated by the number of observations)
 
-                group_redundancy = group_reds[group_key]
+                group_redundancy = self.group_redundancies[group_key]
                 group_variance_factor = (
                     np.sum(group_residuals * np.reciprocal(group_variances) * group_residuals) / group_redundancy
                 )
@@ -317,8 +313,8 @@ class Alignment:
         Tests the consistency of the functional and stochastic model and
         adjusts the variance vector if necessary.
         """
-        cnt = 0
-        max_iterations = 5
+        cnt = 1
+        max_iterations = 6
 
         while abs(self.variance_factor - 1) > 0.2:
             logger.info("Adjusting variance vector (%i/%i).", cnt, max_iterations)
@@ -384,34 +380,6 @@ class Alignment:
             correlates_k = -spsolve(bbt, a_design @ delta_params + contradiction_w)
             self.data.res_vector = self.data.sigma_ll @ b_cond.T @ correlates_k
 
-            q_22 = -inv(a_design.T @ spsolve(bbt, a_design))
-            q_12 = -spsolve(bbt, a_design @ q_22)
-            q_21 = q_12.T
-            q_11 = spsolve(
-                bbt, spdiags(np.ones(a_design.shape[0]), 0, a_design.shape[0], a_design.shape[0]) - a_design @ q_21
-            )
-            red_components = (
-                self.data.sigma_ll @ b_cond.T @ q_11 @ b_cond @ self.data.sigma_ll
-            ).diagonal() * np.reciprocal(self.data.var_vector)
-
-            self.xy_from_red = sum(red_components[0 :: self.data.num_obs_per_epoch]) + sum(
-                red_components[1 :: self.data.num_obs_per_epoch]
-            )
-            self.z_from_red = sum(red_components[2 :: self.data.num_obs_per_epoch])
-            self.xy_to_red = sum(red_components[3 :: self.data.num_obs_per_epoch]) + sum(
-                red_components[4 :: self.data.num_obs_per_epoch]
-            )
-            self.z_to_red = sum(red_components[5 :: self.data.num_obs_per_epoch])
-            self.roll_pitch_red = sum(red_components[6 :: self.data.num_obs_per_epoch]) + sum(
-                red_components[7 :: self.data.num_obs_per_epoch]
-            )
-            self.yaw_red = sum(red_components[8 :: self.data.num_obs_per_epoch])
-            self.speed_red = (
-                sum(red_components[9 :: self.data.num_obs_per_epoch])
-                + sum(red_components[10 :: self.data.num_obs_per_epoch])
-                + sum(red_components[11 :: self.data.num_obs_per_epoch])
-            )
-
             # update
             self._est_params.values_enabled += delta_params
             contradiction_w = self._auto_functional_relationship() - b_cond @ self.data.res_vector.ravel()
@@ -419,7 +387,42 @@ class Alignment:
 
         if self._converged:
             logger.info("Adjustment did converge after %i iterations", it_counter)
+
+        if self.data.alignment_settings.stochastics.variance_component_estimation:
+            self._compute_group_redundancies(a_design, b_cond, bbt)
         self._compute_parameter_variances(a_design, bbt)
+
+    def _compute_group_redundancies(self, a_design: csc_matrix, b_cond: csc_matrix, bbt: csc_matrix) -> None:
+        q_22 = -inv(a_design.T @ spsolve(bbt, a_design))
+        q_12 = -spsolve(bbt, a_design @ q_22)
+        q_21 = q_12.T
+        q_11 = spsolve(
+            bbt, spdiags(np.ones(a_design.shape[0]), 0, a_design.shape[0], a_design.shape[0]) - a_design @ q_21
+        )
+        red_components = (
+            self.data.sigma_ll @ b_cond.T @ q_11 @ b_cond @ self.data.sigma_ll
+        ).diagonal() * np.reciprocal(self.data.var_vector)
+
+        group_redundancies = {}
+
+        group_redundancies["XY_FROM"] = sum(red_components[0 :: self.data.num_obs_per_epoch]) + sum(
+            red_components[1 :: self.data.num_obs_per_epoch]
+        )
+        group_redundancies["Z_FROM"] = sum(red_components[2 :: self.data.num_obs_per_epoch])
+        group_redundancies["XY_TO"] = sum(red_components[3 :: self.data.num_obs_per_epoch]) + sum(
+            red_components[4 :: self.data.num_obs_per_epoch]
+        )
+        group_redundancies["Z_TO"] = sum(red_components[5 :: self.data.num_obs_per_epoch])
+        group_redundancies["ROLL_PITCH"] = sum(red_components[6 :: self.data.num_obs_per_epoch]) + sum(
+            red_components[7 :: self.data.num_obs_per_epoch]
+        )
+        group_redundancies["YAW"] = sum(red_components[8 :: self.data.num_obs_per_epoch])
+        group_redundancies["SPEED"] = (
+            sum(red_components[9 :: self.data.num_obs_per_epoch])
+            + sum(red_components[10 :: self.data.num_obs_per_epoch])
+            + sum(red_components[11 :: self.data.num_obs_per_epoch])
+        )
+        self._group_redundancies = group_redundancies
 
     def _compute_parameter_variances(self, a_design: csc_matrix, bbt: csc_matrix) -> None:
         sigma_xx_inv: csc_matrix = a_design.T @ spsolve(bbt, a_design)

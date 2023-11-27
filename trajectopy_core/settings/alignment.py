@@ -226,6 +226,7 @@ class AlignmentStochastics(Settings):
     std_yaw: float = float(np.deg2rad(1.0))
     std_speed_to: float = 1.0
     error_probability: float = 0.05
+    variance_component_estimation: bool = False
 
     @property
     def var_xy_from(self) -> float:

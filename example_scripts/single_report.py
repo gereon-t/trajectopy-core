@@ -1,12 +1,10 @@
 import logging
 
-import numpy as np
 from trajectopy_core.pipelines import ate, rpe
 from trajectopy_core.report.single import render_single_report
 from trajectopy_core.report.utils import show_report, write_report
 from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.settings.report import ReportSettings
-from trajectopy_core.settings.alignment import AlignmentSettings, AlignmentEstimationSettings
 from trajectopy_core.trajectory import Trajectory
 
 logging.basicConfig(
@@ -21,13 +19,8 @@ def main():
     gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
     est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
 
-    gt_traj = gt_traj.apply_index(np.arange(0, len(gt_traj), 10))
-    est_traj = est_traj.apply_index(np.arange(0, len(est_traj), 10))
-
     # default settings
-    settings = ProcessingSettings(
-        alignment=AlignmentSettings(estimation_of=AlignmentEstimationSettings.all(sensor_rotation=False))
-    )
+    settings = ProcessingSettings()
 
     ate_result = ate(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
     rpe_result = rpe(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
