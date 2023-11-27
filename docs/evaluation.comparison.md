@@ -10,7 +10,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 ---
 
-<a href="..\trajectopy_core\evaluation\comparison.py#L25"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L24"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `compare_trajectories_absolute`
 
@@ -18,7 +18,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 compare_trajectories_absolute(
     traj_test: Trajectory,
     traj_ref: Trajectory
-) → AbsoluteTrajectoryDeviations
+) → ATEResult
 ```
 
 Compares two trajectories in absolute terms, returning the deviations between them. 
@@ -34,12 +34,12 @@ Compares two trajectories in absolute terms, returning the deviations between th
 
 **Returns:**
  
- - <b>`AbsoluteTrajectoryDeviations`</b>:  An object containing the absolute deviations between the two trajectories. 
+ - <b>`ATEResult`</b>:  An object containing the absolute deviations between the two trajectories. 
 
 
 ---
 
-<a href="..\trajectopy_core\evaluation\comparison.py#L63"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L94"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `compare_trajectories_relative`
 
@@ -47,41 +47,8 @@ Compares two trajectories in absolute terms, returning the deviations between th
 compare_trajectories_relative(
     traj_test: Trajectory,
     traj_ref: Trajectory,
-    settings: RelativeComparisonSettings
-) → RelativeTrajectoryDeviations
-```
-
-This function compares two trajectories using the relative comparison method. 
-
-
-
-
-
-**Args:**
- 
- - <b>`traj_test`</b> (Trajectory):  Test trajectory. 
- - <b>`traj_ref`</b> (Trajectory):  Reference trajectory. 
- - <b>`settings`</b> (ComparisonSettings):  Comparison settings. 
-
-
-
-**Returns:**
- 
- - <b>`RelativeTrajectoryDeviations`</b>:  Relative trajectory deviations. 
-
-
----
-
-<a href="..\trajectopy_core\evaluation\comparison.py#L118"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-## <kbd>function</kbd> `pairwise_comparison`
-
-```python
-pairwise_comparison(
-    traj_test: Trajectory,
-    traj_ref: Trajectory,
-    settings: RelativeComparisonSettings
-) → RelativeTrajectoryDeviations
+    settings: RelativeComparisonSettings = RelativeComparisonSettings(pair_min_distance=100.0, pair_max_distance=800.0, pair_distance_step=100.0, pair_distance_unit=<Unit.METER: 3>, use_all_pose_pairs=True)
+) → RPEResult
 ```
 
 This function compares two trajectories using the relative comparison method. 
@@ -89,7 +56,7 @@ This function compares two trajectories using the relative comparison method.
 
 ---
 
-<a href="..\trajectopy_core\evaluation\comparison.py#L198"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L174"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `se3_inv`
 
@@ -102,7 +69,7 @@ Invert SE3 pose
 
 ---
 
-<a href="..\trajectopy_core\evaluation\comparison.py#L209"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L185"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `rotation_error`
 
@@ -115,7 +82,7 @@ KITTI metric port
 
 ---
 
-<a href="..\trajectopy_core\evaluation\comparison.py#L218"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L194"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `translation_error`
 
@@ -128,7 +95,7 @@ KITTI metric port
 
 ---
 
-<a href="..\trajectopy_core\evaluation\comparison.py#L226"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L202"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_directed_deviations`
 
@@ -147,7 +114,7 @@ get_directed_deviations(
 
 ---
 
-<a href="..\trajectopy_core\evaluation\comparison.py#L235"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L211"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `derive_dev_directions_no_rot`
 
@@ -162,7 +129,7 @@ By constructing a 3D line between the corresponding point in xyz_ref and its suc
 
 ---
 
-<a href="..\trajectopy_core\evaluation\comparison.py#L264"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\evaluation\comparison.py#L240"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `derive_dev_directions_with_rot`
 

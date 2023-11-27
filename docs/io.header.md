@@ -11,13 +11,12 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 ---------------
 - **GPS_WEEK_ZERO**
 - **TIME_FORMAT_DICT**
-- **SORTING_DICT**
 - **HEADER_KEYS**
 - **HANDLER_MAPPING**
 
 ---
 
-<a href="..\trajectopy_core\io\header.py#L44"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L42"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `default_line_handler`
 
@@ -32,7 +31,7 @@ default_line_handler(line: str) → str
 
 ---
 
-<a href="..\trajectopy_core\io\header.py#L48"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L46"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `integer_line_handler`
 
@@ -47,7 +46,7 @@ integer_line_handler(line: str) → int
 
 ---
 
-<a href="..\trajectopy_core\io\header.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L50"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `float_line_handler`
 
@@ -62,7 +61,7 @@ float_line_handler(line: str) → float
 
 ---
 
-<a href="..\trajectopy_core\io\header.py#L56"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L54"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `delimiter_line_handler`
 
@@ -75,7 +74,7 @@ This function extracts the delimiter from the file header. All characters betwee
 
 ---
 
-<a href="..\trajectopy_core\io\header.py#L75"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L73"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `HeaderData`
 Class to store the header data of a trajectopy file. 
@@ -199,22 +198,6 @@ __init__(data: Dict[str, Union[str, int, float]]) → None
 
 ---
 
-#### <kbd>property</kbd> sorting
-
-
-
-
-
----
-
-#### <kbd>property</kbd> state
-
-
-
-
-
----
-
 #### <kbd>property</kbd> time_format
 
 
@@ -241,7 +224,7 @@ __init__(data: Dict[str, Union[str, int, float]]) → None
 
 ---
 
-<a href="..\trajectopy_core\io\header.py#L153"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="..\trajectopy_core\io\header.py#L154"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>classmethod</kbd> `from_file`
 
@@ -262,6 +245,44 @@ Reads the header of a trajectory file.
 **Returns:**
  
  - <b>`HeaderData`</b>:  The header data. 
+
+---
+
+<a href="..\trajectopy_core\io\header.py#L172"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>classmethod</kbd> `from_string`
+
+```python
+from_string(input_str: str) → HeaderData
+```
+
+Reads the header of an input string. 
+
+
+
+**Args:**
+ 
+ - <b>`input_str`</b> (str):  The header string. 
+
+
+
+**Returns:**
+ 
+ - <b>`HeaderData`</b>:  The header data. 
+
+---
+
+<a href="..\trajectopy_core\io\header.py#L143"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `handle_line`
+
+```python
+handle_line(metadata: Dict[str, Union[str, int, float]], line: str) → None
+```
+
+
+
+
 
 
 

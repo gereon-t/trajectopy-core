@@ -9,7 +9,7 @@ Gereon Tombrink, 2023 mail@gtombrink.de
 
 **Global Variables**
 ---------------
-- **ROS_MESSAGE_TYPES**
+- **ROS_MESSAGE_HANDLERS**
 
 ---
 
