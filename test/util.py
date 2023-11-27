@@ -1,12 +1,14 @@
+from typing import Tuple
+
 import numpy as np
 from pointset import PointSet
+
+from trajectopy_core.alignment import apply_alignment
+from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
+from trajectopy_core.alignment.result import AlignmentResult
+from trajectopy_core.definitions import Unit
 from trajectopy_core.rotationset import RotationSet
-
 from trajectopy_core.trajectory import Trajectory
-
-
-def random_number(min: float, max: float) -> float:
-    return np.random.rand() * (max - min) + min
 
 
 def generate_noisy_trajectory(num: int) -> Trajectory:
@@ -59,3 +61,74 @@ def generate_trajectory(num: int) -> Trajectory:
     rotationset = RotationSet.from_euler(seq="xyz", angles=rpy, degrees=False)
 
     return Trajectory(pos=pointset, rot=rotationset, tstamps=tstamps)
+
+
+def random_number(lower_bound: float, upper_bound: float) -> float:
+    return np.random.rand() * (upper_bound - lower_bound) + lower_bound
+
+
+def generate_transformation(
+    similarity_enabled: bool = True,
+    time_shift_enabled: bool = True,
+    lever_enabled: bool = True,
+):
+    if similarity_enabled:
+        rand_rot = RotationSet.random().as_euler("xyz", degrees=False) * 0.2
+        sim_trans_x = Parameter(value=random_number(-100, upper_bound=100), unit=Unit.METER)
+        sim_trans_y = Parameter(value=random_number(-100, upper_bound=100), unit=Unit.METER)
+        sim_trans_z = Parameter(value=random_number(-100, upper_bound=100), unit=Unit.METER)
+        sim_rot_x = Parameter(value=rand_rot[0], unit=Unit.RADIAN)
+        sim_rot_y = Parameter(value=rand_rot[1], unit=Unit.RADIAN)
+        sim_rot_z = Parameter(value=rand_rot[2], unit=Unit.RADIAN)
+        sim_scale = Parameter(value=random_number(0.1, upper_bound=10), unit=Unit.SCALE)
+    else:
+        sim_trans_x = Parameter(value=0, unit=Unit.METER)
+        sim_trans_y = Parameter(value=0, unit=Unit.METER)
+        sim_trans_z = Parameter(value=0, unit=Unit.METER)
+        sim_rot_x = Parameter(value=0, unit=Unit.RADIAN)
+        sim_rot_y = Parameter(value=0, unit=Unit.RADIAN)
+        sim_rot_z = Parameter(value=0, unit=Unit.RADIAN)
+        sim_scale = Parameter(value=1, unit=Unit.SCALE)
+
+    if time_shift_enabled:
+        time_shift = Parameter(value=random_number(lower_bound=-10, upper_bound=10), unit=Unit.SECOND)
+    else:
+        time_shift = Parameter(value=0, unit=Unit.SECOND)
+
+    if lever_enabled:
+        lever_x = Parameter(value=random_number(-5, upper_bound=5), unit=Unit.METER)
+        lever_y = Parameter(value=random_number(-5, upper_bound=5), unit=Unit.METER)
+        lever_z = Parameter(value=random_number(-5, upper_bound=5), unit=Unit.METER)
+    else:
+        lever_x = Parameter(value=0, unit=Unit.METER)
+        lever_y = Parameter(value=0, unit=Unit.METER)
+        lever_z = Parameter(value=0, unit=Unit.METER)
+
+    return AlignmentParameters(
+        sim_trans_x=sim_trans_x,
+        sim_trans_y=sim_trans_y,
+        sim_trans_z=sim_trans_z,
+        sim_rot_x=sim_rot_x,
+        sim_rot_y=sim_rot_y,
+        sim_rot_z=sim_rot_z,
+        sim_scale=sim_scale,
+        time_shift=time_shift,
+        lever_x=lever_x,
+        lever_y=lever_y,
+        lever_z=lever_z,
+    )
+
+
+def transform_randomly(
+    trajectory: Trajectory,
+    similarity_enabled: bool = True,
+    time_shift_enabled: bool = True,
+    lever_enabled: bool = True,
+) -> Tuple[Trajectory, AlignmentParameters]:
+    parameters = generate_transformation(
+        similarity_enabled=similarity_enabled, time_shift_enabled=time_shift_enabled, lever_enabled=lever_enabled
+    )
+    transformed = apply_alignment(
+        trajectory=trajectory, alignment_result=AlignmentResult(position_parameters=parameters), inplace=False
+    )
+    return transformed, parameters

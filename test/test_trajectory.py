@@ -5,8 +5,8 @@ from typing import Any
 
 import numpy as np
 from pointset import PointSet
-from trajectopy_core.rotationset import RotationSet
 
+from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.trajectory import Trajectory
 
 
@@ -42,7 +42,7 @@ class TestTrajectory(unittest.TestCase):
 
         random_sampling = np.array(
             [
-                random_number(min=trajectory.tstamps[0], max=trajectory.tstamps[-1])
+                random_number(lower_bound=trajectory.tstamps[0], upper_bound=trajectory.tstamps[-1])
                 for _ in range(np.random.randint(1, len(trajectory) // 1.2))
             ]
         )
@@ -63,8 +63,10 @@ class TestTrajectory(unittest.TestCase):
     def test_crop(self) -> None:
         trajectory = open_loop_trajectory.copy()
 
-        tstamp_min = random_number(min=trajectory.tstamps[0], max=trajectory.tstamps[len(trajectory) // 2])
-        tstamp_max = random_number(min=tstamp_min, max=trajectory.tstamps[-1])
+        tstamp_min = random_number(
+            lower_bound=trajectory.tstamps[0], upper_bound=trajectory.tstamps[len(trajectory) // 2]
+        )
+        tstamp_max = random_number(lower_bound=tstamp_min, upper_bound=trajectory.tstamps[-1])
 
         trajectory.crop(t_start=tstamp_min, t_end=tstamp_max)
 

@@ -3,18 +3,18 @@ from test.testdata import generated_trajectory
 from test.util import random_number
 
 import numpy as np
-from trajectopy_core.alignment.actions import apply_alignment
 
+from trajectopy_core.alignment.actions import apply_alignment
 from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
 from trajectopy_core.alignment.result import AlignmentResult
+from trajectopy_core.definitions import Unit
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute, compare_trajectories_relative
-from trajectopy_core.matching import match_trajectories
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.settings.matching import MatchingMethod, MatchingSettings
+from trajectopy_core.matching import match_trajectories
 from trajectopy_core.settings.comparison import RelativeComparisonSettings
+from trajectopy_core.settings.matching import MatchingMethod, MatchingSettings
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.definitions import Unit
 
 
 def compare_trajectories_abs(traj_ref: Trajectory, traj_test: Trajectory) -> ATEResult:
@@ -46,9 +46,9 @@ class TestComparison(unittest.TestCase):
         trajectory = generated_trajectory.copy()
 
         parameters = AlignmentParameters(
-            lever_x=Parameter(value=random_number(min=-1, max=1), unit=Unit.METER),
-            lever_y=Parameter(value=random_number(min=-1, max=1), unit=Unit.METER),
-            lever_z=Parameter(value=random_number(min=-1, max=1), unit=Unit.METER),
+            lever_x=Parameter(value=random_number(lower_bound=-1, upper_bound=1), unit=Unit.METER),
+            lever_y=Parameter(value=random_number(lower_bound=-1, upper_bound=1), unit=Unit.METER),
+            lever_z=Parameter(value=random_number(lower_bound=-1, upper_bound=1), unit=Unit.METER),
         )
         transformed = apply_alignment(
             trajectory=generated_trajectory,
@@ -66,9 +66,9 @@ class TestComparison(unittest.TestCase):
         trajectory = generated_trajectory.copy()
 
         parameters = AlignmentParameters(
-            sim_trans_x=Parameter(value=random_number(min=-1, max=1), unit=Unit.METER),
-            sim_trans_y=Parameter(value=random_number(min=-1, max=1), unit=Unit.METER),
-            sim_trans_z=Parameter(value=random_number(min=-1, max=1), unit=Unit.METER),
+            sim_trans_x=Parameter(value=random_number(lower_bound=-1, upper_bound=1), unit=Unit.METER),
+            sim_trans_y=Parameter(value=random_number(lower_bound=-1, upper_bound=1), unit=Unit.METER),
+            sim_trans_z=Parameter(value=random_number(lower_bound=-1, upper_bound=1), unit=Unit.METER),
         )
         transformed = apply_alignment(
             trajectory=generated_trajectory,
