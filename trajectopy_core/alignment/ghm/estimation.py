@@ -9,19 +9,19 @@ from typing import Dict, Union
 
 import numpy as np
 from numpy import matlib
-from scipy.sparse import csc_matrix
+from scipy.sparse import csc_matrix, spdiags
 from scipy.sparse.linalg import spsolve
 from scipy.stats.distributions import chi2
-from scipy.sparse import spdiags
+
 from trajectopy_core.alignment.direct.helmert_transformation import direct_helmert_transformation
 from trajectopy_core.alignment.direct.leverarm import direct_leverarm
 from trajectopy_core.alignment.direct.timeshift import direct_timeshift
 from trajectopy_core.alignment.ghm.data import AlignmentData
 from trajectopy_core.alignment.ghm.functional_model.interface import FunctionalRelationship
 from trajectopy_core.alignment.parameters import AlignmentParameters, HelmertTransformation, Leverarm, Parameter
-from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings
-from trajectopy_core.definitions import Unit
 from trajectopy_core.alignment.utils import dict2table
+from trajectopy_core.definitions import Unit
+from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings
 
 logger = logging.getLogger("root")
 
@@ -63,7 +63,7 @@ class Alignment:
         self.data = alignment_data
 
         self._est_params = self.init_parameters()
-        self._recomputation_required = True
+        self._reestimation_required = True
         self._has_results = False
         self._converged = False
         self._group_redundancies = {}
@@ -123,14 +123,14 @@ class Alignment:
             logger.warning("Nothing to estimate since all parameters are disabled")
             return AlignmentParameters()
 
-        max_recomputations = 5
+        max_recomputations = 10
         cnt = 0
-        while self._recomputation_required:
+        while self._reestimation_required:
             if cnt > max_recomputations:
                 logger.warning("Maximum number of recomputations reached. Aborting.")
                 break
 
-            self._recomputation_required = False
+            self._reestimation_required = False
             self._estimate_parameters()
 
             if self.data.alignment_settings.stochastics.variance_component_estimation:
@@ -138,7 +138,7 @@ class Alignment:
 
             # after adjusting the group variances, the parameters need to be re-estimated before performing the global test
             # we only want to change one thing at a time
-            if self._recomputation_required:
+            if self._reestimation_required:
                 self._estimate_parameters()
 
             self.variance_estimation()
@@ -288,6 +288,10 @@ class Alignment:
                 np.sum(group_residuals * np.reciprocal(group_variances) * group_residuals) / group_redundancy
             )
 
+            if np.allclose(group_variance_factor, 0):
+                logger.warning("Variance factor is 0 for group %s. Skipping.", group_key)
+                continue
+
             group_global_test = self._global_test(
                 variance_factor=group_variance_factor, redundancy=group_redundancy, description=group_key
             )
@@ -301,9 +305,9 @@ class Alignment:
 
         if any((abs(factor - 1)) > 0.1 for factor in group_variance_factors):
             logger.info("Group variance components are different from 1, re-estimation required.")
-            self._recomputation_required = True
+            self._reestimation_required = True
         else:
-            logger.info("Finished with variance component estimation. No re-estimation required.")
+            logger.info("Finished with variance component estimation. Re-estimation not required.")
 
         logging.info(dict2table(group_global_tests, title="Group Stochastic Test Results"))
         return group_global_tests
@@ -315,15 +319,19 @@ class Alignment:
         """
         self._global_test(variance_factor=self.variance_factor, redundancy=self.redundancy)
 
-        # if not global_test_result:
-        logger.info("Adjusting variance vector by factor %.3f, re-estimation required", self.variance_factor)
-        self.data._var_vector *= self.variance_factor
+        logger.info("Adjusting variance vector by factor %.3f", self.variance_factor)
+
+        if np.allclose(self.variance_factor, 0):
+            logger.warning("Variance factor is 0. Aborting.")
+            return
 
         if abs(self.variance_factor - 1) > 0.1:
             logger.info("Variance component is different from 1, re-estimation required.")
-            self._recomputation_required = True
+            self._reestimation_required = True
         else:
-            logger.info("Finished with variance estimation. No re-estimation required.")
+            logger.info("Finished with variance estimation. Re-estimation not required.")
+
+        self.data._var_vector *= self.variance_factor
 
     def _global_test(self, variance_factor: float, redundancy: int, description: str = "global") -> bool:
         tau = variance_factor * redundancy
@@ -387,14 +395,15 @@ class Alignment:
         if self._converged:
             logger.info("Adjustment did converge after %i iterations", it_counter)
 
-        if self.data.alignment_settings.stochastics.variance_component_estimation:
-            self._compute_group_redundancies(a_design, b_cond, bbt)
         self._compute_parameter_variances(a_design, bbt)
 
+        if self.data.alignment_settings.stochastics.variance_component_estimation:
+            self._compute_group_redundancies(a_design, b_cond, bbt)
+
     def _compute_group_redundancies(self, a_design: csc_matrix, b_cond: csc_matrix, bbt: csc_matrix) -> None:
-        q_22 = -np.linalg.pinv((a_design.T @ spsolve(bbt, a_design)).toarray())
+        q_22 = -self.est_params.get_covariance_matrix()
         q_12 = -spsolve(bbt, a_design @ q_22)
-        q_21 = q_12.T
+        q_21 = q_12.T if q_12.ndim == 2 else q_12[None, :]
         q_11 = spsolve(
             bbt, spdiags(np.ones(a_design.shape[0]), 0, a_design.shape[0], a_design.shape[0]) - a_design @ q_21
         )

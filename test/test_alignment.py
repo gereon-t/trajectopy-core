@@ -8,7 +8,7 @@ from trajectopy_core.alignment.actions import align_trajectories
 from trajectopy_core.alignment.parameters import AlignmentParameters
 from trajectopy_core.alignment.rotation_alignment import align_rotations
 from trajectopy_core.rotationset import RotationSet
-from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings
+from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings, AlignmentStochastics
 from trajectopy_core.settings.matching import MatchingSettings
 
 
@@ -33,7 +33,8 @@ class TestAlignment(unittest.TestCase):
                     leverarm=lever_enabled,
                     sensor_rotation=False,
                     auto_update=False,
-                )
+                ),
+                stochastics=AlignmentStochastics(variance_component_estimation=False),
             ),
             matching_settings=MatchingSettings(),
         )

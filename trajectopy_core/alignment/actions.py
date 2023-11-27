@@ -6,9 +6,8 @@ mail@gtombrink.de
 """
 import logging
 from typing import Tuple
-import numpy as np
 
-from trajectopy_core.rotationset import RotationSet
+import numpy as np
 
 from trajectopy_core.alignment.ghm.data import AlignmentData
 from trajectopy_core.alignment.ghm.estimation import Alignment
@@ -16,6 +15,7 @@ from trajectopy_core.alignment.ghm.functional_model.equations import leverarm_ti
 from trajectopy_core.alignment.parameters import AlignmentParameters, SensorRotationParameters
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.alignment.rotation_alignment import align_rotations
+from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.settings.alignment import AlignmentSettings, AlignmentStochastics
 from trajectopy_core.settings.matching import MatchingSettings
 from trajectopy_core.trajectory import Trajectory
@@ -250,7 +250,8 @@ def _set_group_variances(alignment_data: AlignmentData) -> None:
     ghm_subset_alignment = Alignment(alignment_data=alignment_data_subset)
     ghm_subset_alignment.estimate()
 
-    group_std_dict = {f"std_{key.lower()}": value for key, value in ghm_subset_alignment.data.group_stds.items()}
+    group_std_dict = alignment_data.alignment_settings.stochastics.to_dict()
+    group_std_dict |= {f"std_{key.lower()}": value for key, value in ghm_subset_alignment.data.group_stds.items()}
     group_std_dict |= {
         "error_probability": alignment_data.alignment_settings.stochastics.error_probability,
         "variance_component_estimation": False,
