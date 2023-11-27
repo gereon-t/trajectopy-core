@@ -13,6 +13,7 @@ from typing import Dict, List, Tuple, Union
 import numpy as np
 from trajectopy_core.rotationset import RotationSet
 from scipy.sparse import spdiags
+import pandas as pd
 
 from trajectopy_core.settings.alignment import AlignmentSettings
 from trajectopy_core.matching import match_trajectories
@@ -82,7 +83,7 @@ class AlignmentData:
             self.traj_from.tstamps[-1],
         )
 
-        self.obs_vector = self._create_obs_vector(
+        self.obs_vector = self.build_obs_vector(
             xyz_from=self.traj_from.pos.xyz,
             xyz_to=self.traj_to.pos.xyz,
             rot_from=self.traj_from.rot,
@@ -90,9 +91,9 @@ class AlignmentData:
         )
 
         logger.debug("Observation vector created.")
-        self.var_vector = self._create_var_vector()
+        self.var_vector = self.build_var_vector()
         logger.debug("Variance vector created.")
-        self.res_vector = self._create_res_vector()
+        self.res_vector = self.build_res_vector()
         logger.debug("Residual vector created.")
 
     @cached_property
@@ -139,6 +140,9 @@ class AlignmentData:
     @property
     def obs_vector(self) -> np.ndarray:
         return self._obs_vector
+
+    def __len__(self) -> int:
+        return len(self._obs_vector) // self.num_obs_per_epoch
 
     @obs_vector.setter
     def obs_vector(self, values: np.ndarray) -> None:
@@ -205,7 +209,7 @@ class AlignmentData:
 
         return obs_count
 
-    def _create_obs_vector(
+    def build_obs_vector(
         self,
         xyz_from: np.ndarray,
         xyz_to: np.ndarray,
@@ -249,7 +253,7 @@ class AlignmentData:
 
         return np.reshape(obs_init, (obs_init.size,))
 
-    def _create_var_vector(self) -> np.ndarray:
+    def build_var_vector(self) -> np.ndarray:
         """Sets up the variance vector
 
         Its size depends on whether the
@@ -287,7 +291,7 @@ class AlignmentData:
             self._set_vector_components(vector=variances, values=variances_speed_to, key="SPEED")
         return variances
 
-    def _create_res_vector(self) -> np.ndarray:
+    def build_res_vector(self) -> np.ndarray:
         return np.zeros_like(self._obs_vector)
 
     def get_obs_group(self, key: str) -> Tuple[np.ndarray, ...]:
@@ -500,3 +504,22 @@ class AlignmentData:
         thresholds[7] *= self.alignment_settings.time_threshold
         thresholds[8:] *= self.alignment_settings.metric_threshold
         return thresholds
+
+    def get_variance_estimation_subset(self, num_obs: int = 200) -> "AlignmentData":
+        obs_matrix = np.reshape(self.obs_vector, (len(self), self.num_obs_per_epoch))
+        if len(obs_matrix) <= num_obs:
+            return copy.deepcopy(self)
+
+        obs_norm = np.linalg.norm(obs_matrix, axis=1)
+        obs_series = pd.Series(obs_norm)
+        max_idx = obs_series.rolling(window=num_obs).std().idxmax()
+
+        traj_index = np.arange(max_idx - num_obs, max_idx)
+        traj_from = self.traj_from.apply_index(traj_index, inplace=False)
+        traj_to = self.traj_to.apply_index(traj_index, inplace=False)
+        return AlignmentData(
+            traj_from=traj_from,
+            traj_to=traj_to,
+            alignment_settings=self.alignment_settings,
+            matching_settings=self.matching_settings,
+        )

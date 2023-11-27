@@ -16,7 +16,7 @@ from trajectopy_core.alignment.ghm.functional_model.equations import leverarm_ti
 from trajectopy_core.alignment.parameters import AlignmentParameters, SensorRotationParameters
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.alignment.rotation_alignment import align_rotations
-from trajectopy_core.settings.alignment import AlignmentSettings
+from trajectopy_core.settings.alignment import AlignmentSettings, AlignmentStochastics
 from trajectopy_core.settings.matching import MatchingSettings
 from trajectopy_core.trajectory import Trajectory
 
@@ -193,14 +193,21 @@ def align_trajectories(
         )
     logger.info("Aligning trajectory positions ...")
 
+    alignment_data = AlignmentData(
+        traj_from=traj_from,
+        traj_to=traj_to,
+        alignment_settings=alignment_settings,
+        matching_settings=matching_settings,
+    )
+
+    if (
+        alignment_settings.stochastics.variance_component_estimation
+        and len(alignment_data) > alignment_settings.stochastics.variance_component_estimation_subset_size
+    ):
+        _set_group_variances(alignment_data)
+
     estimation_settings_changed = True
     while estimation_settings_changed:
-        alignment_data = AlignmentData(
-            traj_from=traj_from,
-            traj_to=traj_to,
-            alignment_settings=alignment_settings,
-            matching_settings=matching_settings,
-        )
         ghm_alignment = Alignment(alignment_data=alignment_data)
         estimated_parameters = ghm_alignment.estimate()
 
@@ -211,7 +218,7 @@ def align_trajectories(
 
         if estimation_settings is not None:
             estimation_settings_changed = True
-            alignment_settings.estimation_of = estimation_settings
+            alignment_data.alignment_settings.estimation_of = estimation_settings
         else:
             estimation_settings_changed = False
 
@@ -234,3 +241,20 @@ def align_trajectories(
         estimation_of=ghm_alignment.settings.estimation_of,
         converged=ghm_alignment.has_results,
     )
+
+
+def _set_group_variances(alignment_data: AlignmentData) -> None:
+    alignment_data_subset = alignment_data.get_variance_estimation_subset(
+        alignment_data.alignment_settings.stochastics.variance_component_estimation_subset_size
+    )
+    ghm_subset_alignment = Alignment(alignment_data=alignment_data_subset)
+    ghm_subset_alignment.estimate()
+
+    group_std_dict = {f"std_{key.lower()}": value for key, value in ghm_subset_alignment.data.group_stds.items()}
+    group_std_dict |= {
+        "error_probability": alignment_data.alignment_settings.stochastics.error_probability,
+        "variance_component_estimation": False,
+        "variance_component_estimation_subset_size": 200,
+    }
+    alignment_data.alignment_settings.stochastics = AlignmentStochastics.from_dict(group_std_dict)
+    alignment_data.var_vector = alignment_data.build_var_vector()

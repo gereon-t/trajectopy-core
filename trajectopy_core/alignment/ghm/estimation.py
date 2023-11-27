@@ -13,7 +13,6 @@ from scipy.sparse import csc_matrix
 from scipy.sparse.linalg import spsolve
 from scipy.stats.distributions import chi2
 from scipy.sparse import spdiags
-from scipy.sparse.linalg import inv
 from trajectopy_core.alignment.direct.helmert_transformation import direct_helmert_transformation
 from trajectopy_core.alignment.direct.leverarm import direct_leverarm
 from trajectopy_core.alignment.direct.timeshift import direct_timeshift
@@ -64,6 +63,7 @@ class Alignment:
         self.data = alignment_data
 
         self._est_params = self.init_parameters()
+        self._recomputation_required = True
         self._has_results = False
         self._converged = False
         self._group_redundancies = {}
@@ -123,12 +123,27 @@ class Alignment:
             logger.warning("Nothing to estimate since all parameters are disabled")
             return AlignmentParameters()
 
-        self._estimate_parameters()
+        max_recomputations = 5
+        cnt = 0
+        while self._recomputation_required:
+            if cnt > max_recomputations:
+                logger.warning("Maximum number of recomputations reached. Aborting.")
+                break
 
-        if self.data.alignment_settings.stochastics.variance_component_estimation:
-            self.variance_component_estimation()
+            self._recomputation_required = False
+            self._estimate_parameters()
 
-        self.variance_estimation()
+            if self.data.alignment_settings.stochastics.variance_component_estimation:
+                self.variance_component_estimation()
+
+            # after adjusting the group variances, the parameters need to be re-estimated before performing the global test
+            # we only want to change one thing at a time
+            if self._recomputation_required:
+                self._estimate_parameters()
+
+            self.variance_estimation()
+
+            cnt += 1
 
         if not self._converged:
             logger.info("Adjustment did not converge. Returning initial parameters.")
@@ -261,49 +276,34 @@ class Alignment:
             - speed (at target positions)
 
         """
-        variances_changed = True
-        cnt = 0
-        max_iterations = 25
-        while variances_changed:
-            if cnt > max_iterations:
-                logging.warning("Breaking out of variance component estimation loop.")
-                break
+        group_global_tests: Dict[str, bool] = {}
+        group_variance_factors = []
 
-            group_global_tests: Dict[str, bool] = {}
-            group_variance_factors = []
+        for group_key in self.data.variance_groups:
+            group_variances = np.c_[self.data.get_var_group(key=group_key)]
+            group_residuals = np.c_[self.data.get_res_group(key=group_key)]
 
-            for group_key in self.data.variance_groups:
-                group_variances = np.c_[self.data.get_var_group(key=group_key)]
-                group_residuals = np.c_[self.data.get_res_group(key=group_key)]
+            group_redundancy = self.group_redundancies[group_key]
+            group_variance_factor = (
+                np.sum(group_residuals * np.reciprocal(group_variances) * group_residuals) / group_redundancy
+            )
 
-                group_redundancy = self.group_redundancies[group_key]
-                group_variance_factor = (
-                    np.sum(group_residuals * np.reciprocal(group_variances) * group_residuals) / group_redundancy
-                )
+            group_global_test = self._global_test(
+                variance_factor=group_variance_factor, redundancy=group_redundancy, description=group_key
+            )
 
-                group_global_test = self._global_test(
-                    variance=group_variance_factor, redundancy=group_redundancy, description=group_key
-                )
+            # global test for group
+            self.data.set_var_group(values=group_variances * group_variance_factor, key=group_key)
+            logger.info("Adjusted variance for group %s by factor %.3f", group_key, group_variance_factor)
 
-                # global test for group
-                self.data.set_var_group(values=group_variances * group_variance_factor, key=group_key)
-                logger.info("Adjusted variance for group %s by factor %.3f", group_key, group_variance_factor)
+            group_global_tests[group_key] = group_global_test
+            group_variance_factors.append(group_variance_factor)
 
-                group_global_tests[group_key] = group_global_test
-                group_variance_factors.append(group_variance_factor)
-
-            if any((abs(factor - 1)) > 0.1 for factor in group_variance_factors):
-                logger.info(
-                    "Group variances changed. Reestimating parameters (%i/%i).",
-                    cnt,
-                    max_iterations,
-                )
-                self._estimate_parameters()
-            else:
-                logger.info("Finished with variance component estimation.")
-                break
-
-            cnt += 1
+        if any((abs(factor - 1)) > 0.1 for factor in group_variance_factors):
+            logger.info("Group variance components are different from 1, re-estimation required.")
+            self._recomputation_required = True
+        else:
+            logger.info("Finished with variance component estimation. No re-estimation required.")
 
         logging.info(dict2table(group_global_tests, title="Group Stochastic Test Results"))
         return group_global_tests
@@ -313,21 +313,20 @@ class Alignment:
         Tests the consistency of the functional and stochastic model and
         adjusts the variance vector if necessary.
         """
-        cnt = 1
-        max_iterations = 6
+        self._global_test(variance_factor=self.variance_factor, redundancy=self.redundancy)
 
-        while abs(self.variance_factor - 1) > 0.2:
-            logger.info("Adjusting variance vector (%i/%i).", cnt, max_iterations)
-            self.data._var_vector *= self.variance_factor
-            self._estimate_parameters()
-            if cnt > max_iterations:
-                logging.warning("Breaking out of global variance estimation loop.")
-                break
+        # if not global_test_result:
+        logger.info("Adjusting variance vector by factor %.3f, re-estimation required", self.variance_factor)
+        self.data._var_vector *= self.variance_factor
 
-        self._global_test(variance=self.variance_factor, redundancy=self.redundancy)
+        if abs(self.variance_factor - 1) > 0.1:
+            logger.info("Variance component is different from 1, re-estimation required.")
+            self._recomputation_required = True
+        else:
+            logger.info("Finished with variance estimation. No re-estimation required.")
 
-    def _global_test(self, variance: float, redundancy: int, description: str = "global") -> bool:
-        tau = variance * redundancy
+    def _global_test(self, variance_factor: float, redundancy: int, description: str = "global") -> bool:
+        tau = variance_factor * redundancy
         quantile = chi2.ppf(1 - self.settings.stochastics.error_probability, redundancy)
 
         logger.info(
@@ -336,7 +335,7 @@ class Alignment:
             str(tau <= quantile),
             quantile,
             tau,
-            self.variance_factor,
+            variance_factor,
         )
         return tau <= quantile
 
@@ -393,7 +392,7 @@ class Alignment:
         self._compute_parameter_variances(a_design, bbt)
 
     def _compute_group_redundancies(self, a_design: csc_matrix, b_cond: csc_matrix, bbt: csc_matrix) -> None:
-        q_22 = -inv(a_design.T @ spsolve(bbt, a_design))
+        q_22 = -np.linalg.pinv((a_design.T @ spsolve(bbt, a_design)).toarray())
         q_12 = -spsolve(bbt, a_design @ q_22)
         q_21 = q_12.T
         q_11 = spsolve(

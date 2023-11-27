@@ -224,9 +224,10 @@ class AlignmentStochastics(Settings):
     std_z_to: float = 1.0
     std_roll_pitch: float = float(np.deg2rad(1.0))
     std_yaw: float = float(np.deg2rad(1.0))
-    std_speed_to: float = 1.0
+    std_speed: float = 1.0
     error_probability: float = 0.05
     variance_component_estimation: bool = False
+    variance_component_estimation_subset_size: int = 200
 
     @property
     def var_xy_from(self) -> float:
@@ -254,7 +255,7 @@ class AlignmentStochastics(Settings):
 
     @property
     def var_speed_to(self) -> float:
-        return self.std_speed_to**2
+        return self.std_speed**2
 
 
 @dataclass
