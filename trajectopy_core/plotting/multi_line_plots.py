@@ -5,14 +5,19 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 
+import itertools
 from typing import Tuple
 
 import numpy as np
+import plotly.express as px
 import plotly.graph_objects as go
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
+from trajectopy_core.plotting.utils import derive_xlabel_from_sortings, get_axis_label
 from trajectopy_core.report.data import ReportDataCollection
+from trajectopy_core.settings.report import ReportSettings
+from trajectopy_core.trajectory import Trajectory
 
 
 def setup_edf_axis(report_data_collection: ReportDataCollection) -> Tuple[go.Figure, dict]:
@@ -43,7 +48,7 @@ def render_dev_edf(report_data_collection: ReportDataCollection) -> str:
         sorted_comb_pos_dev = np.sort(data.comb_dev_pos)
         pos_norm_cdf = np.arange(len(sorted_comb_pos_dev)) / float(len(sorted_comb_pos_dev))
         fig.add_trace(
-            go.Scatter(
+            go.Scattergl(
                 x=sorted_comb_pos_dev,
                 y=pos_norm_cdf,
                 mode=data.settings.plot_mode,
@@ -57,7 +62,7 @@ def render_dev_edf(report_data_collection: ReportDataCollection) -> str:
             sorted_comb_rot_dev = np.sort(data.comb_dev_rot)
             rot_norm_cdf = np.arange(len(sorted_comb_rot_dev)) / float(len(sorted_comb_rot_dev))
             fig.add_trace(
-                go.Scatter(
+                go.Scattergl(
                     x=sorted_comb_rot_dev,
                     y=rot_norm_cdf,
                     mode=data.settings.plot_mode,
@@ -96,7 +101,7 @@ def render_dev_comb_plot(report_data_collection: ReportDataCollection) -> str:
 
     for data in report_data_collection.items:
         fig.add_trace(
-            go.Scatter(
+            go.Scattergl(
                 x=data.function_of,
                 y=data.comb_dev_pos,
                 mode=data.settings.plot_mode,
@@ -108,7 +113,7 @@ def render_dev_comb_plot(report_data_collection: ReportDataCollection) -> str:
 
         if data.has_ate_rot:
             fig.add_trace(
-                go.Scatter(
+                go.Scattergl(
                     x=data.function_of,
                     y=data.comb_dev_rot,
                     mode=data.settings.plot_mode,
@@ -122,112 +127,39 @@ def render_dev_comb_plot(report_data_collection: ReportDataCollection) -> str:
     return plot(fig, output_type="div", config=config)
 
 
-def setup_dev_pos_axis(report_data_collection: ReportDataCollection) -> go.Figure:
-    report_data = report_data_collection.items[0]
-    fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
-    fig.update_layout(title="Position Deviations per Direction", height=report_data.settings.three_subplots_height)
-
-    fig.update_xaxes(title_text=report_data.function_of_label, row=3, col=1)
-    fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=1, col=1)
-    fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=2, col=1)
-    fig.update_yaxes(title_text=f"[{report_data.ate_unit}]", row=3, col=1)
-
-    return fig
-
-
 def render_dev_pos_plot(report_data_collection: ReportDataCollection) -> str:
-    fig = setup_dev_pos_axis(report_data_collection)
+    report_data = report_data_collection.items[0]
 
-    for data in report_data_collection.items:
-        fig.add_trace(
-            go.Scatter(
-                x=data.function_of,
-                y=data.pos_dev_x,
-                mode=data.settings.plot_mode,
-                name=f"{data.short_name} {data.pos_dev_x_name}",
-            ),
-            row=1,
-            col=1,
-        )
-        fig.add_trace(
-            go.Scatter(
-                x=data.function_of,
-                y=data.pos_dev_y,
-                mode=data.settings.plot_mode,
-                name=f"{data.short_name} {data.pos_dev_y_name}",
-            ),
-            row=2,
-            col=1,
-        )
-        fig.add_trace(
-            go.Scatter(
-                x=data.function_of,
-                y=data.pos_dev_z,
-                mode=data.settings.plot_mode,
-                name=f"{data.short_name} {data.pos_dev_z_name}",
-            ),
-            row=3,
-            col=1,
-        )
-
-    return plot(
-        fig, output_type="div", config=report_data_collection.items[0].settings.three_subplots_export.to_config()
+    return render_shared_x_plot(
+        x_data=[data.function_of for data in report_data_collection.items],
+        y_data=[[data.pos_dev_x, data.pos_dev_y, data.pos_dev_z] for data in report_data_collection.items],
+        names=[data.short_name for data in report_data_collection.items],
+        x_label=report_data.function_of_label,
+        y_labels=[
+            f"{report_data.pos_dev_x_name} [{report_data.ate_unit}]",
+            f"{report_data.pos_dev_y_name} [{report_data.ate_unit}]",
+            f"{report_data.pos_dev_z_name} [{report_data.ate_unit}]",
+        ],
+        title="Position Deviations per Direction",
+        report_settings=report_data.settings,
     )
 
 
-def setup_dev_rot_axis(report_data_collection: ReportDataCollection) -> go.Figure:
-    report_data_item = report_data_collection.items[0]
-    fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
-
-    fig.update_layout(title="Rotation Deviations per Axis", height=report_data_item.settings.three_subplots_height)
-    fig.update_xaxes(title_text=report_data_item.function_of_label, row=3, col=1)
-    fig.update_yaxes(title_text=f"[{report_data_item.settings.rot_unit}]", row=1, col=1)
-    fig.update_yaxes(title_text=f"[{report_data_item.settings.rot_unit}]", row=2, col=1)
-    fig.update_yaxes(title_text=f"[{report_data_item.settings.rot_unit}]", row=3, col=1)
-
-    return fig
-
-
 def render_dev_rot_plot(report_data_collection: ReportDataCollection) -> str:
-    fig = setup_dev_rot_axis(report_data_collection)
+    report_data = report_data_collection.items[0]
 
-    for data in report_data_collection.items:
-        if not data.has_ate_rot:
-            continue
-
-        fig.add_trace(
-            go.Scatter(
-                x=data.function_of,
-                y=data.rot_dev_x,
-                mode=data.settings.plot_mode,
-                name=f"{data.short_name} {data.settings.rot_x_name}",
-            ),
-            row=1,
-            col=1,
-        )
-        fig.add_trace(
-            go.Scatter(
-                x=data.function_of,
-                y=data.rot_dev_y,
-                mode=data.settings.plot_mode,
-                name=f"{data.short_name} {data.settings.rot_y_name}",
-            ),
-            row=2,
-            col=1,
-        )
-        fig.add_trace(
-            go.Scatter(
-                x=data.function_of,
-                y=data.rot_dev_z,
-                mode=data.settings.plot_mode,
-                name=f"{data.short_name} {data.settings.rot_z_name}",
-            ),
-            row=3,
-            col=1,
-        )
-
-    return plot(
-        fig, output_type="div", config=report_data_collection.items[0].settings.three_subplots_export.to_config()
+    return render_shared_x_plot(
+        x_data=[data.function_of for data in report_data_collection.items],
+        y_data=[[data.rot_dev_x, data.rot_dev_y, data.rot_dev_z] for data in report_data_collection.items],
+        names=[data.short_name for data in report_data_collection.items],
+        x_label=report_data.function_of_label,
+        y_labels=[
+            f"{report_data.settings.rot_x_name} {report_data.settings.rot_unit}",
+            f"{report_data.settings.rot_y_name} {report_data.settings.rot_unit}",
+            f"{report_data.settings.rot_z_name} {report_data.settings.rot_unit}",
+        ],
+        title="Rotation Deviations per Direction",
+        report_settings=report_data.settings,
     )
 
 
@@ -260,7 +192,7 @@ def render_rpe(report_data_collection: ReportDataCollection) -> str:
         rpe_result = data.rpe_result
 
         fig.add_trace(
-            go.Scatter(
+            go.Scattergl(
                 x=rpe_result.mean_pair_distances,
                 y=rpe_result.pos_dev_mean,
                 mode=data.settings.plot_mode,
@@ -277,7 +209,7 @@ def render_rpe(report_data_collection: ReportDataCollection) -> str:
 
         if rpe_result.has_rot_dev:
             fig.add_trace(
-                go.Scatter(
+                go.Scattergl(
                     x=rpe_result.mean_pair_distances,
                     y=np.rad2deg(rpe_result.rot_dev_mean),
                     mode=data.settings.plot_mode,
@@ -293,3 +225,73 @@ def render_rpe(report_data_collection: ReportDataCollection) -> str:
             )
 
     return plot(fig, output_type="div", config=config)
+
+
+def render_pos_plot(trajectories: list[Trajectory], report_settings: ReportSettings = ReportSettings()) -> str:
+    pos_x_label, pos_y_label, pos_z_label = get_axis_label(trajectories=trajectories)
+    x_label = derive_xlabel_from_sortings([traj.sort_by for traj in trajectories])
+
+    return render_shared_x_plot(
+        x_data=[traj.function_of for traj in trajectories],
+        y_data=[[traj.pos.x, traj.pos.y, traj.pos.z] for traj in trajectories],
+        names=[traj.name for traj in trajectories],
+        x_label=x_label,
+        y_labels=[pos_x_label, pos_y_label, pos_z_label],
+        title="Position Components",
+        report_settings=report_settings,
+    )
+
+
+def render_rot_plot(trajectories: list[Trajectory], report_settings: ReportSettings = ReportSettings()) -> str:
+    rot_x_label, rot_y_label, rot_z_label = ("roll [°]", "pitch [°]", "yaw [°]")
+    x_label = derive_xlabel_from_sortings([traj.sort_by for traj in trajectories])
+
+    return render_shared_x_plot(
+        x_data=[traj.function_of for traj in trajectories],
+        y_data=[
+            [np.rad2deg(traj.rpy[:, 0]), np.rad2deg(traj.rpy[:, 1]), np.rad2deg(traj.rpy[:, 2])]
+            for traj in trajectories
+        ],
+        names=[traj.name for traj in trajectories],
+        x_label=x_label,
+        y_labels=[rot_x_label, rot_y_label, rot_z_label],
+        title="Position Components",
+        report_settings=report_settings,
+    )
+
+
+def render_shared_x_plot(
+    x_data: list[np.ndarray],
+    y_data: list[list[np.ndarray]],
+    names: list[str],
+    x_label: str,
+    y_labels: list[str],
+    title: str,
+    report_settings: ReportSettings = ReportSettings(),
+) -> str:
+    fig = make_subplots(rows=len(y_labels), cols=1, shared_xaxes=True)
+    fig.update_layout(title=title, height=report_settings.three_subplots_height)
+
+    fig.update_xaxes(title_text=x_label, row=len(y_labels), col=1)
+
+    for i, y_label in enumerate(y_labels):
+        fig.update_yaxes(title_text=y_label, row=i + 1, col=1)
+
+    for x_data_item, y_data_item, name, color in zip(
+        x_data, y_data, names, itertools.cycle(px.colors.qualitative.Plotly)
+    ):
+        for i, y_data_subitem in enumerate(y_data_item):
+            fig.add_trace(
+                go.Scattergl(
+                    x=x_data_item,
+                    y=y_data_subitem,
+                    mode=report_settings.plot_mode,
+                    name=name,
+                    marker=dict(color=color),
+                    showlegend=(i == 0),
+                ),
+                row=i + 1,
+                col=1,
+            )
+
+    return plot(fig, output_type="div", config=report_settings.three_subplots_export.to_config())

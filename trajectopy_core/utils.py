@@ -144,3 +144,54 @@ def common_time_span(tstamps1: np.ndarray, tstamps2: np.ndarray) -> Union[Tuple[
     t_end = min(tstamps1[-1], tstamps2[-1])
 
     return (t_start, t_end)
+
+
+def rndodd(s: float) -> int:
+    """
+    Rounds a float to the nearest odd integer.
+
+    Args:
+        s (float): The float to round.
+
+    Returns:
+        int: The rounded odd integer.
+    """
+    idx = s % 2 < 1
+    s = np.floor(s)
+
+    if idx:
+        s += 1
+    return int(s)
+
+
+def round_to_precision(
+    function_of: np.ndarray, data: np.ndarray, resolution: float, filter_size: int = 100
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Reduces the amount of deviations using smoothing and rounding
+
+    It will first smooth the data using a convolution with a filter
+    of size filter_size. Then, the data is rounded to the specified
+    resolution and duplicate values that can result from this operation
+    are deleted.
+
+    Args:
+        function_of (np.ndarray): nxm array that contains for example
+                                  time stamps, arc lengths or positions
+                                  corresponding to the data.
+        data (np.ndarray): nx1 array that contains the data that should
+                           be smoothed.
+        precision (float): Desired resolution
+        filter_size (int): Window / filter size for smoothing
+
+    Returns:
+        downsampled function_of and data
+    """
+    data_smoothed = np.convolve(data, [1 / filter_size] * filter_size, "same")
+    data_rounded = np.round(data_smoothed / resolution) * resolution
+    _, indices = np.unique(np.c_[function_of, data_rounded], return_index=True, axis=0)
+    indices_sorted = np.sort(indices)
+
+    function_of_unique = function_of[indices_sorted, :] if function_of.ndim > 1 else function_of[indices_sorted]
+    data_unique = data_smoothed[indices_sorted]
+
+    return function_of_unique, data_unique

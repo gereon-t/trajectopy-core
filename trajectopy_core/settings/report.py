@@ -29,7 +29,7 @@ class ExportSettings(Settings):
 
 @dataclass
 class ReportSettings(Settings):
-    downsample_size: int = 2000
+    report_width: str = "800px"
     scatter_max_std: float = 4.0
     ate_unit_is_mm: bool = False
     directed_ate: bool = True

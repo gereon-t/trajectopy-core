@@ -7,7 +7,7 @@ mail@gtombrink.de
 
 import logging
 import os
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 import jinja2
 import numpy as np
@@ -16,7 +16,7 @@ from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.plotting import bar_plots, histograms, line_plots, scatter_plots
 from trajectopy_core.report.data import ReportData
-from trajectopy_core.report.utils import image_to_base64, number_to_string
+from trajectopy_core.report.utils import convert_images_to_base64, number_to_string
 from trajectopy_core.settings.report import ReportSettings
 
 base_path = os.path.join(os.path.dirname(__file__))
@@ -24,18 +24,6 @@ base_path = os.path.join(os.path.dirname(__file__))
 TEMPLATES_PATH = os.path.join(base_path)
 
 logger = logging.getLogger("root")
-
-
-def convert_images_to_base64() -> Tuple[str, str, str]:
-    igg_path = os.path.join(os.path.join(base_path), "assets", "igg.png")
-    uni_bonn_path = os.path.join(os.path.join(base_path), "assets", "uni_bonn.png")
-    icon_path = os.path.join(os.path.join(base_path), "assets", "icon.png")
-
-    igg_base64 = image_to_base64(igg_path)
-    uni_bonn_base64 = image_to_base64(uni_bonn_path)
-    icon_base64 = image_to_base64(icon_path)
-
-    return igg_base64, uni_bonn_base64, icon_base64
 
 
 def render_side_by_side_plots(report_data: ReportData) -> List[str]:

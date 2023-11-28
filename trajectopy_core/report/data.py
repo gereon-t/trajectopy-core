@@ -13,7 +13,6 @@ import numpy as np
 
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.report.utils import shrink_data
 from trajectopy_core.settings.report import ReportSettings
 
 
@@ -60,47 +59,35 @@ class ReportData:
 
     @cached_property
     def pos_x(self) -> np.ndarray:
-        return shrink_data(self.ate_result.trajectory.pos.x, self.settings.downsample_size)
+        return self.ate_result.trajectory.pos.x
 
     @cached_property
     def pos_y(self) -> np.ndarray:
-        return shrink_data(self.ate_result.trajectory.pos.y, self.settings.downsample_size)
+        return self.ate_result.trajectory.pos.y
 
     @cached_property
     def pos_z(self) -> np.ndarray:
-        return shrink_data(self.ate_result.trajectory.pos.z, self.settings.downsample_size)
+        return self.ate_result.trajectory.pos.z
 
     @cached_property
     def function_of(self) -> np.ndarray:
-        return shrink_data(self.ate_result.trajectory.function_of, self.settings.downsample_size)
+        return self.ate_result.trajectory.function_of
 
     @cached_property
     def comb_dev_pos(self) -> np.ndarray:
-        return shrink_data(self.ate_result.pos_dev_comb, self.settings.downsample_size)
+        return self.ate_result.pos_dev_comb
 
     @cached_property
     def pos_dev_x(self) -> np.ndarray:
-        return (
-            shrink_data(self.ate_result.pos_dev_along, self.settings.downsample_size)
-            if self.settings.directed_ate
-            else shrink_data(self.ate_result.abs_dev.pos_dev[:, 0], self.settings.downsample_size)
-        )
+        return self.ate_result.pos_dev_along if self.settings.directed_ate else self.ate_result.abs_dev.pos_dev[:, 0]
 
     @cached_property
     def pos_dev_y(self) -> np.ndarray:
-        return (
-            shrink_data(self.ate_result.pos_dev_cross_h, self.settings.downsample_size)
-            if self.settings.directed_ate
-            else shrink_data(self.ate_result.abs_dev.pos_dev[:, 1], self.settings.downsample_size)
-        )
+        return self.ate_result.pos_dev_cross_h if self.settings.directed_ate else self.ate_result.abs_dev.pos_dev[:, 1]
 
     @cached_property
     def pos_dev_z(self) -> np.ndarray:
-        return (
-            shrink_data(self.ate_result.pos_dev_cross_v, self.settings.downsample_size)
-            if self.settings.directed_ate
-            else shrink_data(self.ate_result.abs_dev.pos_dev[:, 2], self.settings.downsample_size)
-        )
+        return self.ate_result.pos_dev_cross_v if self.settings.directed_ate else self.ate_result.abs_dev.pos_dev[:, 2]
 
     @property
     def pos_dev_x_name(self) -> str:
@@ -119,49 +106,49 @@ class ReportData:
         if not self.ate_result.has_orientation:
             raise ValueError("ATE result has no orientation.")
 
-        return np.rad2deg(shrink_data(self.ate_result.trajectory.rpy[:, 0], self.settings.downsample_size))
+        return np.rad2deg(self.ate_result.trajectory.rpy[:, 0])
 
     @cached_property
     def pitch(self) -> np.ndarray:
         if not self.ate_result.has_orientation:
             raise ValueError("ATE result has no orientation.")
 
-        return np.rad2deg(shrink_data(self.ate_result.trajectory.rpy[:, 1], self.settings.downsample_size))
+        return np.rad2deg(self.ate_result.trajectory.rpy[:, 1])
 
     @cached_property
     def yaw(self) -> np.ndarray:
         if not self.ate_result.has_orientation:
             raise ValueError("ATE result has no orientation.")
 
-        return np.rad2deg(shrink_data(self.ate_result.trajectory.rpy[:, 2], self.settings.downsample_size))
+        return np.rad2deg(self.ate_result.trajectory.rpy[:, 2])
 
     @cached_property
     def comb_dev_rot(self) -> np.ndarray:
         if not self.ate_result.has_orientation:
             raise ValueError("ATE result has no orientation.")
 
-        return np.rad2deg(shrink_data(self.ate_result.rot_dev_comb, self.settings.downsample_size))
+        return np.rad2deg(self.ate_result.rot_dev_comb)
 
     @cached_property
     def rot_dev_x(self) -> np.ndarray:
         if not self.ate_result.has_orientation:
             raise ValueError("ATE result has no orientation.")
 
-        return np.rad2deg(shrink_data(self.ate_result.rot_dev_x, self.settings.downsample_size))
+        return np.rad2deg(self.ate_result.rot_dev_x)
 
     @cached_property
     def rot_dev_y(self) -> np.ndarray:
         if not self.ate_result.has_orientation:
             raise ValueError("ATE result has no orientation.")
 
-        return np.rad2deg(shrink_data(self.ate_result.rot_dev_y, self.settings.downsample_size))
+        return np.rad2deg(self.ate_result.rot_dev_y)
 
     @cached_property
     def rot_dev_z(self) -> np.ndarray:
         if not self.ate_result.has_orientation:
             raise ValueError("ATE result has no orientation.")
 
-        return np.rad2deg(shrink_data(self.ate_result.rot_dev_z, self.settings.downsample_size))
+        return np.rad2deg(self.ate_result.rot_dev_z)
 
 
 @dataclass

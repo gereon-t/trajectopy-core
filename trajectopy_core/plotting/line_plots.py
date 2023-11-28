@@ -22,7 +22,7 @@ def render_dev_edf(report_data: ReportData) -> str:
     sorted_comb_pos_dev = np.sort(report_data.comb_dev_pos)
     pos_norm_cdf = np.arange(len(sorted_comb_pos_dev)) / float(len(sorted_comb_pos_dev))
     fig.add_trace(
-        go.Scatter(x=sorted_comb_pos_dev, y=pos_norm_cdf, mode=report_data.settings.plot_mode, name="position"),
+        go.Scattergl(x=sorted_comb_pos_dev, y=pos_norm_cdf, mode=report_data.settings.plot_mode, name="position"),
         row=1,
         col=1,
     )
@@ -31,7 +31,7 @@ def render_dev_edf(report_data: ReportData) -> str:
         sorted_comb_rot_dev = np.sort(report_data.comb_dev_rot)
         rot_norm_cdf = np.arange(len(sorted_comb_rot_dev)) / float(len(sorted_comb_rot_dev))
         fig.add_trace(
-            go.Scatter(x=sorted_comb_rot_dev, y=rot_norm_cdf, mode=report_data.settings.plot_mode, name="rotation"),
+            go.Scattergl(x=sorted_comb_rot_dev, y=rot_norm_cdf, mode=report_data.settings.plot_mode, name="rotation"),
             row=2,
             col=1,
         )
@@ -55,7 +55,7 @@ def render_dev_edf(report_data: ReportData) -> str:
 def render_pos_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.pos_x,
             mode=report_data.settings.plot_mode,
@@ -65,7 +65,7 @@ def render_pos_plot(report_data: ReportData) -> str:
         col=1,
     )
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.pos_y,
             mode=report_data.settings.plot_mode,
@@ -75,7 +75,7 @@ def render_pos_plot(report_data: ReportData) -> str:
         col=1,
     )
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.pos_z,
             mode=report_data.settings.plot_mode,
@@ -98,7 +98,7 @@ def render_pos_plot(report_data: ReportData) -> str:
 def render_rot_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.roll,
             mode=report_data.settings.plot_mode,
@@ -108,7 +108,7 @@ def render_rot_plot(report_data: ReportData) -> str:
         col=1,
     )
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.pitch,
             mode=report_data.settings.plot_mode,
@@ -118,7 +118,7 @@ def render_rot_plot(report_data: ReportData) -> str:
         col=1,
     )
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.yaw,
             mode=report_data.settings.plot_mode,
@@ -141,7 +141,7 @@ def render_rot_plot(report_data: ReportData) -> str:
 def render_dev_pos_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.pos_dev_x,
             mode=report_data.settings.plot_mode,
@@ -151,7 +151,7 @@ def render_dev_pos_plot(report_data: ReportData) -> str:
         col=1,
     )
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.pos_dev_y,
             mode=report_data.settings.plot_mode,
@@ -161,7 +161,7 @@ def render_dev_pos_plot(report_data: ReportData) -> str:
         col=1,
     )
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.pos_dev_z,
             mode=report_data.settings.plot_mode,
@@ -185,7 +185,7 @@ def render_dev_rot_plot(report_data: ReportData) -> str:
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True)
 
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.rot_dev_x,
             mode=report_data.settings.plot_mode,
@@ -195,7 +195,7 @@ def render_dev_rot_plot(report_data: ReportData) -> str:
         col=1,
     )
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.rot_dev_y,
             mode=report_data.settings.plot_mode,
@@ -205,7 +205,7 @@ def render_dev_rot_plot(report_data: ReportData) -> str:
         col=1,
     )
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.rot_dev_z,
             mode=report_data.settings.plot_mode,
@@ -235,7 +235,7 @@ def render_dev_comb_plot(report_data: ReportData) -> str:
         height = report_data.settings.single_plot_height
 
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=report_data.function_of,
             y=report_data.comb_dev_pos,
             mode=report_data.settings.plot_mode,
@@ -247,7 +247,7 @@ def render_dev_comb_plot(report_data: ReportData) -> str:
 
     if report_data.has_ate_rot:
         fig.add_trace(
-            go.Scatter(
+            go.Scattergl(
                 x=report_data.function_of,
                 y=report_data.comb_dev_rot,
                 mode=report_data.settings.plot_mode,
@@ -273,7 +273,7 @@ def render_rpe(report_data: ReportData) -> str:
 
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
     fig.add_trace(
-        go.Scatter(
+        go.Scattergl(
             x=rpe_result.mean_pair_distances,
             y=rpe_result.pos_dev_mean,
             mode=report_data.settings.plot_mode,
@@ -290,7 +290,7 @@ def render_rpe(report_data: ReportData) -> str:
 
     if rpe_result.has_rot_dev:
         fig.add_trace(
-            go.Scatter(
+            go.Scattergl(
                 x=rpe_result.mean_pair_distances,
                 y=np.rad2deg(rpe_result.rot_dev_mean),
                 mode=report_data.settings.plot_mode,

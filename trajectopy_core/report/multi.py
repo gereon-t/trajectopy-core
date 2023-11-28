@@ -30,7 +30,7 @@ def render_one_line_plots(report_data_collection: ReportDataCollection) -> List[
 
     if report_data_collection.has_ate_rot:
         one_line_plots.insert(2, bar_plots.render_multi_rot_bar_plot(report_data_collection))
-        multi_line_plots.render_dev_rot_plot(report_data_collection)
+        one_line_plots.insert(4, multi_line_plots.render_dev_rot_plot(report_data_collection))
 
     if report_data_collection.has_rpe:
         one_line_plots.insert(1, multi_line_plots.render_rpe(report_data_collection))

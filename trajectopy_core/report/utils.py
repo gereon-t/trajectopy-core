@@ -8,6 +8,7 @@ import base64
 import logging
 import os
 import tempfile
+import uuid
 import webbrowser
 from typing import Tuple
 
@@ -86,7 +87,7 @@ def write_report(*, output_file: str, report_text: str) -> None:
         f.write(report_text)
 
 
-def show_report(report_text: str) -> None:
+def show_report(report_text: str, filepath: str = "") -> None:
     """
     Shows a report in the browser.
 
@@ -95,7 +96,14 @@ def show_report(report_text: str) -> None:
         report_text (str): The report string
 
     """
+    dirname = "reports"
+    if not os.path.exists(dirname):
+        os.mkdir(dirname)
 
-    with tempfile.NamedTemporaryFile("w", delete=False, suffix=".html", encoding="utf-8") as f:
+    random_string = uuid.uuid4().hex
+
+    file = filepath or os.path.join(dirname, f"{random_string}.html")
+
+    with open(file, "w", encoding="utf-8") as f:
         f.write(report_text)
         webbrowser.open("file://" + os.path.realpath(f.name))
