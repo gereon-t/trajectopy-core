@@ -6,11 +6,13 @@ mail@gtombrink.de
 """
 
 from dataclasses import dataclass, field
+
 from trajectopy_core.settings.alignment import AlignmentSettings
 from trajectopy_core.settings.base import Settings
 from trajectopy_core.settings.comparison import RelativeComparisonSettings
 from trajectopy_core.settings.matching import MatchingSettings
 from trajectopy_core.settings.report import ReportSettings
+from trajectopy_core.settings.sorting import SortingSettings
 
 
 @dataclass
@@ -21,6 +23,7 @@ class ProcessingSettings(Settings):
     matching: MatchingSettings = field(default_factory=MatchingSettings)
     relative_comparison: RelativeComparisonSettings = field(default_factory=RelativeComparisonSettings)
     report: ReportSettings = field(default_factory=ReportSettings)
+    sorting: SortingSettings = field(default_factory=SortingSettings)
 
 
 if __name__ == "__main__":

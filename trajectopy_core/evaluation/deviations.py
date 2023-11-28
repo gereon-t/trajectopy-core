@@ -9,9 +9,9 @@ from dataclasses import dataclass
 from typing import Dict, List, Union
 
 import numpy as np
-from trajectopy_core.rotationset import RotationSet
 
 from trajectopy_core.definitions import Unit
+from trajectopy_core.rotationset import RotationSet
 
 
 @dataclass

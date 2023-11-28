@@ -7,9 +7,10 @@ mail@gtombrink.de
 import base64
 import logging
 import os
-from typing import Tuple
 import tempfile
 import webbrowser
+from typing import Tuple
+
 import numpy as np
 
 # logger configuration

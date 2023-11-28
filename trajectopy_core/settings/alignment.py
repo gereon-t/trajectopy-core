@@ -7,7 +7,9 @@ mail@gtombrink.de
 
 from dataclasses import dataclass, field
 from typing import List
+
 import numpy as np
+
 from trajectopy_core.settings.base import Settings
 
 METRIC_THRESHOLD = 1e-4

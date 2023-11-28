@@ -5,6 +5,7 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 from dataclasses import dataclass, field
+
 from trajectopy_core.settings.base import Settings
 
 

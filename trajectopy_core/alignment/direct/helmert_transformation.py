@@ -5,10 +5,10 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 import numpy as np
-from trajectopy_core.rotationset import RotationSet
 
 from trajectopy_core.alignment.parameters import HelmertTransformation, Parameter
 from trajectopy_core.definitions import Unit
+from trajectopy_core.rotationset import RotationSet
 
 
 def direct_helmert_transformation(

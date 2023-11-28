@@ -1,18 +1,9 @@
-import logging
-
 from rich.console import Console
-from rich.logging import RichHandler
 from rich.table import Table
 
 from trajectopy_core.pipelines import ate
 from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.trajectory import Trajectory
-
-logging.basicConfig(
-    format="%(message)s",
-    level=logging.INFO,
-    handlers=[RichHandler(omit_repeated_times=False, log_time_format="%Y-%m-%d %H:%M:%S")],
-)
 
 
 def dict_to_table(data: dict):

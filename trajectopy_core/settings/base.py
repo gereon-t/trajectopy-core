@@ -5,9 +5,9 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 
+import json
 from abc import ABC
 from dataclasses import dataclass
-import json
 from typing import Any
 
 

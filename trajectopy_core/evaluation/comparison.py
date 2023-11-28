@@ -8,15 +8,15 @@ import logging
 from typing import Dict, List, Tuple, Union
 
 import numpy as np
-from trajectopy_core.rotationset import RotationSet
 
-from trajectopy_core.evaluation.utils import nearest_point
+from trajectopy_core.definitions import Unit
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.deviations import AbsoluteTrajectoryDeviations, RelativeTrajectoryDeviations
 from trajectopy_core.evaluation.rpe_result import RPEResult
+from trajectopy_core.evaluation.utils import nearest_point
+from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.settings.comparison import RelativeComparisonSettings
 from trajectopy_core.trajectory import Trajectory
-from trajectopy_core.definitions import Unit
 
 logger = logging.getLogger("root")
 

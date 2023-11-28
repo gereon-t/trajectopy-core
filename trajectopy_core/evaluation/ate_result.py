@@ -10,11 +10,11 @@ from typing import Dict
 import numpy as np
 import pandas as pd
 from pointset import PointSet
-from trajectopy_core.rotationset import RotationSet
 
-from trajectopy_core.evaluation.utils import rms
 from trajectopy_core.evaluation.deviations import AbsoluteTrajectoryDeviations
+from trajectopy_core.evaluation.utils import rms
 from trajectopy_core.io.header import HeaderData
+from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.trajectory import Trajectory
 
 

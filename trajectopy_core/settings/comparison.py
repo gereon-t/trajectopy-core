@@ -6,10 +6,11 @@ mail@gtombrink.de
 """
 
 from dataclasses import dataclass
-from typing import Any
 from enum import Enum, auto
-from trajectopy_core.settings.base import Settings
+from typing import Any
+
 from trajectopy_core.definitions import Unit
+from trajectopy_core.settings.base import Settings
 
 
 class ComparisonMethod(Enum):

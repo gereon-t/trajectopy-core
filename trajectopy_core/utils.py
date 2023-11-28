@@ -4,9 +4,9 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
-from dataclasses import dataclass
 import logging
-from typing import Tuple, Union, List
+from dataclasses import dataclass
+from typing import List, Tuple, Union
 
 import numpy as np
 

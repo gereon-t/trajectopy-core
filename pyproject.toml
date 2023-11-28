@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "trajectopy-core"
-version = "2.1.1"
+version = "2.2.0"
 description = "Trajectory Evaluation in Python"
 authors = ["Gereon Tombrink <tombrink@igg.uni-bonn.de>"]
 maintainers = ["Gereon Tombrink <tombrink@igg.uni-bonn.de>"]
@@ -20,6 +20,8 @@ rich = "^13.6.0"
 autograd = "^1.6.2"
 pointset = "^0.1.5"
 scipy = "^1.11.3"
+networkx = "^3.2.1"
+matplotlib = "^3.8.2"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.5.1"

@@ -11,9 +11,9 @@ from typing import Any, Dict, List
 import numpy as np
 from pointset import PointSet
 from rosbags.highlevel import AnyReader
-from trajectopy_core.rotationset import RotationSet
 
 from trajectopy_core.io.rosmsg import geometry_pose_stamped_handler
+from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.trajectory import Trajectory
 
 ROS_MESSAGE_HANDLERS = {"geometry_msgs/msg/PoseStamped": geometry_pose_stamped_handler}

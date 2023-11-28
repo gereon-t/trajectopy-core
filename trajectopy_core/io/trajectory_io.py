@@ -11,11 +11,11 @@ from typing import List, Tuple, Union
 import numpy as np
 import pandas as pd
 from pointset import PointSet
-from trajectopy_core.rotationset import RotationSet
 
+from trajectopy_core.definitions import GPS_LEAP_SECONDS, GPS_WEEK_ZERO, TimeFormat
 from trajectopy_core.io.header import HeaderData
 from trajectopy_core.io.utils import get_rot_matrix
-from trajectopy_core.definitions import GPS_LEAP_SECONDS, GPS_WEEK_ZERO, TimeFormat
+from trajectopy_core.rotationset import RotationSet
 
 logger = logging.getLogger("root")
 

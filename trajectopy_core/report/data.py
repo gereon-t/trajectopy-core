@@ -5,7 +5,7 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 
-from dataclasses import field, dataclass
+from dataclasses import dataclass, field
 from functools import cached_property
 from typing import List, Optional
 
@@ -13,8 +13,8 @@ import numpy as np
 
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.settings.report import ReportSettings
 from trajectopy_core.report.utils import shrink_data
+from trajectopy_core.settings.report import ReportSettings
 
 
 @dataclass

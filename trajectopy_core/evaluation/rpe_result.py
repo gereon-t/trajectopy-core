@@ -10,9 +10,9 @@ from typing import Any, Callable, Dict, List
 import numpy as np
 import pandas as pd
 
+from trajectopy_core.definitions import Unit
 from trajectopy_core.evaluation.deviations import RelativeTrajectoryDeviations
 from trajectopy_core.io.header import HeaderData
-from trajectopy_core.definitions import Unit
 
 
 class RPEResult:

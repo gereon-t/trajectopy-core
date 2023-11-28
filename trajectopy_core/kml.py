@@ -4,8 +4,10 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
-import numpy as np
 import xml.etree.ElementTree as ET
+
+import numpy as np
+
 from trajectopy_core.trajectory import Trajectory
 
 

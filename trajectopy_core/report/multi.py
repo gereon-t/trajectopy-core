@@ -10,14 +10,12 @@ from typing import List, Optional
 
 import jinja2
 
-
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.plotting import multi_line_plots, bar_plots
+from trajectopy_core.plotting import bar_plots, multi_line_plots
 from trajectopy_core.report.data import ReportData, ReportDataCollection
-from trajectopy_core.settings.report import ReportSettings
 from trajectopy_core.report.utils import TEMPLATES_PATH, convert_images_to_base64
-
+from trajectopy_core.settings.report import ReportSettings
 
 logger = logging.getLogger("root")
 

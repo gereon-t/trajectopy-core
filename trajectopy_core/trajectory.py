@@ -11,11 +11,11 @@ from typing import List, Tuple, Union
 import numpy as np
 import pandas as pd
 from pointset import PointSet
-from trajectopy_core.rotationset import RotationSet
 from scipy.spatial.transform import Slerp
 
 import trajectopy_core.io.trajectory_io as trajectory_io
-from trajectopy_core.utils import gradient_3d, common_time_span, lengths_from_xyz
+from trajectopy_core.rotationset import RotationSet
+from trajectopy_core.utils import common_time_span, gradient_3d, lengths_from_xyz
 
 # logger configuration
 logger = logging.getLogger("root")

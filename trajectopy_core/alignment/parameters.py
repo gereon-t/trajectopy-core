@@ -10,11 +10,11 @@ from typing import Dict, List
 
 import numpy as np
 import pandas as pd
-from trajectopy_core.rotationset import RotationSet
 
-from trajectopy_core.settings.alignment import AlignmentEstimationSettings
-from trajectopy_core.definitions import UNIT_FORMAT_RULES, Unit
 from trajectopy_core.alignment.utils import list2box
+from trajectopy_core.definitions import UNIT_FORMAT_RULES, Unit
+from trajectopy_core.rotationset import RotationSet
+from trajectopy_core.settings.alignment import AlignmentEstimationSettings
 
 
 class AlignmentParametersError(Exception):
