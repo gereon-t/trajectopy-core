@@ -7,9 +7,10 @@ mail@gtombrink.de
 import base64
 import logging
 import os
-import tempfile
 import uuid
 import webbrowser
+
+# import webbrowser
 from typing import Tuple
 
 import numpy as np
@@ -106,4 +107,5 @@ def show_report(report_text: str, filepath: str = "") -> None:
 
     with open(file, "w", encoding="utf-8") as f:
         f.write(report_text)
-        webbrowser.open("file://" + os.path.realpath(f.name))
+        url = "file://" + os.path.realpath(f.name)
+        webbrowser.open(url)

@@ -44,7 +44,7 @@ def setup_edf_axis(report_data_collection: ReportDataCollection) -> Tuple[go.Fig
 def render_dev_edf(report_data_collection: ReportDataCollection) -> str:
     fig, config = setup_edf_axis(report_data_collection)
 
-    for data in report_data_collection.items:
+    for data, color in zip(report_data_collection.items, itertools.cycle(px.colors.qualitative.Plotly)):
         sorted_comb_pos_dev = np.sort(data.comb_dev_pos)
         pos_norm_cdf = np.arange(len(sorted_comb_pos_dev)) / float(len(sorted_comb_pos_dev))
         fig.add_trace(
@@ -52,7 +52,8 @@ def render_dev_edf(report_data_collection: ReportDataCollection) -> str:
                 x=sorted_comb_pos_dev,
                 y=pos_norm_cdf,
                 mode=data.settings.plot_mode,
-                name=f"{data.short_name} Pos.",
+                name=f"{data.short_name}",
+                marker=dict(color=color),
             ),
             row=1,
             col=1,
@@ -66,7 +67,9 @@ def render_dev_edf(report_data_collection: ReportDataCollection) -> str:
                     x=sorted_comb_rot_dev,
                     y=rot_norm_cdf,
                     mode=data.settings.plot_mode,
-                    name=f"{data.short_name} Rot.",
+                    name=f"{data.short_name}",
+                    marker=dict(color=color),
+                    showlegend=False,
                 ),
                 row=2,
                 col=1,
@@ -97,34 +100,31 @@ def setup_dev_comb_axis(report_data_collection: ReportDataCollection) -> Tuple[g
 
 
 def render_dev_comb_plot(report_data_collection: ReportDataCollection) -> str:
-    fig, config = setup_dev_comb_axis(report_data_collection)
+    report_data = report_data_collection.items[0]
 
-    for data in report_data_collection.items:
-        fig.add_trace(
-            go.Scattergl(
-                x=data.function_of,
-                y=data.comb_dev_pos,
-                mode=data.settings.plot_mode,
-                name=f"{data.short_name} Pos.",
-            ),
-            row=1,
-            col=1,
-        )
+    any_rot_available = any(data.has_ate_rot for data in report_data_collection.items)
 
-        if data.has_ate_rot:
-            fig.add_trace(
-                go.Scattergl(
-                    x=data.function_of,
-                    y=data.comb_dev_rot,
-                    mode=data.settings.plot_mode,
-                    name=f"{data.short_name} Rot.",
-                ),
-                row=2,
-                col=1,
-            )
-            fig.update_yaxes(title_text=f"[{data.settings.rot_unit}]", row=2, col=1)
+    y_data = (
+        [[data.comb_dev_pos, data.comb_dev_rot if data.has_ate_rot else None] for data in report_data_collection.items]
+        if any_rot_available
+        else [[data.comb_dev_pos] for data in report_data_collection.items]
+    )
 
-    return plot(fig, output_type="div", config=config)
+    y_labels = (
+        [f"[{report_data.ate_unit}]", f"[{report_data.settings.rot_unit}]"]
+        if any_rot_available
+        else [f"[{report_data.ate_unit}]"]
+    )
+
+    return render_shared_x_plot(
+        x_data=[data.function_of for data in report_data_collection.items],
+        y_data=y_data,
+        names=[data.short_name for data in report_data_collection.items],
+        x_label=report_data.function_of_label,
+        y_labels=y_labels,
+        title="Trajectory Deviations",
+        report_settings=report_data.settings,
+    )
 
 
 def render_dev_pos_plot(report_data_collection: ReportDataCollection) -> str:
@@ -150,7 +150,11 @@ def render_dev_rot_plot(report_data_collection: ReportDataCollection) -> str:
 
     return render_shared_x_plot(
         x_data=[data.function_of for data in report_data_collection.items],
-        y_data=[[data.rot_dev_x, data.rot_dev_y, data.rot_dev_z] for data in report_data_collection.items],
+        y_data=[
+            [data.rot_dev_x, data.rot_dev_y, data.rot_dev_z]
+            for data in report_data_collection.items
+            if data.has_ate_rot
+        ],
         names=[data.short_name for data in report_data_collection.items],
         x_label=report_data.function_of_label,
         y_labels=[
@@ -188,7 +192,7 @@ def setup_rpe_axis(report_data_collection: ReportDataCollection) -> Tuple[go.Fig
 def render_rpe(report_data_collection: ReportDataCollection) -> str:
     fig, config = setup_rpe_axis(report_data_collection)
 
-    for data in report_data_collection.items:
+    for data, color in zip(report_data_collection.items, itertools.cycle(px.colors.qualitative.Plotly)):
         rpe_result = data.rpe_result
 
         fig.add_trace(
@@ -196,12 +200,13 @@ def render_rpe(report_data_collection: ReportDataCollection) -> str:
                 x=rpe_result.mean_pair_distances,
                 y=rpe_result.pos_dev_mean,
                 mode=data.settings.plot_mode,
-                name=f"{data.short_name} Pos.",
+                name=f"{data.short_name}",
                 error_y=dict(
                     type="data",
                     array=rpe_result.pos_std,
                     visible=True,
                 ),
+                marker=dict(color=color),
             ),
             row=1,
             col=1,
@@ -213,12 +218,14 @@ def render_rpe(report_data_collection: ReportDataCollection) -> str:
                     x=rpe_result.mean_pair_distances,
                     y=np.rad2deg(rpe_result.rot_dev_mean),
                     mode=data.settings.plot_mode,
-                    name=f"{data.short_name} Rot.",
+                    name=f"{data.short_name}",
                     error_y=dict(
                         type="data",
                         array=np.rad2deg(rpe_result.rot_std),
                         visible=True,
                     ),
+                    marker=dict(color=color),
+                    showlegend=False,
                 ),
                 row=2,
                 col=1,
@@ -269,8 +276,13 @@ def render_shared_x_plot(
     title: str,
     report_settings: ReportSettings = ReportSettings(),
 ) -> str:
+    height_dict = {
+        1: report_settings.single_plot_height,
+        2: report_settings.two_subplots_height,
+        3: report_settings.three_subplots_height,
+    }
     fig = make_subplots(rows=len(y_labels), cols=1, shared_xaxes=True)
-    fig.update_layout(title=title, height=report_settings.three_subplots_height)
+    fig.update_layout(title=title, height=height_dict[len(y_labels)])
 
     fig.update_xaxes(title_text=x_label, row=len(y_labels), col=1)
 
@@ -281,6 +293,9 @@ def render_shared_x_plot(
         x_data, y_data, names, itertools.cycle(px.colors.qualitative.Plotly)
     ):
         for i, y_data_subitem in enumerate(y_data_item):
+            if y_data_subitem is None:
+                continue
+
             fig.add_trace(
                 go.Scattergl(
                     x=x_data_item,
@@ -294,4 +309,10 @@ def render_shared_x_plot(
                 col=1,
             )
 
-    return plot(fig, output_type="div", config=report_settings.three_subplots_export.to_config())
+    config_dicts = {
+        1: report_settings.single_plot_export.to_config(),
+        2: report_settings.two_subplots_export.to_config(),
+        3: report_settings.three_subplots_export.to_config(),
+    }
+
+    return plot(fig, output_type="div", config=config_dicts[len(y_labels)])
