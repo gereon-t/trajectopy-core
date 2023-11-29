@@ -19,7 +19,7 @@ import numpy as np
 logger = logging.getLogger("root")
 
 BASE_PATH = os.path.join(os.path.dirname(__file__))
-TEMPLATES_PATH = os.path.join(BASE_PATH)
+TEMPLATES_PATH = os.path.join(BASE_PATH, "templates")
 
 
 def number_to_string(number: float) -> str:

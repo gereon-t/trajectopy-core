@@ -6,19 +6,14 @@ mail@gtombrink.de
 """
 
 import logging
-import os
 from typing import List
 
 import jinja2
 
 from trajectopy_core.plotting import multi_line_plots, scatter_plots
-from trajectopy_core.report.utils import convert_images_to_base64
+from trajectopy_core.report.utils import TEMPLATES_PATH, convert_images_to_base64
 from trajectopy_core.settings.report import ReportSettings
 from trajectopy_core.trajectory import Trajectory
-
-base_path = os.path.join(os.path.dirname(__file__))
-
-TEMPLATES_PATH = os.path.join(base_path)
 
 logger = logging.getLogger("root")
 
@@ -55,6 +50,7 @@ def render_trajectories(*, trajectories: list[Trajectory], report_settings: Repo
     one_line_plots = render_one_line_plots(trajectories, report_settings)
 
     context = {
+        "title": trajectories[0].name if len(trajectories) == 1 else "Trajectory Plot",
         "one_line_plots": one_line_plots,
         "icon": icon,
         "igg": igg,

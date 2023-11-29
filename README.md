@@ -287,17 +287,20 @@ Furthermore, the user can choose to either use consecutive pose pairs (non-overl
 
 #### Visualization Settings
 
-- `downsample_size` (integer): The downsample size for data visualization. To prevent unresponsive and overly large html reports, the data can be downsampled before visualization. Downsampling is done by grouping multiple values into one using averaging. The downsample size defines the maximum number of values after downsampling. If set to 0 or -1, no downsampling is performed. A downsample_size larger than the number of values in the trajectory will result in no downsampling. Default: 2000
-- `scatter_max_std` (float): The upper colorbar limit is set to the mean plus this value times the standard deviation of the data. This is useful to prevent outliers from dominating the colorbar. Default: 4.0
-- `ate_unit_is_mm` (boolean): If true, ATE (Absolute Trajectory Error) unit is in millimeters. Default: False
-- `directed_ate` (boolean): If true, ATE position deviations are divided into along-track, cross-track (horizontal) and cross-track (vertical directions). Default: True
-- `histogram_opacity` (float): Opacity of histograms for overlay visualization. Default 0.6
-- `histogram_bargap` (float): Gap between histogram bars in overlay mode. Default: 0.1
-- `histogram_barmode` (string): The mode for histogram bars. Default: "overlay"
-- `histogram_yaxis_title` (string): Title for the y-axis in histograms. Default: "Count"
-- `plot_mode` (string): The mode for plot visualization. Default: "lines+markers"
-- `scatter_mode` (string): The mode for scatter plot visualization. Default: "markers"
-- `scatter_colorscale` (string): The colorscale for scatter plots, Default: "RdYlBu_r".
+- `report_width` (str): The width of the report in pixels. Default value is "800px".
+- `scatter_max_std` (float): The upper colorbar limit is set to the mean plus this value times the standard deviation of the data. This is useful to prevent outliers from dominating the colorbar. Default value is 4.0.
+- `ate_unit_is_mm` (bool): Indicates whether the unit of Absolute Trajectory Error (ATE) is millimeters. Default value is False.
+- `directed_ate` (bool): Indicates whether the ATE is split into along-, horizontal-cross- and vertical-cross-track direction. Default value is True.
+- `histogram_opacity` (float): The opacity of the histogram bars. Default value is 0.7.
+- `histogram_bargap` (float): The gap between histogram bars. Default value is 0.1.
+- `histogram_barmode` (str): The mode of displaying histogram bars. Default value is "overlay".
+- `histogram_yaxis_title` (str): The title of the y-axis in the histogram. Default value is "Count".
+- `plot_mode` (str): The mode of displaying plots. Default value is "lines+markers".
+- `scatter_mode` (str): The mode of displaying scatter plots. Default value is "markers".
+- `scatter_colorscale` (str): The colorscale for scatter plots. Default value is "RdYlBu_r".
+- `scatter_axis_order` (str): The order of the axes in scatter plots. Default value is "xy". If 3d plotting is desired, also specify "z".
+- `scatter_marker_size` (int): The size of markers in scatter plots. Default value is 5.
+- `scatter_detailed` (bool): Indicates whether to show scatter plots for each degree of freedom. Default value is False.
 
 #### Position Units and Names
 
@@ -317,12 +320,12 @@ Furthermore, the user can choose to either use consecutive pose pairs (non-overl
 
 #### Export Settings
 
-- `single_plot_export` (object): `ExportSettings` for exporting single plots.
-- `two_subplots_export` (object): `ExportSettings` for exporting two subplots.
-- `three_subplots_export` (object): `ExportSettings` for exporting three subplots.
-- `single_plot_height` (integer): Height for single plot exports in pixels. Default: 450.
-- `two_subplots_height` (integer): Height for two subplots exports in pixels. Default: 540.
-- `three_subplots_height` (integer): Height for three subplots exports in pixels. Default: 750.
+- `single_plot_export` (ExportSettings): The export settings for single plots. Default value is an instance of ExportSettings with width=800 and height=450.
+- `two_subplots_export` (ExportSettings): The export settings for two subplots. Default value is an instance of ExportSettings with width=800 and height=540.
+- `three_subplots_export` (ExportSettings): The export settings for three subplots. Default value is an instance of ExportSettings with width=800 and height=750.
+- `single_plot_height` (int): The height of a single plot. Default value is 450.
+- `two_subplots_height` (int): The height of two subplots. Default value is 540.
+- `three_subplots_height` (int): The height of three subplots. Default value is 750.
 
 
 #### Export Settings

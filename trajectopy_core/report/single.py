@@ -6,7 +6,6 @@ mail@gtombrink.de
 """
 
 import logging
-import os
 from typing import List, Optional
 
 import jinja2
@@ -16,12 +15,8 @@ from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.plotting import bar_plots, histograms, line_plots, scatter_plots
 from trajectopy_core.report.data import ReportData
-from trajectopy_core.report.utils import convert_images_to_base64, number_to_string
+from trajectopy_core.report.utils import TEMPLATES_PATH, convert_images_to_base64, number_to_string
 from trajectopy_core.settings.report import ReportSettings
-
-base_path = os.path.join(os.path.dirname(__file__))
-
-TEMPLATES_PATH = os.path.join(base_path)
 
 logger = logging.getLogger("root")
 
@@ -63,6 +58,16 @@ def render_one_line_plots(report_data: ReportData) -> List[str]:
     one_line_plots.insert(len(one_line_plots) - 1, line_plots.render_dev_rot_plot(report_data))
     one_line_plots.append(line_plots.render_rot_plot(report_data))
 
+    if report_data.settings.scatter_detailed:
+        one_line_plots.append(scatter_plots.render_pos_x_devs(report_data))
+        one_line_plots.append(scatter_plots.render_pos_y_devs(report_data))
+        one_line_plots.append(scatter_plots.render_pos_z_devs(report_data))
+
+        if report_data.has_ate_rot:
+            one_line_plots.append(scatter_plots.render_rot_x_devs(report_data))
+            one_line_plots.append(scatter_plots.render_rot_y_devs(report_data))
+            one_line_plots.append(scatter_plots.render_rot_z_devs(report_data))
+
     return one_line_plots
 
 
@@ -85,7 +90,7 @@ def render_single_report(
         str: The html report string
 
     """
-    template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("template.html")
+    template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("single_template.html")
     igg, uni_bonn, icon = convert_images_to_base64()
 
     report_data = ReportData(ate_result=ate_result, rpe_result=rpe_result, settings=report_settings)

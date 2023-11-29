@@ -1,16 +1,8 @@
-import logging
-
 from trajectopy_core.pipelines import ate, rpe
 from trajectopy_core.report.multi import render_multi_report
 from trajectopy_core.report.utils import show_report
 from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.trajectory import Trajectory
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s %(levelname)s %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
 
 
 def main():

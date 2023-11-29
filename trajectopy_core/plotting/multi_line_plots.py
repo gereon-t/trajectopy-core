@@ -303,7 +303,7 @@ def render_shared_x_plot(
                     mode=report_settings.plot_mode,
                     name=name,
                     marker=dict(color=color),
-                    showlegend=(i == 0),
+                    showlegend=(i == 0) and len(y_data) > 1,
                 ),
                 row=i + 1,
                 col=1,
