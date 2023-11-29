@@ -13,7 +13,6 @@ import numpy as np
 import pandas as pd
 
 from trajectopy_core.alignment.parameters import AlignmentParameters
-from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.plotting import heatmaps, tables
 from trajectopy_core.report.utils import TEMPLATES_PATH, convert_images_to_base64
 from trajectopy_core.settings.report import ReportSettings
@@ -35,17 +34,22 @@ def build_correlation_dataframe(estimated_parameters: AlignmentParameters, enabl
 
 
 def render_one_line_plots(
-    alignment_result: AlignmentResult, report_settings: ReportSettings = ReportSettings()
+    alignment_parameters: AlignmentParameters, report_settings: ReportSettings = ReportSettings()
 ) -> List[str]:
-    dataframe = build_correlation_dataframe(alignment_result.position_parameters, enabled_only=True)
+    dataframe = build_correlation_dataframe(alignment_parameters, enabled_only=True)
 
-    one_line_plots = [tables.render_alignment_table(alignment_result.position_parameters, report_settings)]
+    one_line_plots = [tables.render_alignment_table(alignment_parameters, report_settings)]
     one_line_plots.append(heatmaps.render_heatmap(dataframe, report_settings))
 
     return one_line_plots
 
 
-def render_heatmaps(*, alignment_result: AlignmentResult, report_settings: ReportSettings = ReportSettings()) -> str:
+def render_heatmaps(
+    *,
+    alignment_parameters: AlignmentParameters,
+    name: str = "Alignment",
+    report_settings: ReportSettings = ReportSettings()
+) -> str:
     """
     Render trajectory alignment heatmaps.
 
@@ -62,10 +66,10 @@ def render_heatmaps(*, alignment_result: AlignmentResult, report_settings: Repor
     template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("generic.html")
     igg, uni_bonn, icon = convert_images_to_base64()
 
-    one_line_plots = render_one_line_plots(alignment_result, report_settings)
+    one_line_plots = render_one_line_plots(alignment_parameters, report_settings)
 
     context = {
-        "title": alignment_result.name,
+        "title": name,
         "one_line_plots": one_line_plots,
         "icon": icon,
         "igg": igg,

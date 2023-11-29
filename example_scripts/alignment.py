@@ -20,7 +20,7 @@ def main():
         matching_settings=settings.matching,
     )
 
-    report = render_heatmaps(alignment_result=alignment_result)
+    report = render_heatmaps(alignment_parameters=alignment_result.position_parameters, name=alignment_result.name)
     show_report(report_text=report, filepath="report.html")
 
 
