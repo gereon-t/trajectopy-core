@@ -97,7 +97,7 @@ def show_report(report_text: str, filepath: str = "") -> None:
         report_text (str): The report string
 
     """
-    dirname = "reports"
+    dirname = os.path.relpath(filepath)
     if not os.path.exists(dirname):
         os.mkdir(dirname)
 
