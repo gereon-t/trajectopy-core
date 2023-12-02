@@ -63,3 +63,14 @@ class Settings(ABC):
             data = json.load(f)
 
         return cls.from_dict(data)
+
+    def update_from_dict(self, dct: dict):
+        for attribute_name, attribute_type in self.__annotations__.items():
+            if attribute_name not in dct:
+                raise ValueError(f"Attribute {attribute_name} not found in input data")
+
+            attribute_data = dct[attribute_name]
+            if isinstance(attribute_data, dict) and issubclass(attribute_type, Settings):
+                getattr(self, attribute_name).update_from_dict(attribute_data)
+            else:
+                setattr(self, attribute_name, self.decoder(attribute_name, attribute_data))
