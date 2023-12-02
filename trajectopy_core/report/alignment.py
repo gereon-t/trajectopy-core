@@ -74,7 +74,6 @@ def render_heatmaps(
         "icon": icon,
         "igg": igg,
         "uni_bonn": uni_bonn,
-        "report_width": report_settings.report_width,
     }
 
     return template.render(context)
