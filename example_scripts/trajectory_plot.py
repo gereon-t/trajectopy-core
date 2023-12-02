@@ -11,7 +11,7 @@ def main():
 
     report_settings = ReportSettings(scatter_axis_order="xy", ate_unit_is_mm=False)
     traj_report = render_trajectories(trajectories=[gt_traj, est_traj], report_settings=report_settings)
-    show_report(traj_report, filepath="report.html")
+    show_report(traj_report, filepath="reports/report.html")
 
 
 if __name__ == "__main__":

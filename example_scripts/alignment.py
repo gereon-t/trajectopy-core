@@ -21,7 +21,7 @@ def main():
     )
 
     report = render_heatmaps(alignment_parameters=alignment_result.position_parameters, name=alignment_result.name)
-    show_report(report_text=report, filepath="report.html")
+    show_report(report_text=report, filepath="reports/report.html")
 
 
 if __name__ == "__main__":

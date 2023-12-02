@@ -24,7 +24,7 @@ def main():
         ate_results=[ate_result_1, ate_result_2], rpe_results=[rpe_result_1, rpe_result_2]
     )
 
-    show_report(report_text=multi_report, filepath="report.html")
+    show_report(report_text=multi_report, filepath="reports/report.html")
 
 
 if __name__ == "__main__":

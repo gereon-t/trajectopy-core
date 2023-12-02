@@ -19,7 +19,7 @@ def main():
 
     report_settings = ReportSettings(scatter_axis_order="xy", ate_unit_is_mm=False)
     report = render_single_report(ate_result=ate_result, rpe_result=rpe_result, report_settings=report_settings)
-    show_report(report_text=report, filepath="report.html")
+    show_report(report_text=report, filepath="reports/report.html")
 
 
 if __name__ == "__main__":
