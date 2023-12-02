@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 from plotly.offline import plot
 
 from trajectopy_core.plotting.utils import get_axis_label
-from trajectopy_core.report.data import ReportData
+from trajectopy_core.report.data import ATEReportData
 from trajectopy_core.settings.report import ReportSettings
 from trajectopy_core.trajectory import Trajectory
 
@@ -103,7 +103,7 @@ def get_marker_dict(
     )
 
 
-def render_pos_devs(report_data: ReportData) -> str:
+def render_pos_devs(report_data: ATEReportData) -> str:
     comb_pos_devs = report_data.comb_dev_pos
 
     return scatter_plot(
@@ -115,7 +115,7 @@ def render_pos_devs(report_data: ReportData) -> str:
     )
 
 
-def render_pos_x_devs(report_data: ReportData) -> str:
+def render_pos_x_devs(report_data: ATEReportData) -> str:
     return scatter_plot(
         pos=np.c_[report_data.pos_x, report_data.pos_y, report_data.pos_z],
         colors=report_data.pos_dev_x,
@@ -125,7 +125,7 @@ def render_pos_x_devs(report_data: ReportData) -> str:
     )
 
 
-def render_pos_y_devs(report_data: ReportData) -> str:
+def render_pos_y_devs(report_data: ATEReportData) -> str:
     return scatter_plot(
         pos=np.c_[report_data.pos_x, report_data.pos_y, report_data.pos_z],
         colors=report_data.pos_dev_y,
@@ -135,7 +135,7 @@ def render_pos_y_devs(report_data: ReportData) -> str:
     )
 
 
-def render_pos_z_devs(report_data: ReportData) -> str:
+def render_pos_z_devs(report_data: ATEReportData) -> str:
     return scatter_plot(
         pos=np.c_[report_data.pos_x, report_data.pos_y, report_data.pos_z],
         colors=report_data.pos_dev_z,
@@ -145,7 +145,7 @@ def render_pos_z_devs(report_data: ReportData) -> str:
     )
 
 
-def render_rot_x_devs(report_data: ReportData) -> str:
+def render_rot_x_devs(report_data: ATEReportData) -> str:
     return scatter_plot(
         pos=np.c_[report_data.pos_x, report_data.pos_y, report_data.pos_z],
         colors=report_data.rot_dev_x,
@@ -155,7 +155,7 @@ def render_rot_x_devs(report_data: ReportData) -> str:
     )
 
 
-def render_rot_y_devs(report_data: ReportData) -> str:
+def render_rot_y_devs(report_data: ATEReportData) -> str:
     return scatter_plot(
         pos=np.c_[report_data.pos_x, report_data.pos_y, report_data.pos_z],
         colors=report_data.rot_dev_y,
@@ -165,7 +165,7 @@ def render_rot_y_devs(report_data: ReportData) -> str:
     )
 
 
-def render_rot_z_devs(report_data: ReportData) -> str:
+def render_rot_z_devs(report_data: ATEReportData) -> str:
     return scatter_plot(
         pos=np.c_[report_data.pos_x, report_data.pos_y, report_data.pos_z],
         colors=report_data.rot_dev_z,
@@ -175,7 +175,7 @@ def render_rot_z_devs(report_data: ReportData) -> str:
     )
 
 
-def render_rot_devs(report_data: ReportData) -> str:
+def render_rot_devs(report_data: ATEReportData) -> str:
     comb_rot_devs = report_data.comb_dev_rot
 
     return scatter_plot(

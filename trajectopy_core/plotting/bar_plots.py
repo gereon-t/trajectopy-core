@@ -9,7 +9,7 @@ import pandas as pd
 import plotly.express as px
 from plotly.offline import plot
 
-from trajectopy_core.report.data import ReportData, ReportDataCollection
+from trajectopy_core.report.data import ATEReportData, ATEReportDataCollection
 
 
 def add_to_dict(metrics: dict, field_name: str, content: list):
@@ -18,7 +18,7 @@ def add_to_dict(metrics: dict, field_name: str, content: list):
     metrics[field_name] = current_content
 
 
-def to_pos_metrics_df(report_data_collection: ReportDataCollection) -> pd.DataFrame:
+def to_pos_metrics_df(report_data_collection: ATEReportDataCollection) -> pd.DataFrame:
     metrics = {}
 
     for data in report_data_collection.items:
@@ -40,7 +40,7 @@ def to_pos_metrics_df(report_data_collection: ReportDataCollection) -> pd.DataFr
     return pd.DataFrame(metrics)
 
 
-def to_rot_metrics_df(report_data_collection: ReportDataCollection) -> pd.DataFrame:
+def to_rot_metrics_df(report_data_collection: ATEReportDataCollection) -> pd.DataFrame:
     metrics = {}
 
     if not report_data_collection.has_ate_rot:
@@ -68,7 +68,7 @@ def to_rot_metrics_df(report_data_collection: ReportDataCollection) -> pd.DataFr
     return pd.DataFrame(metrics)
 
 
-def render_multi_pos_bar_plot(report_data_collection: ReportDataCollection) -> None:
+def render_multi_pos_bar_plot(report_data_collection: ATEReportDataCollection) -> str:
     metrics_df = to_pos_metrics_df(report_data_collection)
 
     fig = px.bar(metrics_df, barmode="group", x="Metric", y="Value", color="Trajectory")
@@ -78,11 +78,11 @@ def render_multi_pos_bar_plot(report_data_collection: ReportDataCollection) -> N
     return plot(fig, output_type="div", config=report_data_collection.items[0].settings.single_plot_export.to_config())
 
 
-def render_pos_bar_plot(report_data: ReportData) -> str:
-    return render_multi_pos_bar_plot(ReportDataCollection([report_data]))
+def render_pos_bar_plot(report_data: ATEReportData) -> str:
+    return render_multi_pos_bar_plot(ATEReportDataCollection([report_data]))
 
 
-def render_multi_rot_bar_plot(report_data_collection: ReportDataCollection) -> None:
+def render_multi_rot_bar_plot(report_data_collection: ATEReportDataCollection) -> str:
     metrics_df = to_rot_metrics_df(report_data_collection)
 
     fig = px.bar(metrics_df, barmode="group", x="Metric", y="Value", color="Trajectory")
@@ -92,5 +92,5 @@ def render_multi_rot_bar_plot(report_data_collection: ReportDataCollection) -> N
     return plot(fig, output_type="div", config=report_data_collection.items[0].settings.single_plot_export.to_config())
 
 
-def render_rot_bar_plot(report_data: ReportData) -> str:
-    return render_multi_rot_bar_plot(ReportDataCollection([report_data]))
+def render_rot_bar_plot(report_data: ATEReportData) -> str:
+    return render_multi_rot_bar_plot(ATEReportDataCollection([report_data]))

@@ -8,10 +8,10 @@ mail@gtombrink.de
 import plotly.graph_objects as go
 from plotly.offline import plot
 
-from trajectopy_core.report.data import ReportData
+from trajectopy_core.report.data import ATEReportData
 
 
-def render_pos_devs(report_data: ReportData) -> str:
+def render_pos_devs(report_data: ATEReportData) -> str:
     fig = go.Figure()
 
     fig.add_trace(
@@ -40,7 +40,7 @@ def render_pos_devs(report_data: ReportData) -> str:
     return plot(fig, output_type="div", config=report_data.settings.single_plot_export.to_config())
 
 
-def render_rot_devs(report_data: ReportData) -> str:
+def render_rot_devs(report_data: ATEReportData) -> str:
     fig = go.Figure()
 
     fig.add_trace(

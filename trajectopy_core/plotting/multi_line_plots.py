@@ -15,12 +15,12 @@ from plotly.offline import plot
 from plotly.subplots import make_subplots
 
 from trajectopy_core.plotting.utils import derive_xlabel_from_sortings, get_axis_label
-from trajectopy_core.report.data import ReportDataCollection
+from trajectopy_core.report.data import ATEReportDataCollection, RPEReportDataCollection
 from trajectopy_core.settings.report import ReportSettings
 from trajectopy_core.trajectory import Trajectory
 
 
-def setup_edf_axis(report_data_collection: ReportDataCollection) -> Tuple[go.Figure, dict]:
+def setup_edf_axis(report_data_collection: ATEReportDataCollection) -> Tuple[go.Figure, dict]:
     report_data_item = report_data_collection.items[0]
     if report_data_collection.has_ate_rot:
         fig = make_subplots(rows=2, cols=1)
@@ -41,7 +41,7 @@ def setup_edf_axis(report_data_collection: ReportDataCollection) -> Tuple[go.Fig
     return fig, config
 
 
-def render_dev_edf(report_data_collection: ReportDataCollection) -> str:
+def render_dev_edf(report_data_collection: ATEReportDataCollection) -> str:
     fig, config = setup_edf_axis(report_data_collection)
 
     for data, color in zip(report_data_collection.items, itertools.cycle(px.colors.qualitative.Plotly)):
@@ -77,7 +77,7 @@ def render_dev_edf(report_data_collection: ReportDataCollection) -> str:
     return plot(fig, output_type="div", config=config)
 
 
-def setup_dev_comb_axis(report_data_collection: ReportDataCollection) -> Tuple[go.Figure, dict]:
+def setup_dev_comb_axis(report_data_collection: ATEReportDataCollection) -> Tuple[go.Figure, dict]:
     report_data_item = report_data_collection.items[0]
     if report_data_collection.has_ate_rot:
         fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
@@ -99,7 +99,7 @@ def setup_dev_comb_axis(report_data_collection: ReportDataCollection) -> Tuple[g
     return fig, config
 
 
-def render_dev_comb_plot(report_data_collection: ReportDataCollection) -> str:
+def render_dev_comb_plot(report_data_collection: ATEReportDataCollection) -> str:
     report_data = report_data_collection.items[0]
 
     any_rot_available = any(data.has_ate_rot for data in report_data_collection.items)
@@ -127,7 +127,7 @@ def render_dev_comb_plot(report_data_collection: ReportDataCollection) -> str:
     )
 
 
-def render_dev_pos_plot(report_data_collection: ReportDataCollection) -> str:
+def render_dev_pos_plot(report_data_collection: ATEReportDataCollection) -> str:
     report_data = report_data_collection.items[0]
 
     return render_shared_x_plot(
@@ -145,7 +145,7 @@ def render_dev_pos_plot(report_data_collection: ReportDataCollection) -> str:
     )
 
 
-def render_dev_rot_plot(report_data_collection: ReportDataCollection) -> str:
+def render_dev_rot_plot(report_data_collection: ATEReportDataCollection) -> str:
     report_data = report_data_collection.items[0]
 
     return render_shared_x_plot(
@@ -167,7 +167,7 @@ def render_dev_rot_plot(report_data_collection: ReportDataCollection) -> str:
     )
 
 
-def setup_rpe_axis(report_data_collection: ReportDataCollection) -> Tuple[go.Figure, dict]:
+def setup_rpe_axis(report_data_collection: RPEReportDataCollection) -> Tuple[go.Figure, dict]:
     report_data_item = report_data_collection.items[0]
     if report_data_collection.has_rpe_rot:
         rpe_rot_item = report_data_collection.get_rpe_results(rot_required=True)[0]
@@ -189,7 +189,7 @@ def setup_rpe_axis(report_data_collection: ReportDataCollection) -> Tuple[go.Fig
     return fig, config
 
 
-def render_rpe(report_data_collection: ReportDataCollection) -> str:
+def render_rpe(report_data_collection: RPEReportDataCollection) -> str:
     fig, config = setup_rpe_axis(report_data_collection)
 
     for data, color in zip(report_data_collection.items, itertools.cycle(px.colors.qualitative.Plotly)):
@@ -269,7 +269,7 @@ def render_rot_plot(trajectories: list[Trajectory], report_settings: ReportSetti
 
 def render_shared_x_plot(
     x_data: list[np.ndarray],
-    y_data: list[list[np.ndarray]],
+    y_data: list[list[np.ndarray | None]],
     names: list[str],
     x_label: str,
     y_labels: list[str],

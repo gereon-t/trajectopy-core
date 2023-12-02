@@ -14,66 +14,71 @@ import numpy as np
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.plotting import bar_plots, histograms, line_plots, scatter_plots
-from trajectopy_core.report.data import ReportData
+from trajectopy_core.report.data import ATEReportData, RPEReportData
 from trajectopy_core.report.utils import TEMPLATES_PATH, convert_images_to_base64, number_to_string
 from trajectopy_core.settings.report import ReportSettings
 
 logger = logging.getLogger("root")
 
 
-def render_side_by_side_plots(report_data: ReportData) -> List[str]:
-    side_by_side_plots = [scatter_plots.render_pos_devs(report_data)]
+def render_side_by_side_plots(ate_report_data: ATEReportData) -> List[str]:
+    side_by_side_plots = [scatter_plots.render_pos_devs(ate_report_data)]
 
-    if not report_data.has_ate_rot:
+    if not ate_report_data.has_ate_rot:
         return side_by_side_plots
 
-    side_by_side_plots.append(scatter_plots.render_rot_devs(report_data))
+    side_by_side_plots.append(scatter_plots.render_rot_devs(ate_report_data))
 
     return side_by_side_plots
 
 
-def render_one_line_plots(report_data: ReportData) -> List[str]:
+def render_one_line_plots(
+    ate_report_data: Optional[ATEReportData] = None, rpe_report_data: Optional[RPEReportData] = None
+) -> List[str]:
     one_line_plots = []
 
-    if report_data.has_rpe:
-        one_line_plots.append(line_plots.render_rpe(report_data))
+    if rpe_report_data is not None:
+        one_line_plots.append(line_plots.render_rpe(rpe_report_data))
+
+    if ate_report_data is None:
+        return one_line_plots
 
     one_line_plots.extend(
         (
-            histograms.render_pos_devs(report_data),
-            bar_plots.render_pos_bar_plot(report_data),
-            line_plots.render_dev_edf(report_data),
-            line_plots.render_dev_comb_plot(report_data),
-            line_plots.render_dev_pos_plot(report_data),
+            histograms.render_pos_devs(ate_report_data),
+            bar_plots.render_pos_bar_plot(ate_report_data),
+            line_plots.render_dev_edf(ate_report_data),
+            line_plots.render_dev_comb_plot(ate_report_data),
+            line_plots.render_dev_pos_plot(ate_report_data),
         )
     )
 
-    one_line_plots.append(line_plots.render_pos_plot(report_data))
+    one_line_plots.append(line_plots.render_pos_plot(ate_report_data))
 
-    if not report_data.has_ate_rot:
+    if not ate_report_data.has_ate_rot:
         return one_line_plots
 
-    one_line_plots.insert(2, histograms.render_rot_devs(report_data))
-    one_line_plots.insert(4, bar_plots.render_rot_bar_plot(report_data))
-    one_line_plots.insert(len(one_line_plots) - 1, line_plots.render_dev_rot_plot(report_data))
-    one_line_plots.append(line_plots.render_rot_plot(report_data))
+    one_line_plots.insert(2, histograms.render_rot_devs(ate_report_data))
+    one_line_plots.insert(4, bar_plots.render_rot_bar_plot(ate_report_data))
+    one_line_plots.insert(len(one_line_plots) - 1, line_plots.render_dev_rot_plot(ate_report_data))
+    one_line_plots.append(line_plots.render_rot_plot(ate_report_data))
 
-    if report_data.settings.scatter_detailed:
-        one_line_plots.append(scatter_plots.render_pos_x_devs(report_data))
-        one_line_plots.append(scatter_plots.render_pos_y_devs(report_data))
-        one_line_plots.append(scatter_plots.render_pos_z_devs(report_data))
+    if ate_report_data.settings.scatter_detailed:
+        one_line_plots.append(scatter_plots.render_pos_x_devs(ate_report_data))
+        one_line_plots.append(scatter_plots.render_pos_y_devs(ate_report_data))
+        one_line_plots.append(scatter_plots.render_pos_z_devs(ate_report_data))
 
-        if report_data.has_ate_rot:
-            one_line_plots.append(scatter_plots.render_rot_x_devs(report_data))
-            one_line_plots.append(scatter_plots.render_rot_y_devs(report_data))
-            one_line_plots.append(scatter_plots.render_rot_z_devs(report_data))
+        if ate_report_data.has_ate_rot:
+            one_line_plots.append(scatter_plots.render_rot_x_devs(ate_report_data))
+            one_line_plots.append(scatter_plots.render_rot_y_devs(ate_report_data))
+            one_line_plots.append(scatter_plots.render_rot_z_devs(ate_report_data))
 
     return one_line_plots
 
 
 def render_single_report(
     *,
-    ate_result: ATEResult,
+    ate_result: Optional[ATEResult] = None,
     rpe_result: Optional[RPEResult] = None,
     report_settings: ReportSettings = ReportSettings(),
 ) -> str:
@@ -90,34 +95,42 @@ def render_single_report(
         str: The html report string
 
     """
+    if ate_result is None and rpe_result is None:
+        raise ValueError("Either ate_result or rpe_result must be provided.")
+
     template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("single_template.html")
     igg, uni_bonn, icon = convert_images_to_base64()
 
-    report_data = ReportData(ate_result=ate_result, rpe_result=rpe_result, settings=report_settings)
+    ate_report_data = (
+        ATEReportData(ate_result=ate_result, settings=report_settings) if ate_result is not None else None
+    )
+    rpe_report_data = (
+        RPEReportData(rpe_result=rpe_result, settings=report_settings) if rpe_result is not None else None
+    )
 
-    side_by_side_plots = render_side_by_side_plots(report_data)
-    one_line_plots = render_one_line_plots(report_data)
+    side_by_side_plots = render_side_by_side_plots(ate_report_data) if ate_report_data is not None else []
+    one_line_plots = render_one_line_plots(ate_report_data, rpe_report_data)
 
     if len(side_by_side_plots) == 1:
         one_line_plots = side_by_side_plots + one_line_plots
         side_by_side_plots = []
 
     context = {
-        "title": ate_result.name,
-        "ate_pos": number_to_string(ate_result.pos_ate),
-        "ate_rot": number_to_string(np.rad2deg(ate_result.rot_ate)),
+        "title": ate_result.name if ate_result is not None else rpe_result.name,
+        "ate_pos": number_to_string(ate_result.pos_ate) if ate_result is not None else "-",
+        "ate_rot": number_to_string(np.rad2deg(ate_result.rot_ate)) if ate_result is not None else "-",
         "rpe_pos": number_to_string(rpe_result.pos_rpe) if rpe_result is not None else "-",
         "rpe_rot": number_to_string(np.rad2deg(rpe_result.rot_rpe)) if rpe_result is not None else "-",
         "rpe_pos_drift_unit": rpe_result.pos_drift_unit if rpe_result is not None else "-",
         "rpe_rot_drift_unit": rpe_result.rot_drift_unit if rpe_result is not None else "-",
-        "ate_pos_unit": report_data.ate_unit,
+        "ate_pos_unit": "mm" if report_settings.ate_unit_is_mm else "m",
         "rpe_available": rpe_result is not None,
         "side_by_side_plots": side_by_side_plots,
         "one_line_plots": one_line_plots,
         "icon": icon,
         "igg": igg,
         "uni_bonn": uni_bonn,
-        "rot_unit": report_data.settings.rot_unit,
+        "rot_unit": report_settings.rot_unit,
     }
 
     return template.render(context)

@@ -7,7 +7,7 @@ mail@gtombrink.de
 
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import List, Optional
+from typing import List
 
 import numpy as np
 
@@ -17,19 +17,17 @@ from trajectopy_core.settings.report import ReportSettings
 
 
 @dataclass
-class ReportData:
+class ATEReportData:
     """
-    Class to store all data needed to render the report.
+    Class to store all ATE data needed to render the report.
 
     Args:
         ate_result: The ATE result to be rendered.
-        rpe_result: The RPE result to be rendered.
         settings: The report settings.
 
     """
 
     ate_result: ATEResult
-    rpe_result: Optional[RPEResult] = None
     settings: ReportSettings = field(default_factory=ReportSettings)
 
     def __post_init__(self) -> None:
@@ -48,10 +46,6 @@ class ReportData:
     @property
     def has_ate_rot(self) -> bool:
         return self.ate_result.has_orientation
-
-    @property
-    def has_rpe(self) -> bool:
-        return self.rpe_result is not None
 
     @property
     def function_of_label(self) -> str:
@@ -152,20 +146,51 @@ class ReportData:
 
 
 @dataclass
-class ReportDataCollection:
+class RPEReportData:
+    """
+    Class to store all RPE data needed to render the report.
+
+    Args:
+        rpe_result: The RPE result to be rendered.
+        settings: The report settings.
+
+    """
+
+    rpe_result: RPEResult
+    settings: ReportSettings = field(default_factory=ReportSettings)
+
+    @property
+    def short_name(self) -> str:
+        return self.rpe_result.name.split("vs")[0]
+
+
+@dataclass
+class ATEReportDataCollection:
     """
     Class to store multiple ReportData objects in a list
     """
 
-    items: List[ReportData]
+    items: List[ATEReportData]
 
     @property
     def has_ate_rot(self) -> bool:
         return any(item.has_ate_rot for item in self.items)
 
+    def get_ate_results(self, rot_required: bool = False) -> list[ATEResult]:
+        return [item.ate_result for item in self.items if not rot_required or item.has_ate_rot]
+
+
+@dataclass
+class RPEReportDataCollection:
+    """
+    Class to store multiple ReportData objects in a list
+    """
+
+    items: List[RPEReportData]
+
     @property
     def has_rpe(self) -> bool:
-        return any(item.has_rpe for item in self.items)
+        return any(item is not None for item in self.items)
 
     @property
     def has_rpe_rot(self) -> bool:
@@ -174,9 +199,6 @@ class ReportDataCollection:
 
         rpe_results = [item.rpe_result for item in self.items]
         return any(result.has_rot_dev for result in rpe_results)
-
-    def get_ate_results(self, rot_required: bool = False) -> list[ATEResult]:
-        return [item.ate_result for item in self.items if not rot_required or item.has_ate_rot]
 
     def get_rpe_results(self, rot_required: bool = False) -> list[RPEResult]:
         return [item.rpe_result for item in self.items if not rot_required or item.rpe_result.has_rot_dev]
