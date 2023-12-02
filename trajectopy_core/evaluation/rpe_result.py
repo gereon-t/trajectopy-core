@@ -237,6 +237,7 @@ class RPEResult:
     def to_file(self, filename: str) -> None:
         with open(filename, "a", encoding="utf-8", newline="") as file:
             file.write(f"#relative_dist_unit {self.rpe_dev.pair_distance_unit.name}\n")
+            file.write(f"#name {self.name}\n")
 
             writer = csv.writer(file)
             file.write("#num_pairs ")
