@@ -111,7 +111,6 @@ def adopt_first_pose(*, traj_from: Trajectory, traj_to: Trajectory) -> Trajector
     """
     adopt_first_position(traj_from=traj_from, traj_to=traj_to)
     adopt_first_orientation(traj_from=traj_from, traj_to=traj_to)
-    traj_from.state.aligned = True
     return traj_from
 
 
