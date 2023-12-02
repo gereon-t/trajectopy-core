@@ -453,11 +453,11 @@ class ATEResult:
 
         return pd.DataFrame(all_data, columns=self.columns)
 
-    def to_file(self, filename: str) -> None:
+    def to_file(self, filename: str, mode: str = "a") -> None:
         """
         Exports results as csv
         """
-        with open(filename, "w", newline="\n", encoding="utf-8") as file:
+        with open(filename, mode, newline="\n", encoding="utf-8") as file:
             file.write(f"#name {self.name}\n")
             file.write(f"#epsg {self.trajectory.pos.epsg}\n")
         self.to_dataframe().to_csv(filename, index=False, mode="a", float_format="%.12f")

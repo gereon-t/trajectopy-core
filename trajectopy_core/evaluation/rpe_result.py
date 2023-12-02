@@ -234,8 +234,8 @@ class RPEResult:
         else:
             return pd.DataFrame(np.c_[self.all_pair_distances, self.pos_dev_all], columns=self.columns)
 
-    def to_file(self, filename: str) -> None:
-        with open(filename, "a", encoding="utf-8", newline="") as file:
+    def to_file(self, filename: str, mode: str = "a") -> None:
+        with open(filename, mode, encoding="utf-8", newline="") as file:
             file.write(f"#relative_dist_unit {self.rpe_dev.pair_distance_unit.name}\n")
             file.write(f"#name {self.name}\n")
 
