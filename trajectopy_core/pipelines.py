@@ -9,6 +9,7 @@ mail@gtombrink.de
 import numpy as np
 
 from trajectopy_core.alignment import align_trajectories, apply_alignment
+from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.approximation.cubic_approximation import piecewise_cubic
 from trajectopy_core.approximation.rot_approximation import rot_average_window
 from trajectopy_core.evaluation.ate_result import ATEResult
@@ -24,8 +25,11 @@ from trajectopy_core.trajectory import Trajectory
 
 
 def ate(
-    trajectory_gt: Trajectory, trajectory_est: Trajectory, settings: ProcessingSettings = ProcessingSettings()
-) -> ATEResult:
+    trajectory_gt: Trajectory,
+    trajectory_est: Trajectory,
+    settings: ProcessingSettings = ProcessingSettings(),
+    return_alignment: bool = False,
+) -> ATEResult | tuple[ATEResult, AlignmentResult]:
     """
     Computes the absolute trajectory error (ATE) between two trajectories.
 
@@ -46,7 +50,14 @@ def ate(
         matching_settings=settings.matching,
     )
     trajectory_est_aligned = apply_alignment(trajectory=trajectory_est, alignment_result=alignment, inplace=False)
-    return compare_trajectories_absolute(traj_ref=trajectory_gt, traj_test=trajectory_est_aligned)
+    return (
+        compare_trajectories_absolute(traj_ref=trajectory_gt, traj_test=trajectory_est_aligned)
+        if not return_alignment
+        else (
+            compare_trajectories_absolute(traj_ref=trajectory_gt, traj_test=trajectory_est_aligned),
+            alignment,
+        )
+    )
 
 
 def rpe(
