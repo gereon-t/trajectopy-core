@@ -110,7 +110,7 @@ def approximate(
     """
     xyz_approx = piecewise_cubic(
         function_of=trajectory.function_of,
-        values=trajectory.pos.xyz,
+        values=trajectory.xyz,
         int_size=approximation_settings.fe_int_size,
         min_obs=approximation_settings.fe_min_obs,
     )
@@ -123,7 +123,7 @@ def approximate(
 
     quat_approx = rot_average_window(
         function_of=trajectory.function_of,
-        quat=trajectory.rot.as_quat(),
+        quat=RotationSet.from_euler(seq="xyz", angles=trajectory.rpy).as_quat(),
         win_size=approximation_settings.rot_approx_win_size,
     )
     traj_approx.rot = RotationSet.from_quat(quat_approx)
