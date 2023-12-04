@@ -253,12 +253,10 @@ def render_rot_plot(trajectories: list[Trajectory], report_settings: ReportSetti
     rot_x_label, rot_y_label, rot_z_label = ("roll [°]", "pitch [°]", "yaw [°]")
     x_label = derive_xlabel_from_sortings([traj.sorting for traj in trajectories])
 
+    traj_rpy = [np.rad2deg(traj.rpy) for traj in trajectories]
     return render_shared_x_plot(
         x_data=[traj.function_of for traj in trajectories],
-        y_data=[
-            [np.rad2deg(traj.rpy[:, 0]), np.rad2deg(traj.rpy[:, 1]), np.rad2deg(traj.rpy[:, 2])]
-            for traj in trajectories
-        ],
+        y_data=[[rpy[:, 0], rpy[:, 1], rpy[:, 2]] for rpy in traj_rpy],
         names=[traj.name for traj in trajectories],
         x_label=x_label,
         y_labels=[rot_x_label, rot_y_label, rot_z_label],

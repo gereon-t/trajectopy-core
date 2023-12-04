@@ -116,16 +116,16 @@ def approximate(
     )
 
     traj_approx = trajectory if inplace else trajectory.copy()
-    traj_approx.pos.xyz = xyz_approx
+    traj_approx.pos.xyz = xyz_approx[trajectory.sort_switching_index, :]
 
     if not traj_approx.has_orientation:
         return traj_approx
 
     quat_approx = rot_average_window(
         function_of=trajectory.function_of,
-        quat=RotationSet.from_euler(seq="xyz", angles=trajectory.rpy).as_quat(),
+        quat=trajectory.quat,
         win_size=approximation_settings.rot_approx_win_size,
     )
-    traj_approx.rot = RotationSet.from_quat(quat_approx)
+    traj_approx.rot = RotationSet.from_quat(quat_approx[trajectory.sort_switching_index, :])
 
     return traj_approx

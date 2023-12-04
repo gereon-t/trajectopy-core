@@ -178,25 +178,41 @@ class Trajectory:
         return trajectory
 
     @property
+    def sort_switching_index(self) -> np.ndarray:
+        """
+        Returns the index that switches the sorting of the trajectory
+        """
+        return np.argsort(self.sorting_index)
+
+    @property
+    def sorting_index(self) -> np.ndarray:
+        """
+        Returns the index that sorts the trajectory
+        """
+        return np.argsort(self.tstamps) if self.sorting == Sorting.TIME else np.argsort(self.arc_lengths)
+
+    @property
     def function_of(self) -> np.ndarray:
         """
         Returns the function of the trajectory
         """
-        return self.to_dataframe()[self.sorting].to_numpy()  # pylint: disable=unsubscriptable-object
+        return (
+            self.tstamps[self.sorting_index] if self.sorting == Sorting.TIME else self.arc_lengths[self.sorting_index]
+        )
 
     @property
     def function_of_unit(self) -> str:
         """
         Returns the unit of the function of the trajectory
         """
-        return "s" if self.sorting == "time" else "m"
+        return "s" if self.sorting == Sorting.TIME else "m"
 
     @property
     def function_of_label(self) -> str:
         """
         Returns the label of the function of the trajectory
         """
-        return "time [s]" if self.sorting == "time" else "arc length [m]"
+        return "time [s]" if self.sorting == Sorting.TIME else "arc length [m]"
 
     @property
     def xyz(self) -> np.ndarray:
@@ -206,7 +222,7 @@ class Trajectory:
         In contrast to the pos.xyz attribute, this method
         reflects the current sorting of the trajectory.
         """
-        return self.to_dataframe()[["pos_x", "pos_y", "pos_z"]].to_numpy()  # pylint: disable=unsubscriptable-object
+        return self.pos.xyz[self.sorting_index]
 
     @property
     def quat(self) -> np.ndarray:
@@ -219,9 +235,7 @@ class Trajectory:
         if self.rot is None:
             return np.zeros((len(self), 4))
 
-        return self.to_dataframe()[
-            ["rot_x", "rot_y", "rot_z", "rot_w"]
-        ].to_numpy()  # pylint: disable=unsubscriptable-object
+        return self.rot.as_quat()[self.sorting_index]
 
     @property
     def rpy(self) -> np.ndarray:
