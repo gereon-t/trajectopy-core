@@ -199,7 +199,7 @@ def render_trajectories(trajectories: list[Trajectory], report_settings: ReportS
     plotting_dim = len(report_settings.scatter_axis_order)
 
     for trajectory in trajectories:
-        pos = trajectory.pos.xyz
+        pos = trajectory.xyz
         if plotting_dim == 2:
             fig.add_trace(
                 go.Scattergl(

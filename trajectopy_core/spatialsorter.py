@@ -5,6 +5,7 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 import logging
+from enum import Enum
 from typing import List, Tuple
 
 import matplotlib.tri as mtri
@@ -17,6 +18,11 @@ from trajectopy_core.settings.sorting import SortingSettings
 
 # logger configuration
 logger = logging.getLogger("root")
+
+
+class Sorting(str, Enum):
+    TIME = "time"
+    ARC_LENGTH = "arc_length"
 
 
 def sort_mls(xyz_unsorted: np.ndarray, settings: SortingSettings = SortingSettings()) -> Tuple[List[int], np.ndarray]:
@@ -33,6 +39,7 @@ def sort_mls(xyz_unsorted: np.ndarray, settings: SortingSettings = SortingSettin
 
     Returns:
         list: Sort index
+        np.ndarray: Arc lengths along the path
     """
     mls_unsorted = mls_iterative(
         xyz=xyz_unsorted,

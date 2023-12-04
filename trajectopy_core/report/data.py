@@ -53,15 +53,15 @@ class ATEReportData:
 
     @cached_property
     def pos_x(self) -> np.ndarray:
-        return self.ate_result.trajectory.pos.x
+        return self.ate_result.trajectory.xyz[:, 0]
 
     @cached_property
     def pos_y(self) -> np.ndarray:
-        return self.ate_result.trajectory.pos.y
+        return self.ate_result.trajectory.xyz[:, 1]
 
     @cached_property
     def pos_z(self) -> np.ndarray:
-        return self.ate_result.trajectory.pos.z
+        return self.ate_result.trajectory.xyz[:, 2]
 
     @cached_property
     def function_of(self) -> np.ndarray:

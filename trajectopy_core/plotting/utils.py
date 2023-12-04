@@ -6,16 +6,17 @@ mail@gtombrink.de
 """
 import logging
 
+from trajectopy_core.spatialsorter import Sorting
 from trajectopy_core.trajectory import Trajectory
 
 logger = logging.getLogger("root")
 
 
 def derive_xlabel_from_sortings(sort_by_list: list[str]) -> str:
-    if all(sorting == "arc_lengths" for sorting in sort_by_list):
+    if all(sorting == Sorting.ARC_LENGTH for sorting in sort_by_list):
         return "trajectory length [m]"
 
-    if all(sorting == "time" for sorting in sort_by_list):
+    if all(sorting == Sorting.TIME for sorting in sort_by_list):
         return "time [s]"
 
     logger.warning("Data is diffently sorted, weird things might happen.")

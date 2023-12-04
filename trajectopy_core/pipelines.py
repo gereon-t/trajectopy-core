@@ -6,6 +6,8 @@ High-level API for trajectory evaluation in Python.
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+import numpy as np
+
 from trajectopy_core.alignment import align_trajectories, apply_alignment
 from trajectopy_core.approximation.cubic_approximation import piecewise_cubic
 from trajectopy_core.approximation.rot_approximation import rot_average_window
@@ -17,7 +19,7 @@ from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.settings.approximation import ApproximationSettings
 from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.settings.sorting import SortingSettings
-from trajectopy_core.spatialsorter import sort_mls
+from trajectopy_core.spatialsorter import Sorting, sort_mls
 from trajectopy_core.trajectory import Trajectory
 
 
@@ -71,8 +73,12 @@ def sort_spatially(
         Trajectory: Sorted trajectory.
 
     """
-    sort_idx, _ = sort_mls(xyz_unsorted=trajectory.pos.xyz, settings=sorting_settings)
-    return trajectory.apply_index(sort_idx, inplace=inplace)
+    sort_idx, arc_lengths = sort_mls(xyz_unsorted=trajectory.pos.xyz, settings=sorting_settings)
+    arg_sort_sort_idx = np.argsort(sort_idx)
+    trajectory = trajectory.apply_index(sorted(sort_idx), inplace=inplace)
+    trajectory.arc_lengths = arc_lengths[arg_sort_sort_idx]
+    trajectory.sorting = Sorting.ARC_LENGTH
+    return trajectory
 
 
 def approximate(

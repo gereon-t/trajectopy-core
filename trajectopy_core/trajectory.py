@@ -15,6 +15,7 @@ from scipy.spatial.transform import Slerp
 
 import trajectopy_core.io.trajectory_io as trajectory_io
 from trajectopy_core.rotationset import RotationSet
+from trajectopy_core.spatialsorter import Sorting
 from trajectopy_core.utils import common_time_span, gradient_3d, lengths_from_xyz
 
 # logger configuration
@@ -43,12 +44,12 @@ class Trajectory:
         name: str = "",
         arc_lengths: Union[np.ndarray, None] = None,
         speed_3d: Union[np.ndarray, None] = None,
-        sort_by: str = "time",
+        sorting: Sorting = Sorting.TIME,
     ) -> None:
         if rot and len(rot) != len(pos):
             raise ValueError("Dimension mismatch between positions and orientations.")
 
-        self.sort_by = sort_by
+        self.sorting = sorting
 
         # pose
         self.pos = pos
@@ -85,6 +86,7 @@ class Trajectory:
             f"| EPSG:                         {self.pos.epsg:<{width}}|\n"
             f"| Length [m]:                   {self.total_length:<{width}.3f}|\n"
             f"| Data rate [Hz]:               {self.data_rate:<{width}.3f}|\n"
+            f"| Function of:                  {self.function_of_label:<{width}}|\n"
             f"|_______________________________________________________|\n"
         )
 
@@ -180,26 +182,29 @@ class Trajectory:
         """
         Returns the function of the trajectory
         """
-        return self.to_dataframe()[self.sort_by].to_numpy()  # pylint: disable=unsubscriptable-object
+        return self.to_dataframe()[self.sorting].to_numpy()  # pylint: disable=unsubscriptable-object
 
     @property
     def function_of_unit(self) -> str:
         """
         Returns the unit of the function of the trajectory
         """
-        return "s" if self.sort_by == "time" else "m"
+        return "s" if self.sorting == "time" else "m"
 
     @property
     def function_of_label(self) -> str:
         """
         Returns the label of the function of the trajectory
         """
-        return "time [s]" if self.sort_by == "time" else "arc length [m]"
+        return "time [s]" if self.sorting == "time" else "arc length [m]"
 
     @property
     def xyz(self) -> np.ndarray:
         """
         Returns the xyz coordinates of the trajectory
+
+        In contrast to the pos.xyz attribute, this method
+        reflects the current sorting of the trajectory.
         """
         return self.to_dataframe()[["pos_x", "pos_y", "pos_z"]].to_numpy()  # pylint: disable=unsubscriptable-object
 
@@ -207,6 +212,9 @@ class Trajectory:
     def quat(self) -> np.ndarray:
         """
         Returns the quaternion of the trajectory
+
+        In contrast to the rot.as_quat() attribute, this method
+        reflects the current sorting of the trajectory.
         """
         if self.rot is None:
             return np.zeros((len(self), 4))
@@ -219,12 +227,18 @@ class Trajectory:
     def rpy(self) -> np.ndarray:
         """
         Returns the roll, pitch, yaw of the trajectory
+
+        In contrast to the rot.as_euler(seq="xyz") attribute, this method
+        reflects the current sorting of the trajectory.
         """
         return RotationSet.from_quat(self.quat).as_euler(seq="xyz")
 
     def to_dataframe(self, sort_by: str = "") -> pd.DataFrame:
         """
         Returns a pandas dataframe containing tstamps, xyz, quat
+        and speed_3d of the trajectory.
+
+        The dataframe is sorted by the current sorting attribute (time or arc_length).
 
         Args:
             sort_by (str, optional): Column to sort by. This
@@ -234,13 +248,13 @@ class Trajectory:
         Returns:
             pd.DataFrame: Trajectory as dataframe
         """
-        sort_by = sort_by or self.sort_by
+        sort_by = sort_by or self.sorting
         if self.rot:
             dataframe = pd.DataFrame(
                 np.c_[self.tstamps, self.arc_lengths, self.pos.xyz, self.rot.as_quat(), self.speed_3d],
                 columns=[
                     "time",
-                    "arc_lengths",
+                    "arc_length",
                     "pos_x",
                     "pos_y",
                     "pos_z",
@@ -256,7 +270,7 @@ class Trajectory:
         else:
             dataframe = pd.DataFrame(
                 np.c_[self.tstamps, self.arc_lengths, self.pos.xyz, self.speed_3d],
-                columns=["time", "arc_lengths", "pos_x", "pos_y", "pos_z", "speed_x", "speed_y", "speed_z"],
+                columns=["time", "arc_length", "pos_x", "pos_y", "pos_z", "speed_x", "speed_y", "speed_z"],
             )
 
         return dataframe.sort_values(by=sort_by)

@@ -236,11 +236,11 @@ def render_rpe(report_data_collection: RPEReportDataCollection) -> str:
 
 def render_pos_plot(trajectories: list[Trajectory], report_settings: ReportSettings = ReportSettings()) -> str:
     pos_x_label, pos_y_label, pos_z_label = get_axis_label(trajectories=trajectories)
-    x_label = derive_xlabel_from_sortings([traj.sort_by for traj in trajectories])
+    x_label = derive_xlabel_from_sortings([traj.sorting for traj in trajectories])
 
     return render_shared_x_plot(
         x_data=[traj.function_of for traj in trajectories],
-        y_data=[[traj.pos.x, traj.pos.y, traj.pos.z] for traj in trajectories],
+        y_data=[[traj.xyz[:, 0], traj.xyz[:, 1], traj.xyz[:, 2]] for traj in trajectories],
         names=[traj.name for traj in trajectories],
         x_label=x_label,
         y_labels=[pos_x_label, pos_y_label, pos_z_label],
@@ -251,7 +251,7 @@ def render_pos_plot(trajectories: list[Trajectory], report_settings: ReportSetti
 
 def render_rot_plot(trajectories: list[Trajectory], report_settings: ReportSettings = ReportSettings()) -> str:
     rot_x_label, rot_y_label, rot_z_label = ("roll [°]", "pitch [°]", "yaw [°]")
-    x_label = derive_xlabel_from_sortings([traj.sort_by for traj in trajectories])
+    x_label = derive_xlabel_from_sortings([traj.sorting for traj in trajectories])
 
     return render_shared_x_plot(
         x_data=[traj.function_of for traj in trajectories],
