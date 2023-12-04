@@ -5,7 +5,7 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 from functools import cached_property
-from typing import Dict
+from typing import Dict, List
 
 import numpy as np
 import pandas as pd
@@ -367,7 +367,7 @@ class ATEResult:
         return rms(self.rot_dev_z)
 
     @property
-    def columns(self) -> list[str]:
+    def columns(self) -> List[str]:
         """Returns the column names of the dataframe"""
         trajectory_columns = [
             "time",

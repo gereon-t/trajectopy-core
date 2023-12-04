@@ -6,6 +6,8 @@ High-level API for trajectory evaluation in Python.
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+from typing import Tuple, Union
+
 import numpy as np
 
 from trajectopy_core.alignment import align_trajectories, apply_alignment
@@ -29,7 +31,7 @@ def ate(
     trajectory_est: Trajectory,
     settings: ProcessingSettings = ProcessingSettings(),
     return_alignment: bool = False,
-) -> ATEResult | tuple[ATEResult, AlignmentResult]:
+) -> Union[ATEResult, Tuple[ATEResult, AlignmentResult]]:
     """
     Computes the absolute trajectory error (ATE) between two trajectories.
 

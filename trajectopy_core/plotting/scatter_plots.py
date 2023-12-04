@@ -5,6 +5,8 @@ Gereon Tombrink, 2023
 mail@gtombrink.de
 """
 
+from typing import List, Tuple, Union
+
 import numpy as np
 import plotly.graph_objects as go
 from plotly.offline import plot
@@ -15,7 +17,7 @@ from trajectopy_core.settings.report import ReportSettings
 from trajectopy_core.trajectory import Trajectory
 
 
-def setup_pos_axis_indices(report_settings: ReportSettings) -> tuple[list[str], list[int]]:
+def setup_pos_axis_indices(report_settings: ReportSettings) -> Tuple[List[str], List[int]]:
     pos_axis_labels = [
         f"{report_settings.pos_x_name} [{report_settings.pos_x_unit}]",
         f"{report_settings.pos_y_name} [{report_settings.pos_y_unit}]",
@@ -31,7 +33,7 @@ def scatter_plot(
     report_settings: ReportSettings,
     figure_title: str,
     colorbar_title: str,
-    colors: np.ndarray | None = None,
+    colors: Union[np.ndarray, None] = None,
 ) -> str:
     marker_dict = get_marker_dict(report_settings, colorbar_title, colors)
     pos_axis_labels, axes_indices = setup_pos_axis_indices(report_settings)
@@ -87,7 +89,7 @@ def scatter_plot(
 
 
 def get_marker_dict(
-    report_settings: ReportSettings, colorbar_title: str = "", colors: np.ndarray | None = None
+    report_settings: ReportSettings, colorbar_title: str = "", colors: Union[np.ndarray, None] = None
 ) -> dict:
     if colors is None:
         return dict(size=report_settings.scatter_marker_size)
@@ -187,7 +189,7 @@ def render_rot_devs(report_data: ATEReportData) -> str:
     )
 
 
-def render_trajectories(trajectories: list[Trajectory], report_settings: ReportSettings) -> str:
+def render_trajectories(trajectories: List[Trajectory], report_settings: ReportSettings) -> str:
     x_label, y_label, z_label = get_axis_label(trajectories=trajectories)
     pos_axis_labels = [x_label, y_label, z_label]
 

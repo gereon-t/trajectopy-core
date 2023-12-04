@@ -176,7 +176,7 @@ class ATEReportDataCollection:
     def has_ate_rot(self) -> bool:
         return any(item.has_ate_rot for item in self.items)
 
-    def get_ate_results(self, rot_required: bool = False) -> list[ATEResult]:
+    def get_ate_results(self, rot_required: bool = False) -> List[ATEResult]:
         return [item.ate_result for item in self.items if not rot_required or item.has_ate_rot]
 
 
@@ -200,5 +200,5 @@ class RPEReportDataCollection:
         rpe_results = [item.rpe_result for item in self.items]
         return any(result.has_rot_dev for result in rpe_results)
 
-    def get_rpe_results(self, rot_required: bool = False) -> list[RPEResult]:
+    def get_rpe_results(self, rot_required: bool = False) -> List[RPEResult]:
         return [item.rpe_result for item in self.items if not rot_required or item.rpe_result.has_rot_dev]

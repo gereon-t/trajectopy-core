@@ -6,7 +6,7 @@ mail@gtombrink.de
 """
 
 import itertools
-from typing import Tuple
+from typing import List, Tuple, Union
 
 import numpy as np
 import plotly.express as px
@@ -234,7 +234,7 @@ def render_rpe(report_data_collection: RPEReportDataCollection) -> str:
     return plot(fig, output_type="div", config=config)
 
 
-def render_pos_plot(trajectories: list[Trajectory], report_settings: ReportSettings = ReportSettings()) -> str:
+def render_pos_plot(trajectories: List[Trajectory], report_settings: ReportSettings = ReportSettings()) -> str:
     pos_x_label, pos_y_label, pos_z_label = get_axis_label(trajectories=trajectories)
     x_label = derive_xlabel_from_sortings([traj.sorting for traj in trajectories])
 
@@ -249,7 +249,7 @@ def render_pos_plot(trajectories: list[Trajectory], report_settings: ReportSetti
     )
 
 
-def render_rot_plot(trajectories: list[Trajectory], report_settings: ReportSettings = ReportSettings()) -> str:
+def render_rot_plot(trajectories: List[Trajectory], report_settings: ReportSettings = ReportSettings()) -> str:
     rot_x_label, rot_y_label, rot_z_label = ("roll [°]", "pitch [°]", "yaw [°]")
     x_label = derive_xlabel_from_sortings([traj.sorting for traj in trajectories])
 
@@ -266,11 +266,11 @@ def render_rot_plot(trajectories: list[Trajectory], report_settings: ReportSetti
 
 
 def render_shared_x_plot(
-    x_data: list[np.ndarray],
-    y_data: list[list[np.ndarray | None]],
-    names: list[str],
+    x_data: List[np.ndarray],
+    y_data: List[List[Union[np.ndarray, None]]],
+    names: List[str],
     x_label: str,
-    y_labels: list[str],
+    y_labels: List[str],
     title: str,
     report_settings: ReportSettings = ReportSettings(),
 ) -> str:

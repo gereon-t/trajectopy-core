@@ -19,7 +19,7 @@ logger = logging.getLogger("root")
 
 
 def render_one_line_plots(
-    trajectories: list[Trajectory], report_settings: ReportSettings = ReportSettings()
+    trajectories: List[Trajectory], report_settings: ReportSettings = ReportSettings()
 ) -> List[str]:
     one_line_plots = [scatter_plots.render_trajectories(trajectories, report_settings)]
     one_line_plots.append(multi_line_plots.render_pos_plot(trajectories, report_settings))
@@ -32,7 +32,7 @@ def render_one_line_plots(
     return one_line_plots
 
 
-def render_trajectories(*, trajectories: list[Trajectory], report_settings: ReportSettings = ReportSettings()) -> str:
+def render_trajectories(*, trajectories: List[Trajectory], report_settings: ReportSettings = ReportSettings()) -> str:
     """
     Render trajectories as scatter plot.
 
