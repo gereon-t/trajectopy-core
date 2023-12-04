@@ -32,7 +32,6 @@ Trajectopy offers a range of features, including:
 - [Installation](#installation)
 - [Exemplary Evaluation](#exemplary-evaluation)
 - [Importing Trajectories](#importing-trajectories)
-- [Processing Options](#processing-options)
 - [Processing Settings](#processing-settings)
 
 
@@ -151,16 +150,15 @@ Below you can find a table of all allowed header entries and their meaning.
 
 **New since 0.9.2**: Experimental ROS bag support for geometry_msgs/msg/PoseStamped messages. Files must have a ".bag" extension. Poses must have positions and orientations. One file can contain multiple trajectories published under different topics.
 
-# Processing Settings
+## Processing Settings
 
 Trajectopy offers a range of processing options that can be applied to the imported trajectories. These options are:
 
 | Option | Description |
 |---|---|
-| Matching | Matching of two trajectories to establish pose-to-pose correspondencies. After matching both trajectories will have the same number of poses. You can choose from different matching methods in the `MatchingSettings`. |
 | Alignment | Alignment of two trajectories using least squares adjustment. The implemented approach can handle a similarity transformation (translation, rotation, scale), a lever arm (3d vector), and a time shift (scalar). Each parameter can be included or exluded from the adjustment depending on the individual sensor modalities using the `AlignmentSettings`. In addition, preprocessing steps and stochastics can also be configured. |
+| Matching | Matching of two trajectories to establish pose-to-pose correspondencies. After matching both trajectories will have the same number of poses. You can choose from different matching methods in the `MatchingSettings`. |
 | Comparison | Comparison of two trajectories using absolute (ATE) and relative (RPE) metrics. The relative comparison can be configured using the `RelativeComparisonSettings`. |
-| Report Generation | Generation of a HTML report containing all results. The apperance of the report can be customized using the `ReportSettings` |
 
 ## Alignment Settings
 
