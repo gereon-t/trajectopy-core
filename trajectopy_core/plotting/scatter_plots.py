@@ -123,7 +123,7 @@ def render_pos_x_devs(report_data: ATEReportData) -> str:
         colors=report_data.pos_dev_x,
         report_settings=report_data.settings,
         figure_title=f"{report_data.settings.pos_x_name} Deviations",
-        colorbar_title=f"{report_data.settings.pos_x_name} [{report_data.settings.pos_x_unit}]",
+        colorbar_title=f"{report_data.settings.pos_x_name} [{report_data.ate_unit}]",
     )
 
 
@@ -133,7 +133,7 @@ def render_pos_y_devs(report_data: ATEReportData) -> str:
         colors=report_data.pos_dev_y,
         report_settings=report_data.settings,
         figure_title=f"{report_data.settings.pos_y_name} Deviations",
-        colorbar_title=f"{report_data.settings.pos_y_name} [{report_data.settings.pos_y_unit}]",
+        colorbar_title=f"{report_data.settings.pos_y_name} [{report_data.ate_unit}]",
     )
 
 
@@ -143,7 +143,7 @@ def render_pos_z_devs(report_data: ATEReportData) -> str:
         colors=report_data.pos_dev_z,
         report_settings=report_data.settings,
         figure_title=f"{report_data.settings.pos_z_name} Deviations",
-        colorbar_title=f"{report_data.settings.pos_z_name} [{report_data.settings.pos_z_unit}]",
+        colorbar_title=f"{report_data.settings.pos_z_name} [{report_data.ate_unit}]",
     )
 
 
