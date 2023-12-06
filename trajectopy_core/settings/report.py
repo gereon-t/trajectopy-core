@@ -14,7 +14,7 @@ class ExportSettings(Settings):
     format: str = "png"  # one of png, svg, jpeg, webp
     height: int = 500
     width: int = 800
-    scale: int = 8
+    scale: int = 1
 
     def to_config(self) -> dict:
         return {
@@ -45,6 +45,9 @@ class ReportSettings(Settings):
     - `scatter_axis_order` (str): The order of the axes in scatter plots. Default value is "xy". If 3d plotting is desired, also specify "z".
     - `scatter_marker_size` (int): The size of markers in scatter plots. Default value is 5.
     - `scatter_detailed` (bool): Indicates whether to show scatter plots for each degree of freedom. Default value is False.
+    - `scatter_mapbox` (bool): Indicates whether to use mapbox for scatter plots. Default value is False.
+    - `scatter_mapbox_style` (str): The mapbox style for scatter plots. Default value is "open-street-map".
+    - `scatter_mapbox_zoom` (int): The zoom level for scatter plots. Default value is 15.
     - `pos_x_name` (str): The name of the x-coordinate in position data. Default value is "x".
     - `pos_y_name` (str): The name of the y-coordinate in position data. Default value is "y".
     - `pos_z_name` (str): The name of the z-coordinate in position data. Default value is "z".
@@ -79,6 +82,11 @@ class ReportSettings(Settings):
     scatter_axis_order: str = "xy"
     scatter_marker_size: int = 5
     scatter_detailed: bool = False
+
+    scatter_mapbox: bool = False
+    scatter_mapbox_style: str = "open-street-map"
+    scatter_mapbox_zoom: int = 15
+    scatter_mapbox_token: str = ""
 
     pos_x_name: str = "x"
     pos_y_name: str = "y"

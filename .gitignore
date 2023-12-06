@@ -58,3 +58,4 @@ scripts/
 data/
 .tox/
 reports/
+.mapbox_token

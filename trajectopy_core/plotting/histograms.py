@@ -36,6 +36,7 @@ def render_pos_devs(report_data: ATEReportData) -> str:
         yaxis=dict(title=report_data.settings.histogram_yaxis_title),
         barmode=report_data.settings.histogram_barmode,
         bargap=report_data.settings.histogram_bargap,
+        height=report_data.settings.single_plot_height,
     )
     return plot(fig, output_type="div", config=report_data.settings.single_plot_export.to_config())
 
@@ -71,6 +72,7 @@ def render_rot_devs(report_data: ATEReportData) -> str:
         yaxis=dict(title=report_data.settings.histogram_yaxis_title),
         barmode=report_data.settings.histogram_barmode,
         bargap=report_data.settings.histogram_bargap,
+        height=report_data.settings.single_plot_height,
     )
 
     return plot(fig, output_type="div", config=report_data.settings.single_plot_export.to_config())

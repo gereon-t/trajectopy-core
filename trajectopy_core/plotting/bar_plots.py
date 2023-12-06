@@ -73,7 +73,10 @@ def render_multi_pos_bar_plot(report_data_collection: ATEReportDataCollection) -
 
     fig = px.bar(metrics_df, barmode="group", x="Metric", y="Value", color="Trajectory")
 
-    fig.update_layout(title_text="Absolute Trajectory Error (ATE) - Position")
+    fig.update_layout(
+        title_text="Absolute Trajectory Error (ATE) - Position",
+        height=report_data_collection.items[0].settings.single_plot_height,
+    )
     fig.update_yaxes(title_text=f"Value [{report_data_collection.items[0].ate_unit}]")
     return plot(fig, output_type="div", config=report_data_collection.items[0].settings.single_plot_export.to_config())
 
@@ -87,7 +90,10 @@ def render_multi_rot_bar_plot(report_data_collection: ATEReportDataCollection) -
 
     fig = px.bar(metrics_df, barmode="group", x="Metric", y="Value", color="Trajectory")
 
-    fig.update_layout(title_text="Absolute Trajectory Error (ATE) - Rotation")
+    fig.update_layout(
+        title_text="Absolute Trajectory Error (ATE) - Rotation",
+        height=report_data_collection.items[0].settings.single_plot_height,
+    )
     fig.update_yaxes(title_text=f"Value [{report_data_collection.items[0].settings.rot_unit}]")
     return plot(fig, output_type="div", config=report_data_collection.items[0].settings.single_plot_export.to_config())
 

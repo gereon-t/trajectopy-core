@@ -30,4 +30,7 @@ def render_heatmap(dataframe: pd.DataFrame, report_settings: ReportSettings = Re
         title="Correlation Matrix",
         aspect="auto",
     )
+
+    fig.update_layout(height=report_settings.single_plot_height)
+
     return plot(fig, output_type="div", config=report_settings.single_plot_export.to_config())
