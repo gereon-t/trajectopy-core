@@ -7,6 +7,7 @@ mail@gtombrink.de
 import base64
 import logging
 import os
+import sys
 import uuid
 import webbrowser
 
@@ -18,7 +19,10 @@ import numpy as np
 # logger configuration
 logger = logging.getLogger("root")
 
-BASE_PATH = os.path.join(os.path.dirname(__file__))
+try:
+    BASE_PATH = os.path.join(sys._MEIPASS, "trajectopy")
+except Exception:
+    BASE_PATH = os.path.dirname(__file__)
 TEMPLATES_PATH = os.path.join(BASE_PATH, "templates")
 
 
