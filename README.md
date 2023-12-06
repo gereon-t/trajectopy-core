@@ -297,6 +297,17 @@ Furthermore, the user can choose to either use consecutive pose pairs (non-overl
 - `scatter_marker_size` (int): The size of markers in scatter plots. Default value is 5.
 - `scatter_detailed` (bool): Indicates whether to show scatter plots for each degree of freedom. Default value is False.
 
+#### Mapbox Settings
+
+These settings currently only apply to trajectory only plots without deviations.
+
+- `scatter_mapbox` (bool): Indicates whether the trajectory should be plotted onto a map. Default value is False.
+- `scatter_mapbox_style` (str): The style of the map. For some styles, a Mapbox token is required. Default value is "open-street-map".
+- `scatter_mapbox_zoom` (int): The zoom level of the map. Default value is 15.
+- `scatter_mapbox_token` (str): The Mapbox token. Default value is "".
+
+The mapbox token can be obtained from [https://www.mapbox.com/](https://www.mapbox.com/) after creating a free account.
+
 #### Position Units and Names
 
 - `pos_x_name` (string): Name for the X-axis position. Default: "x".
