@@ -35,6 +35,7 @@ def render_trajectories_mapbox(trajectories: List[Trajectory], report_settings: 
 
     if len(plotable_trajectories) != len(trajectories):
         logger.warning("Some trajectories could not be plotted because they are in a local coordinate system.")
+        return ""
 
     for trajectory in plotable_trajectories:
         trajectory.pos.to_epsg(4326)  # WGS84
