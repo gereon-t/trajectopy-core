@@ -32,6 +32,9 @@ class ReportSettings(Settings):
     """
     ReportSettings class represents the settings for generating reports.
 
+    - `single_plot_height` (int): The height of a single plot. Default value is 450.
+    - `two_subplots_height` (int): The height of two subplots. Default value is 540.
+    - `three_subplots_height` (int): The height of three subplots. Default value is 750.
     - `scatter_max_std` (float): The upper colorbar limit is set to the mean plus this value times the standard deviation of the data. This is useful to prevent outliers from dominating the colorbar. Default value is 4.0.
     - `ate_unit_is_mm` (bool): Indicates whether the unit of Absolute Trajectory Error (ATE) is millimeters. Default value is False.
     - `directed_ate` (bool): Indicates whether the ATE is split into along-, horizontal-cross- and vertical-cross-track direction. Default value is True.
@@ -61,10 +64,12 @@ class ReportSettings(Settings):
     - `single_plot_export` (ExportSettings): The export settings for single plots. Default value is an instance of ExportSettings with width=800 and height=450.
     - `two_subplots_export` (ExportSettings): The export settings for two subplots. Default value is an instance of ExportSettings with width=800 and height=540.
     - `three_subplots_export` (ExportSettings): The export settings for three subplots. Default value is an instance of ExportSettings with width=800 and height=750.
-    - `single_plot_height` (int): The height of a single plot. Default value is 450.
-    - `two_subplots_height` (int): The height of two subplots. Default value is 540.
-    - `three_subplots_height` (int): The height of three subplots. Default value is 750.
+
     """
+
+    single_plot_height: int = 450
+    two_subplots_height: int = 540
+    three_subplots_height: int = 750
 
     scatter_max_std: float = 4.0
     ate_unit_is_mm: bool = False
@@ -103,10 +108,6 @@ class ReportSettings(Settings):
     single_plot_export: ExportSettings = field(default_factory=lambda: ExportSettings(width=800, height=450))
     two_subplots_export: ExportSettings = field(default_factory=lambda: ExportSettings(width=800, height=540))
     three_subplots_export: ExportSettings = field(default_factory=lambda: ExportSettings(width=800, height=750))
-
-    single_plot_height: int = 450
-    two_subplots_height: int = 540
-    three_subplots_height: int = 750
 
 
 if __name__ == "__main__":
