@@ -67,7 +67,7 @@ class ReportSettings(Settings):
 
     """
 
-    single_plot_height: int = 450
+    single_plot_height: int = 540
     two_subplots_height: int = 540
     three_subplots_height: int = 750
 
@@ -105,7 +105,7 @@ class ReportSettings(Settings):
     rot_z_name: str = "yaw"
     rot_unit: str = "°"
 
-    single_plot_export: ExportSettings = field(default_factory=lambda: ExportSettings(width=800, height=450))
+    single_plot_export: ExportSettings = field(default_factory=lambda: ExportSettings(width=800, height=540))
     two_subplots_export: ExportSettings = field(default_factory=lambda: ExportSettings(width=800, height=540))
     three_subplots_export: ExportSettings = field(default_factory=lambda: ExportSettings(width=800, height=750))
 

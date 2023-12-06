@@ -40,9 +40,6 @@ def render_trajectories_mapbox(trajectories: List[Trajectory], report_settings: 
     for trajectory in plotable_trajectories:
         trajectory.pos.to_epsg(4326)  # WGS84
 
-    x_label, y_label, z_label = get_axis_label(trajectories=trajectories)
-    pos_axis_labels = [x_label, y_label, z_label]
-
     marker_dict = get_marker_dict(report_settings)
     _, axes_indices = setup_pos_axis_indices(report_settings)
 
@@ -81,8 +78,6 @@ def render_trajectories_mapbox(trajectories: List[Trajectory], report_settings: 
         autosize=True,
         hovermode="closest",
         mapbox=mapbox_dict,
-        xaxis=dict(title=pos_axis_labels[axes_indices[0]]),
-        yaxis=dict(title=pos_axis_labels[axes_indices[1]]),
         height=report_settings.single_plot_height,
     )
 
