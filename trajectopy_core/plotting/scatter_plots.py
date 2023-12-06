@@ -48,7 +48,7 @@ def render_trajectories_mapbox(trajectories: List[Trajectory], report_settings: 
 
     fig = go.Figure()
 
-    mean_pos = np.mean([trajectory.xyz for trajectory in plotable_trajectories], axis=0).flatten()
+    mean_pos = np.mean(np.row_stack([trajectory.xyz for trajectory in plotable_trajectories]), axis=0)
     for trajectory in plotable_trajectories:
         pos = trajectory.xyz
         fig.add_trace(
