@@ -158,9 +158,9 @@ def render_dev_rot_plot(report_data_collection: ATEReportDataCollection) -> str:
         names=[data.short_name for data in report_data_collection.items],
         x_label=report_data.function_of_label,
         y_labels=[
-            f"{report_data.settings.rot_x_name} {report_data.settings.rot_unit}",
-            f"{report_data.settings.rot_y_name} {report_data.settings.rot_unit}",
-            f"{report_data.settings.rot_z_name} {report_data.settings.rot_unit}",
+            f"{report_data.settings.rot_x_name} [{report_data.settings.rot_unit}]",
+            f"{report_data.settings.rot_y_name} [{report_data.settings.rot_unit}]",
+            f"{report_data.settings.rot_z_name} [{report_data.settings.rot_unit}]",
         ],
         title="Rotation Deviations per Direction",
         report_settings=report_data.settings,
