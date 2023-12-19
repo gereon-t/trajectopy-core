@@ -15,7 +15,7 @@ from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.plotting import bar_plots, histograms, line_plots, scatter_plots
 from trajectopy_core.report.data import ATEReportData, RPEReportData
-from trajectopy_core.report.utils import TEMPLATES_PATH, convert_images_to_base64, number_to_string
+from trajectopy_core.report.utils import TEMPLATES_PATH, convert_icon_to_base64, number_to_string
 from trajectopy_core.settings.report import ReportSettings
 
 logger = logging.getLogger("root")
@@ -99,7 +99,7 @@ def render_single_report(
         raise ValueError("Either ate_result or rpe_result must be provided.")
 
     template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("single_template.html")
-    igg, uni_bonn, icon = convert_images_to_base64()
+    icon = convert_icon_to_base64()
 
     ate_report_data = (
         ATEReportData(ate_result=ate_result, settings=report_settings) if ate_result is not None else None
@@ -128,8 +128,6 @@ def render_single_report(
         "side_by_side_plots": side_by_side_plots,
         "one_line_plots": one_line_plots,
         "icon": icon,
-        "igg": igg,
-        "uni_bonn": uni_bonn,
         "rot_unit": report_settings.rot_unit,
     }
 

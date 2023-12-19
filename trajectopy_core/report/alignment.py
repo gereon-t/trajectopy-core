@@ -14,7 +14,7 @@ import pandas as pd
 
 from trajectopy_core.alignment.parameters import AlignmentParameters
 from trajectopy_core.plotting import heatmaps, tables
-from trajectopy_core.report.utils import TEMPLATES_PATH, convert_images_to_base64
+from trajectopy_core.report.utils import TEMPLATES_PATH, convert_icon_to_base64
 from trajectopy_core.settings.report import ReportSettings
 
 logger = logging.getLogger("root")
@@ -64,7 +64,7 @@ def render_heatmaps(
     """
 
     template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("generic.html")
-    igg, uni_bonn, icon = convert_images_to_base64()
+    igg, uni_bonn, icon = convert_icon_to_base64()
 
     one_line_plots = render_one_line_plots(alignment_parameters, report_settings)
 

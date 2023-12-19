@@ -11,10 +11,10 @@ import sys
 import uuid
 import webbrowser
 
-# import webbrowser
-from typing import Tuple
-
 import numpy as np
+
+# import webbrowser
+
 
 # logger configuration
 logger = logging.getLogger("root")
@@ -36,16 +36,9 @@ def image_to_base64(image_path: str) -> str:
     return encoded_string
 
 
-def convert_images_to_base64() -> Tuple[str, str, str]:
-    igg_path = os.path.join(os.path.join(BASE_PATH), "assets", "igg.png")
-    uni_bonn_path = os.path.join(os.path.join(BASE_PATH), "assets", "uni_bonn.png")
+def convert_icon_to_base64() -> str:
     icon_path = os.path.join(os.path.join(BASE_PATH), "assets", "icon.png")
-
-    igg_base64 = image_to_base64(igg_path)
-    uni_bonn_base64 = image_to_base64(uni_bonn_path)
-    icon_base64 = image_to_base64(icon_path)
-
-    return igg_base64, uni_bonn_base64, icon_base64
+    return image_to_base64(icon_path)
 
 
 def shrink_data(data: np.ndarray, max_size: int = 1000) -> np.ndarray:

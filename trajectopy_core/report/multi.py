@@ -14,7 +14,7 @@ from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
 from trajectopy_core.plotting import bar_plots, multi_line_plots
 from trajectopy_core.report.data import ATEReportData, ATEReportDataCollection, RPEReportData, RPEReportDataCollection
-from trajectopy_core.report.utils import TEMPLATES_PATH, convert_images_to_base64
+from trajectopy_core.report.utils import TEMPLATES_PATH, convert_icon_to_base64
 from trajectopy_core.settings.report import ReportSettings
 
 logger = logging.getLogger("root")
@@ -70,7 +70,7 @@ def render_multi_report(
         raise ValueError("Either ate_results or rpe_results must be provided")
 
     template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("multi_template.html")
-    igg, uni_bonn, icon = convert_images_to_base64()
+    icon = convert_icon_to_base64()
 
     ate_report_data_collection = (
         ATEReportDataCollection(
@@ -94,8 +94,6 @@ def render_multi_report(
         "rpe_available": rpe_results is not None,
         "one_line_plots": one_line_plots,
         "icon": icon,
-        "igg": igg,
-        "uni_bonn": uni_bonn,
     }
 
     return template.render(context)
