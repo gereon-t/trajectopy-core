@@ -23,7 +23,7 @@ Trajectopy offers a range of features, including:
 
 - Trajectory __alignment__ using least squares adjustment theory and up to 11 parameters (i.e. similarity transformation, lever arm, time shift)
 
-- Customizable __HTML report__ generation ([Demo](https://htmlpreview.github.io/?https://github.com/gereon-t/trajectopy-core/blob/feature/example_data/report.html))
+- Customizable __HTML report__ generation ([demo](https://htmlpreview.github.io/?https://github.com/gereon-t/trajectopy-core/blob/feature/example_data/report.html)) (takes a few seconds to load)
 
 ## Table of Contents
 - [Installation](#installation)
