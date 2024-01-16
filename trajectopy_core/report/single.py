@@ -53,6 +53,11 @@ def render_one_line_plots(
         )
     )
 
+    if ate_report_data.settings.scatter_detailed:
+        one_line_plots.append(scatter_plots.render_pos_x_devs(ate_report_data))
+        one_line_plots.append(scatter_plots.render_pos_y_devs(ate_report_data))
+        one_line_plots.append(scatter_plots.render_pos_z_devs(ate_report_data))
+
     one_line_plots.append(line_plots.render_pos_plot(ate_report_data))
 
     if not ate_report_data.has_ate_rot:
@@ -60,18 +65,14 @@ def render_one_line_plots(
 
     one_line_plots.insert(2, histograms.render_rot_devs(ate_report_data))
     one_line_plots.insert(4, bar_plots.render_rot_bar_plot(ate_report_data))
-    one_line_plots.insert(len(one_line_plots) - 1, line_plots.render_dev_rot_plot(ate_report_data))
-    one_line_plots.append(line_plots.render_rot_plot(ate_report_data))
+    one_line_plots.append(line_plots.render_dev_rot_plot(ate_report_data))
 
     if ate_report_data.settings.scatter_detailed:
-        one_line_plots.append(scatter_plots.render_pos_x_devs(ate_report_data))
-        one_line_plots.append(scatter_plots.render_pos_y_devs(ate_report_data))
-        one_line_plots.append(scatter_plots.render_pos_z_devs(ate_report_data))
+        one_line_plots.append(scatter_plots.render_rot_x_devs(ate_report_data))
+        one_line_plots.append(scatter_plots.render_rot_y_devs(ate_report_data))
+        one_line_plots.append(scatter_plots.render_rot_z_devs(ate_report_data))
 
-        if ate_report_data.has_ate_rot:
-            one_line_plots.append(scatter_plots.render_rot_x_devs(ate_report_data))
-            one_line_plots.append(scatter_plots.render_rot_y_devs(ate_report_data))
-            one_line_plots.append(scatter_plots.render_rot_z_devs(ate_report_data))
+    one_line_plots.append(line_plots.render_rot_plot(ate_report_data))
 
     return one_line_plots
 
