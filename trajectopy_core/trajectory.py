@@ -640,23 +640,3 @@ class Trajectory:
         traj_self = self if inplace else self.copy()
         traj_self.se3 = [np.dot(transformation, p) for p in traj_self.se3]
         return traj_self
-
-    def append(self, trajectory: "Trajectory", inplace: bool = True) -> Union["Trajectory", None]:
-        if trajectory.has_orientation != self.has_orientation:
-            logger.error("Cannot append bla trajectories with different orientation states")
-            return None
-
-        traj_self = self if inplace else self.copy()
-
-        traj_self.tstamps = np.concatenate((traj_self.tstamps, trajectory.tstamps), axis=None)
-        traj_self.pos.xyz = np.concatenate((traj_self.pos.xyz, trajectory.pos.xyz), axis=0)
-        traj_self.speed_3d = np.concatenate((traj_self.speed_3d, trajectory.speed_3d), axis=0)
-
-        if traj_self.rot is not None and trajectory.rot is not None:
-            merged_quat = np.concatenate((traj_self.rot.as_quat(), trajectory.rot.as_quat()), axis=0)
-            traj_self.rot = RotationSet.from_quat(merged_quat)
-
-        traj_self.apply_index(index=np.argsort(traj_self.tstamps))
-        traj_self.arc_lengths = traj_self.init_arc_lengths()
-
-        return traj_self
