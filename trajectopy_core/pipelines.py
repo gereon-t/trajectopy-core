@@ -6,9 +6,11 @@ High-level API for trajectory evaluation in Python.
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
-from typing import Tuple, Union
+import logging
+from typing import List, Tuple, Union
 
 import numpy as np
+from pointset import PointSet
 
 from trajectopy_core.alignment import align_trajectories, apply_alignment
 from trajectopy_core.alignment.result import AlignmentResult
@@ -24,6 +26,8 @@ from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.settings.sorting import SortingSettings
 from trajectopy_core.spatialsorter import Sorting, sort_mls
 from trajectopy_core.trajectory import Trajectory
+
+logger = logging.getLogger("root")
 
 
 def ate(
@@ -131,3 +135,46 @@ def approximate(
     traj_approx.rot = RotationSet.from_quat(quat_approx[trajectory.sort_switching_index, :])
 
     return traj_approx
+
+
+def merge(trajectories: List[Trajectory]) -> Trajectory:
+    """
+    Merges a list of trajectories into one trajectory.
+
+    This function ignores EPSG codes and merges the
+    trajectories based on their timestamps.
+
+    Args:
+        list[Trajectory]: List of trajectories to merge.
+
+    Returns:
+        Trajectory: Merged trajectory.
+
+    """
+    epsg_set = set([t.pos.epsg for t in trajectories])
+
+    if len(epsg_set) > 1:
+        logger.warning(
+            "Merging trajectories with different EPSG codes. "
+            "This may lead to unexpected results. "
+            "Consider reprojecting the trajectories to the same EPSG code."
+        )
+
+    epsg = epsg_set.pop()
+
+    merged_xyz = np.concatenate([t.pos.xyz for t in trajectories], axis=0)
+    merged_quat = np.concatenate(
+        [t.rot.as_quat() if t.has_orientation else RotationSet.identity(len(t)).as_quat() for t in trajectories],
+        axis=0,
+    )
+    merged_timestamps = np.concatenate([t.tstamps for t in trajectories], axis=0)
+
+    merged = Trajectory(
+        name="Merged",
+        tstamps=merged_timestamps,
+        pos=PointSet(xyz=merged_xyz, epsg=epsg),
+        rot=RotationSet.from_quat(merged_quat),
+    )
+
+    merged.apply_index(np.argsort(merged.tstamps), inplace=True)
+    return merged
