@@ -167,13 +167,14 @@ def merge(trajectories: List[Trajectory]) -> Trajectory:
         [t.rot.as_quat() if t.has_orientation else RotationSet.identity(len(t)).as_quat() for t in trajectories],
         axis=0,
     )
+    has_rot = [t.has_orientation for t in trajectories]
     merged_timestamps = np.concatenate([t.tstamps for t in trajectories], axis=0)
 
     merged = Trajectory(
         name="Merged",
         tstamps=merged_timestamps,
         pos=PointSet(xyz=merged_xyz, epsg=epsg),
-        rot=RotationSet.from_quat(merged_quat),
+        rot=RotationSet.from_quat(merged_quat) if any(has_rot) else None,
     )
 
     merged.apply_index(np.argsort(merged.tstamps), inplace=True)
