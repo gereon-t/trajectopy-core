@@ -64,7 +64,7 @@ def render_heatmaps(
     """
 
     template = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATES_PATH)).get_template("generic.html")
-    igg, uni_bonn, icon = convert_icon_to_base64()
+    icon = convert_icon_to_base64()
 
     one_line_plots = render_one_line_plots(alignment_parameters, report_settings)
 
@@ -72,8 +72,6 @@ def render_heatmaps(
         "title": name,
         "one_line_plots": one_line_plots,
         "icon": icon,
-        "igg": igg,
-        "uni_bonn": uni_bonn,
     }
 
     return template.render(context)
