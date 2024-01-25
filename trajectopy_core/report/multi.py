@@ -33,14 +33,14 @@ def render_one_line_plots(
 
     one_line_plots = [
         multi_line_plots.render_dev_comb_plot(ate_report_data_collection),
+        multi_line_plots.render_dev_edf(ate_report_data_collection),
         bar_plots.render_multi_pos_bar_plot(ate_report_data_collection),
         multi_line_plots.render_dev_pos_plot(ate_report_data_collection),
-        multi_line_plots.render_dev_edf(ate_report_data_collection),
     ]
 
     if ate_report_data_collection.has_ate_rot:
-        one_line_plots.insert(2, bar_plots.render_multi_rot_bar_plot(ate_report_data_collection))
-        one_line_plots.insert(4, multi_line_plots.render_dev_rot_plot(ate_report_data_collection))
+        one_line_plots.append(bar_plots.render_multi_rot_bar_plot(ate_report_data_collection))
+        one_line_plots.append(multi_line_plots.render_dev_rot_plot(ate_report_data_collection))
 
     if rpe_report_data_collection is not None:
         one_line_plots.insert(1, multi_line_plots.render_rpe(rpe_report_data_collection))

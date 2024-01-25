@@ -17,9 +17,7 @@ def main():
     ate_result = ate(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
     rpe_result = rpe(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
 
-    report_settings = ReportSettings(
-        scatter_axis_order="xy", ate_unit_is_mm=False, scatter_marker_size=10, scatter_detailed=True
-    )
+    report_settings = ReportSettings(ate_unit_is_mm=False, scatter_marker_size=8)
     report = render_single_report(ate_result=ate_result, rpe_result=rpe_result, report_settings=report_settings)
     show_report(report_text=report, filepath="reports/report.html")
 

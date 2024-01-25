@@ -67,9 +67,9 @@ class ReportSettings(Settings):
 
     """
 
-    single_plot_height: int = 540
-    two_subplots_height: int = 540
-    three_subplots_height: int = 750
+    single_plot_height: int = 640
+    two_subplots_height: int = 750
+    three_subplots_height: int = 860
 
     scatter_max_std: float = 4.0
     ate_unit_is_mm: bool = False
