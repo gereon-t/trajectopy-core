@@ -100,6 +100,10 @@ class ReportSettings(Settings):
     pos_y_unit: str = "m"
     pos_z_unit: str = "m"
 
+    pos_dir_dev_x_name: str = "along"
+    pos_dir_dev_y_name: str = "cross-h"
+    pos_dir_dev_z_name: str = "cross-v"
+
     rot_x_name: str = "roll"
     rot_y_name: str = "pitch"
     rot_z_name: str = "yaw"

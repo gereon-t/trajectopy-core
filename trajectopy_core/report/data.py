@@ -85,15 +85,15 @@ class ATEReportData:
 
     @property
     def pos_dev_x_name(self) -> str:
-        return "along" if self.settings.directed_ate else "x"
+        return self.settings.pos_dir_dev_x_name if self.settings.directed_ate else self.settings.pos_x_name
 
     @property
     def pos_dev_y_name(self) -> str:
-        return "cross-h" if self.settings.directed_ate else "y"
+        return self.settings.pos_dir_dev_y_name if self.settings.directed_ate else self.settings.pos_y_name
 
     @property
     def pos_dev_z_name(self) -> str:
-        return "cross-v" if self.settings.directed_ate else "z"
+        return self.settings.pos_dir_dev_z_name if self.settings.directed_ate else self.settings.pos_z_name
 
     @cached_property
     def roll(self) -> np.ndarray:
