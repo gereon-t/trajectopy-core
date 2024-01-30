@@ -205,21 +205,7 @@ def align_trajectories(
     ):
         _set_group_variances(alignment_data)
 
-    estimation_settings_changed = True
-    while estimation_settings_changed:
-        ghm_alignment = Alignment(alignment_data=alignment_data)
-        estimated_parameters = ghm_alignment.estimate()
-
-        if alignment_settings.estimation_of.auto_update:
-            estimation_settings = ghm_alignment.updated_estimation_settings
-        else:
-            estimation_settings = None
-
-        if estimation_settings is not None:
-            estimation_settings_changed = True
-            alignment_data.alignment_settings.estimation_of = estimation_settings
-        else:
-            estimation_settings_changed = False
+    ghm_alignment, estimated_parameters = updated_estimation_process(alignment_settings, alignment_data)
 
     if (
         alignment_data.traj_from.rot is not None
@@ -240,6 +226,26 @@ def align_trajectories(
         estimation_of=ghm_alignment.settings.estimation_of,
         converged=ghm_alignment.has_results,
     )
+
+
+def updated_estimation_process(alignment_settings: AlignmentSettings, alignment_data: AlignmentData):
+    estimation_settings_changed = True
+    while estimation_settings_changed:
+        ghm_alignment = Alignment(alignment_data=alignment_data)
+        estimated_parameters = ghm_alignment.estimate()
+
+        if alignment_settings.estimation_of.auto_update:
+            estimation_settings = ghm_alignment.update_estimation_settings()
+        else:
+            estimation_settings = None
+
+        if estimation_settings is not None:
+            estimation_settings_changed = True
+            alignment_data.alignment_settings.estimation_of = estimation_settings
+            alignment_data.setup()
+        else:
+            estimation_settings_changed = False
+    return ghm_alignment, estimated_parameters
 
 
 def _set_group_variances(alignment_data: AlignmentData) -> None:

@@ -17,7 +17,7 @@ from scipy.sparse import spdiags
 from trajectopy_core.alignment.utils import gradient_3d
 from trajectopy_core.matching import match_trajectories
 from trajectopy_core.rotationset import RotationSet
-from trajectopy_core.settings.alignment import AlignmentSettings
+from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings
 from trajectopy_core.settings.matching import MatchingSettings
 from trajectopy_core.trajectory import Trajectory
 

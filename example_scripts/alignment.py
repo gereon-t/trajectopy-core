@@ -1,6 +1,7 @@
 from trajectopy_core.alignment.actions import align_trajectories
 from trajectopy_core.report.alignment import render_heatmaps
 from trajectopy_core.report.utils import show_report
+from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings
 from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.trajectory import Trajectory
 

@@ -78,8 +78,7 @@ class Alignment:
     def settings(self) -> AlignmentSettings:
         return self.data.alignment_settings
 
-    @property
-    def updated_estimation_settings(self) -> Union[AlignmentEstimationSettings, None]:
+    def update_estimation_settings(self) -> Union[AlignmentEstimationSettings, None]:
         """Checks if enabled parameters are actually needed and returns the updated settings"""
 
         def default_check(parameter: Parameter) -> bool:
@@ -411,25 +410,29 @@ class Alignment:
             self.data.sigma_ll @ b_cond.T @ q_11 @ b_cond @ self.data.sigma_ll
         ).diagonal() * np.reciprocal(self.data.var_vector)
 
-        group_redundancies = {}
+        group_redundancies = {
+            "XY_FROM": (
+                sum(red_components[0 :: self.data.num_obs_per_epoch])
+                + sum(red_components[1 :: self.data.num_obs_per_epoch])
+            ),
+            "Z_FROM": sum(red_components[2 :: self.data.num_obs_per_epoch]),
+            "XY_TO": (
+                sum(red_components[3 :: self.data.num_obs_per_epoch])
+                + sum(red_components[4 :: self.data.num_obs_per_epoch])
+            ),
+            "Z_TO": sum(red_components[5 :: self.data.num_obs_per_epoch]),
+            "ROLL_PITCH": (
+                sum(red_components[6 :: self.data.num_obs_per_epoch])
+                + sum(red_components[7 :: self.data.num_obs_per_epoch])
+            ),
+            "YAW": sum(red_components[8 :: self.data.num_obs_per_epoch]),
+            "SPEED": (
+                sum(red_components[9 :: self.data.num_obs_per_epoch])
+                + sum(red_components[10 :: self.data.num_obs_per_epoch])
+                + sum(red_components[11 :: self.data.num_obs_per_epoch])
+            ),
+        }
 
-        group_redundancies["XY_FROM"] = sum(red_components[0 :: self.data.num_obs_per_epoch]) + sum(
-            red_components[1 :: self.data.num_obs_per_epoch]
-        )
-        group_redundancies["Z_FROM"] = sum(red_components[2 :: self.data.num_obs_per_epoch])
-        group_redundancies["XY_TO"] = sum(red_components[3 :: self.data.num_obs_per_epoch]) + sum(
-            red_components[4 :: self.data.num_obs_per_epoch]
-        )
-        group_redundancies["Z_TO"] = sum(red_components[5 :: self.data.num_obs_per_epoch])
-        group_redundancies["ROLL_PITCH"] = sum(red_components[6 :: self.data.num_obs_per_epoch]) + sum(
-            red_components[7 :: self.data.num_obs_per_epoch]
-        )
-        group_redundancies["YAW"] = sum(red_components[8 :: self.data.num_obs_per_epoch])
-        group_redundancies["SPEED"] = (
-            sum(red_components[9 :: self.data.num_obs_per_epoch])
-            + sum(red_components[10 :: self.data.num_obs_per_epoch])
-            + sum(red_components[11 :: self.data.num_obs_per_epoch])
-        )
         self._group_redundancies = group_redundancies
 
     def _compute_parameter_variances(self, a_design: csc_matrix, bbt: csc_matrix) -> None:
