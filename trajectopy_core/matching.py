@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+import copy
 import logging
 from typing import Tuple
 
@@ -40,8 +41,7 @@ def match_trajectories(
     logger.info("Matching trajectories using method %s", settings.method.name)
 
     if settings.method == MatchingMethod.INTERPOLATION:
-        traj_test.same_sampling(traj_ref)
-        return traj_test, traj_ref
+        return match_trajectories_interpolation(traj_test=traj_test, traj_ref=traj_ref)
 
     if settings.method == MatchingMethod.NEAREST_TEMPORAL:
         return match_trajectories_temporal(traj_test=traj_test, traj_ref=traj_ref, max_distance=settings.max_time_diff)
@@ -50,7 +50,7 @@ def match_trajectories(
         return match_trajectories_spatial(traj_test=traj_test, traj_ref=traj_ref, max_distance=settings.max_distance)
 
     if settings.method == MatchingMethod.NEAREST_SPATIAL_INTERPOLATED:
-        return match_trajectories_spatial_interpolated(
+        return match_trajectories_spatial_interpolation(
             traj_test=traj_test,
             traj_ref=traj_ref,
             max_distance=settings.max_distance,
@@ -58,6 +58,33 @@ def match_trajectories(
         )
 
     raise ValueError(f"Matching method {settings.method} not supported!")
+
+
+def match_trajectories_interpolation(traj_test: Trajectory, traj_ref: Trajectory) -> Tuple[Trajectory, Trajectory]:
+    """Ensures that both trajectories are sampled in the same way
+
+    This method will intersect both trajectories with each other
+    and then approximate the trajectory with the higher data rate
+    onto the other trajectory. The sorting and the arc lengths of
+    both trajectories are identical after the call of this method.
+
+    Args:
+        traj_test (Trajectory): Test trajectory
+        traj_ref (Trajectory): Reference trajectory
+
+    Returns:
+        Tuple[Trajectory, Trajectory]: Both trajectories with the
+                                        same sampling. The instance
+                                        which called this method is
+                                        the first returned trajectory.
+    """
+    traj_test.intersect(traj_ref.tstamps)
+    traj_ref.intersect(traj_test.tstamps)
+
+    traj_test.interpolate(traj_ref.tstamps)
+    traj_test.arc_lengths = copy.deepcopy(traj_ref.arc_lengths)
+
+    return traj_test, traj_ref
 
 
 def match_trajectories_temporal(
@@ -109,7 +136,7 @@ def match_trajectories_spatial(
     return traj_test.apply_index(test_indices), traj_ref.apply_index(ref_indices)
 
 
-def match_trajectories_spatial_interpolated(
+def match_trajectories_spatial_interpolation(
     traj_test: Trajectory, traj_ref: Trajectory, max_distance: float = 0.0, k_nearest: int = 10
 ) -> Tuple[Trajectory, Trajectory]:
     """This method matches both trajectories spatially by requesting

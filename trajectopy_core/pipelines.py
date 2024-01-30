@@ -57,12 +57,12 @@ def ate(
     )
     trajectory_est_aligned = apply_alignment(trajectory=trajectory_est, alignment_result=alignment, inplace=False)
     return (
-        compare_trajectories_absolute(traj_ref=trajectory_gt, traj_test=trajectory_est_aligned)
-        if not return_alignment
-        else (
+        (
             compare_trajectories_absolute(traj_ref=trajectory_gt, traj_test=trajectory_est_aligned),
             alignment,
         )
+        if return_alignment
+        else compare_trajectories_absolute(traj_ref=trajectory_gt, traj_test=trajectory_est_aligned)
     )
 
 
@@ -151,7 +151,7 @@ def merge(trajectories: List[Trajectory]) -> Trajectory:
         Trajectory: Merged trajectory.
 
     """
-    epsg_set = set([t.pos.epsg for t in trajectories])
+    epsg_set = {t.pos.epsg for t in trajectories}
 
     if len(epsg_set) > 1:
         logger.warning(

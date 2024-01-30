@@ -27,15 +27,6 @@ class TestTrajectory(unittest.TestCase):
         self.trajectory_sanity_check(trajectory)
         self.trajectory_sanity_check(trajectory_ref)
 
-    def test_same_sampling(self) -> None:
-        trajectory_ref = open_loop_trajectory.copy()
-        trajectory = self.generate_altered_trajectory()
-        trajectory_ref.same_sampling(trajectory)
-
-        self.assertListEqual(sorted(trajectory_ref.tstamps.tolist()), sorted(trajectory.tstamps.tolist()))
-        self.trajectory_sanity_check(trajectory)
-        self.trajectory_sanity_check(trajectory_ref)
-
     def test_interpolate(self) -> None:
         trajectory_ref = open_loop_trajectory.copy()
         trajectory = self.generate_altered_trajectory()

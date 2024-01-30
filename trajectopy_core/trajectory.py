@@ -6,7 +6,7 @@ mail@gtombrink.de
 """
 import copy
 import logging
-from typing import List, Tuple, Union
+from typing import List, Union
 
 import numpy as np
 import pandas as pd
@@ -166,7 +166,7 @@ class Trajectory:
         speed_3d = trajectory_io.extract_trajectory_speed(header_data=header_data, trajectory_data=trajectory_data)
         rot = trajectory_io.extract_trajectory_rotations(header_data=header_data, trajectory_data=trajectory_data)
 
-        trajectory = Trajectory(
+        return Trajectory(
             tstamps=tstamps,
             pos=pos,
             rot=rot,
@@ -174,8 +174,6 @@ class Trajectory:
             arc_lengths=arc_lengths,
             speed_3d=speed_3d,
         )
-
-        return trajectory
 
     @property
     def sort_switching_index(self) -> np.ndarray:
@@ -559,35 +557,6 @@ class Trajectory:
         traj_self.apply_index(np.array(filter_index, dtype=int))
 
         return traj_self
-
-    def same_sampling(self, other: "Trajectory", inplace: bool = True) -> Tuple["Trajectory", "Trajectory"]:
-        """Ensures that both trajectories are sampled in the same way
-
-        This method will intersect both trajectories with each other
-        and then approximate the trajectory with the higher data rate
-        onto the other trajectory. The sorting and the arc lengths of
-        both trajectories are identical after the call of this method.
-
-        Args:
-            other (Trajectory)
-            inplace (bool, optional): Defaults to True.
-
-        Returns:
-            Tuple[Trajectory, Trajectory]: Both trajectories with the
-                                           same sampling. The instance
-                                           which called this method is
-                                           the first returned trajectory.
-        """
-        traj_self = self if inplace else self.copy()
-        traj_other = other if inplace else other.copy()
-
-        traj_self.intersect(traj_other.tstamps)
-        traj_other.intersect(traj_self.tstamps)
-
-        traj_self.interpolate(traj_other.tstamps)
-        traj_self.arc_lengths = copy.deepcopy(traj_other.arc_lengths)
-
-        return traj_self, traj_other
 
     def apply_index(self, index: Union[list, np.ndarray], inplace: bool = True) -> "Trajectory":
         """Applies index to the trajectory
