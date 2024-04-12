@@ -123,7 +123,7 @@ class Alignment:
             logger.warning("Nothing to estimate since all parameters are disabled")
             return AlignmentParameters()
 
-        max_recomputations = 10
+        max_recomputations = 5
         cnt = 0
         while self._reestimation_required:
             if cnt > max_recomputations:
