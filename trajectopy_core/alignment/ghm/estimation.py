@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import logging
 from typing import Dict, Union
 
@@ -140,7 +141,8 @@ class Alignment:
             if self._reestimation_required:
                 self._estimate_parameters()
 
-            self.variance_estimation()
+            if self.data.alignment_settings.stochastics.variance_estimation:
+                self.variance_estimation()
 
             cnt += 1
 
@@ -361,7 +363,7 @@ class Alignment:
         contradiction_w = self._auto_functional_relationship()
 
         it_counter = 0
-        max_iterations = 10
+        max_iterations = 15
         self._converged = True
         while any(abs(value) > threshold for value, threshold in zip(delta_params, self.data.thresholds)):
             if it_counter > max_iterations:

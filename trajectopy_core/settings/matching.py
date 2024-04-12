@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any
@@ -28,15 +29,11 @@ class MatchingSettings(Settings):
 
     @staticmethod
     def encoder(name: str, value: Any) -> Any:
-        if name == "method":
-            return value.value
-        return value
+        return value.value if name == "method" else value
 
     @staticmethod
     def decoder(name: str, value: Any) -> Any:
-        if name == "method":
-            return MatchingMethod(value)
-        return value
+        return MatchingMethod(value) if name == "method" else value
 
 
 if __name__ == "__main__":

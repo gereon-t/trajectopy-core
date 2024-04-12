@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import logging
 from typing import Tuple
 
@@ -169,12 +170,11 @@ def align_trajectories(
     Args:
         traj_from (Trajectory)
         traj_to (Trajectory)
-        alignment_config (AlignmentConfig): Configuration holding all
-                                            relevant settings for aligning
-                                            the trajectories.
+        alignment_settings (AlignmentSettings, optional): Settings for the alignment process. Defaults to AlignmentSettings().
+        matching_settings (MatchingSettings, optional): Settings for the matching process. Defaults to MatchingSettings().
 
     Returns:
-        Tuple[Trajectory, Trajectory]: Aligned trajectories
+        AlignmentResult: Result of the alignment process
     """
     # one of the trajectories is in an unknown datum
     if (

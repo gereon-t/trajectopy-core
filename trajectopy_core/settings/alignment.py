@@ -228,6 +228,7 @@ class AlignmentStochastics(Settings):
     std_yaw: float = float(np.deg2rad(1.0))
     std_speed: float = 1.0
     error_probability: float = 0.05
+    variance_estimation: bool = False
     variance_component_estimation: bool = False
     variance_component_estimation_subset_size: int = 200
 

@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import copy
 import logging
 from typing import Tuple
@@ -27,6 +28,7 @@ def match_trajectories(
 ) -> Tuple[Trajectory, Trajectory]:
     """
     Matches two trajectories using the specified method
+    The test trajectory is matched onto the reference trajectory.
 
     Supported methods:
         - MatchingMethod.INTERPOLATION
