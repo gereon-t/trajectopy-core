@@ -8,7 +8,7 @@ from trajectopy_core.trajectory import Trajectory
 
 def dict_to_table(data: dict):
     """Converts a dictionary to a rich table."""
-    table_data = Table(title="ATE Results")
+    table_data = Table(title="RPE Results")
     table_data.add_column("Property")
     table_data.add_column("Value")
     for key, value in data.items():
