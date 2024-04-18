@@ -21,8 +21,8 @@ logger = logging.getLogger("root")
 
 
 def match_trajectories(
-    traj_test: Trajectory,
-    traj_ref: Trajectory,
+    traj_from: Trajectory,
+    traj_to: Trajectory,
     settings: MatchingSettings = MatchingSettings(),
     inplace: bool = True,
 ) -> Tuple[Trajectory, Trajectory]:
@@ -37,24 +37,24 @@ def match_trajectories(
         - MatchingMethod.NEAREST_SPATIAL_INTERPOLATED
 
     """
-    traj_test = traj_test if inplace else traj_test.copy()
-    traj_ref = traj_ref if inplace else traj_ref.copy()
+    traj_from = traj_from if inplace else traj_from.copy()
+    traj_to = traj_to if inplace else traj_to.copy()
 
     logger.info("Matching trajectories using method %s", settings.method.name)
 
     if settings.method == MatchingMethod.INTERPOLATION:
-        return match_trajectories_interpolation(traj_test=traj_test, traj_ref=traj_ref)
+        return match_trajectories_interpolation(traj_test=traj_from, traj_ref=traj_to)
 
     if settings.method == MatchingMethod.NEAREST_TEMPORAL:
-        return match_trajectories_temporal(traj_test=traj_test, traj_ref=traj_ref, max_distance=settings.max_time_diff)
+        return match_trajectories_temporal(traj_test=traj_from, traj_ref=traj_to, max_distance=settings.max_time_diff)
 
     if settings.method == MatchingMethod.NEAREST_SPATIAL:
-        return match_trajectories_spatial(traj_test=traj_test, traj_ref=traj_ref, max_distance=settings.max_distance)
+        return match_trajectories_spatial(traj_test=traj_from, traj_ref=traj_to, max_distance=settings.max_distance)
 
     if settings.method == MatchingMethod.NEAREST_SPATIAL_INTERPOLATED:
         return match_trajectories_spatial_interpolation(
-            traj_test=traj_test,
-            traj_ref=traj_ref,
+            traj_test=traj_from,
+            traj_ref=traj_to,
             max_distance=settings.max_distance,
             k_nearest=settings.k_nearest,
         )

@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import datetime
 from enum import Enum, auto
 from typing import Dict, Tuple
@@ -52,12 +53,12 @@ class Unit(Enum):
 
 # [multiply with , unit string, number of decimals]
 UNIT_FORMAT_RULES: Dict[Unit, Dict[str, Tuple[float, str, int]]] = {
-    Unit.METER: {"normal": (1, "m", 4), "precise": (1000, "mm", 1)},
-    Unit.RADIAN: {"normal": (180 / np.pi, "°", 4)},
-    Unit.DEGREE: {"normal": (1, "°", 4)},
+    Unit.METER: {"normal": (1, "m", 3), "precise": (1000, "mm", 1)},
+    Unit.RADIAN: {"normal": (180 / np.pi, "°", 3)},
+    Unit.DEGREE: {"normal": (1, "°", 3)},
     Unit.SECOND: {"normal": (1000, "ms", 1), "precise": (1000, "ms", 1)},
-    Unit.SCALE: {"normal": (1, "-", 4), "precise": (1e6, "ppm", 1)},
-    Unit.NONE: {"normal": (1, "-", 4)},
+    Unit.SCALE: {"normal": (1, "-", 3), "precise": (1e6, "ppm", 1)},
+    Unit.NONE: {"normal": (1, "-", 3)},
 }
 
 

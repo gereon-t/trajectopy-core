@@ -6,6 +6,7 @@ High-level API for trajectory evaluation in Python.
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import logging
 from typing import List, Tuple, Union
 
@@ -48,7 +49,7 @@ def ate(
         ATEResult: Result of the ATE computation.
 
     """
-    match_trajectories(traj_test=trajectory_est, traj_ref=trajectory_gt, settings=settings.matching)
+    match_trajectories(traj_from=trajectory_est, traj_to=trajectory_gt, settings=settings.matching)
     alignment = align_trajectories(
         traj_from=trajectory_est,
         traj_to=trajectory_gt,
@@ -69,7 +70,7 @@ def ate(
 def rpe(
     trajectory_gt: Trajectory, trajectory_est: Trajectory, settings: ProcessingSettings = ProcessingSettings()
 ) -> RPEResult:
-    match_trajectories(traj_test=trajectory_est, traj_ref=trajectory_gt, settings=settings.matching)
+    match_trajectories(traj_from=trajectory_est, traj_to=trajectory_gt, settings=settings.matching)
     return compare_trajectories_relative(
         traj_ref=trajectory_gt, traj_test=trajectory_est, settings=settings.relative_comparison
     )

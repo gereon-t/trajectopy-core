@@ -27,7 +27,7 @@ class TestAlignment(unittest.TestCase):
             traj_from=open_loop_trajectory.copy(),
             traj_to=transformed,
             alignment_settings=AlignmentSettings(
-                estimation_of=AlignmentEstimationSettings.from_components(
+                estimation_settings=AlignmentEstimationSettings.from_components(
                     similarity=similarity_enabled,
                     time_shift=time_shift_enabled,
                     leverarm=lever_enabled,

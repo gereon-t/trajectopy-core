@@ -179,7 +179,7 @@ def align_trajectories(
     # one of the trajectories is in an unknown datum
     if (
         None in [traj_to.pos.local_transformer, traj_to.pos.local_transformer]
-        and not alignment_settings.estimation_of.helmert_enabled
+        and not alignment_settings.estimation_settings.helmert_enabled
     ):
         print(
             "\n ____________________________________________________\n"
@@ -210,7 +210,7 @@ def align_trajectories(
     if (
         alignment_data.traj_from.rot is not None
         and alignment_data.traj_to.rot is not None
-        and alignment_settings.estimation_of.sensor_rotation
+        and alignment_settings.estimation_settings.sensor_rotation
     ):
         alignment_data.traj_from.apply_transformation(estimated_parameters.sim3_matrix)
         logger.info("Aligning rotations ...")
@@ -223,7 +223,7 @@ def align_trajectories(
         name=f"{alignment_data.traj_from.name} to {alignment_data.traj_to.name}",
         position_parameters=estimated_parameters,
         rotation_parameters=sensor_rot_params,
-        estimation_of=ghm_alignment.settings.estimation_of,
+        estimation_of=ghm_alignment.settings.estimation_settings,
         converged=ghm_alignment.has_results,
     )
 
@@ -234,14 +234,14 @@ def updated_estimation_process(alignment_settings: AlignmentSettings, alignment_
         ghm_alignment = Alignment(alignment_data=alignment_data)
         estimated_parameters = ghm_alignment.estimate()
 
-        if alignment_settings.estimation_of.auto_update:
+        if alignment_settings.estimation_settings.auto_update:
             estimation_settings = ghm_alignment.update_estimation_settings()
         else:
             estimation_settings = None
 
         if estimation_settings is not None:
             estimation_settings_changed = True
-            alignment_data.alignment_settings.estimation_of = estimation_settings
+            alignment_data.alignment_settings.estimation_settings = estimation_settings
             alignment_data.setup()
         else:
             estimation_settings_changed = False

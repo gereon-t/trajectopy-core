@@ -119,7 +119,7 @@ class Alignment:
         estimation methods.
         """
         logger.info("Performing alignment...")
-        if self.settings.estimation_of.all_lq_disabled:
+        if self.settings.estimation_settings.all_lq_disabled:
             logger.warning("Nothing to estimate since all parameters are disabled")
             return AlignmentParameters()
 
@@ -141,8 +141,7 @@ class Alignment:
             if self._reestimation_required:
                 self._estimate_parameters()
 
-            if self.data.alignment_settings.stochastics.variance_estimation:
-                self.variance_estimation()
+            self.variance_estimation()
 
             cnt += 1
 
@@ -188,7 +187,7 @@ class Alignment:
             AlignmentParameters: Hold the estimates parameters.
                                  14 = 7 (helmert+scale) 3 (leverarm) 1 (time) 3 (orientation)
         """
-        if self.settings.estimation_of.helmert_enabled:
+        if self.settings.estimation_settings.helmert_enabled:
             helmert_init = direct_helmert_transformation(xyz_from=self.data.xyz_from, xyz_to=self.data.xyz_to)
             xyz_init = helmert_init.apply_to(self.data.xyz_from)
         else:
@@ -197,16 +196,19 @@ class Alignment:
 
         logger.debug("Initial Helmert: %s \n", str(helmert_init))
 
-        if self.settings.estimation_of.time_shift_enabled and not self.settings.estimation_of.leverarm_enabled:
+        if (
+            self.settings.estimation_settings.time_shift_enabled
+            and not self.settings.estimation_settings.leverarm_enabled
+        ):
             time_shift_init, _ = direct_timeshift(xyz_from=xyz_init, xyz_to=self.data.xyz_to, speed=self.data.speed)
         else:
             time_shift_init = Parameter(value=0.0, name="Time shift", unit=Unit.SECOND)
 
         logger.debug("Initial time shift: %.3f", time_shift_init.value)
 
-        if self.settings.estimation_of.leverarm_enabled:
+        if self.settings.estimation_settings.leverarm_enabled:
             leverarm_init, time_shift_init, _ = direct_leverarm(
-                speed=self.data.speed if self.settings.estimation_of.time_shift_enabled else None,
+                speed=self.data.speed if self.settings.estimation_settings.time_shift_enabled else None,
                 xyz_from=xyz_init,
                 xyz_to=self.data.xyz_to,
                 rpy_body=self.data.rpy_from,
@@ -230,8 +232,8 @@ class Alignment:
             lever_z=leverarm_init.z,
         )
 
-        alignparams.apply_settings(self.settings.estimation_of)
-        logger.debug("Applied settings: %s \n", str(self.settings.estimation_of))
+        alignparams.apply_settings(self.settings.estimation_settings)
+        logger.debug("Applied settings: %s \n", str(self.settings.estimation_settings))
         return alignparams
 
     @property
@@ -320,6 +322,9 @@ class Alignment:
         """
         self._global_test(variance_factor=self.variance_factor, redundancy=self.redundancy)
 
+        if not self.data.alignment_settings.stochastics.variance_estimation:
+            return
+
         logger.info("Adjusting variance vector by factor %.3f", self.variance_factor)
 
         if np.allclose(self.variance_factor, 0):
@@ -378,7 +383,7 @@ class Alignment:
             a_design = self.auto_design_matrix()
 
             # filter design matrix
-            a_design = a_design[:, self.settings.estimation_of.lq_parameter_filter]
+            a_design = a_design[:, self.settings.estimation_settings.lq_parameter_filter]
             b_cond = self._condition_matrix()
 
             bbt = b_cond @ self.data.sigma_ll @ b_cond.T
@@ -685,15 +690,17 @@ class Alignment:
         """
         xyz_from_component = self._auto_condition_xyz_from()
 
-        rpy_body_component = self._auto_condition_rpy_body() if self.settings.estimation_of.leverarm_enabled else None
+        rpy_body_component = (
+            self._auto_condition_rpy_body() if self.settings.estimation_settings.leverarm_enabled else None
+        )
 
         speed_to_component = (
-            self._auto_condition_speed_to() if self.settings.estimation_of.time_shift_enabled else None
+            self._auto_condition_speed_to() if self.settings.estimation_settings.time_shift_enabled else None
         )
 
         if (
-            self.settings.estimation_of.leverarm_enabled
-            and not self.settings.estimation_of.time_shift_enabled
+            self.settings.estimation_settings.leverarm_enabled
+            and not self.settings.estimation_settings.time_shift_enabled
             and rpy_body_component is not None
         ):
             return np.column_stack(
@@ -708,8 +715,8 @@ class Alignment:
             )
 
         if (
-            self.settings.estimation_of.time_shift_enabled
-            and not self.settings.estimation_of.leverarm_enabled
+            self.settings.estimation_settings.time_shift_enabled
+            and not self.settings.estimation_settings.leverarm_enabled
             and speed_to_component is not None
         ):
             return np.column_stack(
@@ -724,8 +731,8 @@ class Alignment:
             )
 
         if (
-            self.settings.estimation_of.leverarm_enabled
-            and self.settings.estimation_of.time_shift_enabled
+            self.settings.estimation_settings.leverarm_enabled
+            and self.settings.estimation_settings.time_shift_enabled
             and rpy_body_component is not None
             and speed_to_component is not None
         ):
@@ -926,7 +933,7 @@ def settings_str(alignment: Alignment) -> str:
     return (
         f"\n _____________________________________________________________________\n"
         f"| ---------------------------- Alignment ---------------------------- |\n"
-        f"| Estimation of:           {alignment.settings.estimation_of.short_mode_str:<42} |\n"
+        f"| Estimation of:           {alignment.settings.estimation_settings.short_mode_str:<42} |\n"
         f"| Error probability [%]:   {alignment.settings.stochastics.error_probability*100:<42} |\n"
         f"|_____________________________________________________________________|\n"
     )

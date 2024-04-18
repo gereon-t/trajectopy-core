@@ -283,13 +283,13 @@ class AlignmentSettings(Settings):
     """
 
     preprocessing: AlignmentPreprocessing = field(default_factory=AlignmentPreprocessing)
-    estimation_of: AlignmentEstimationSettings = field(default_factory=AlignmentEstimationSettings)
+    estimation_settings: AlignmentEstimationSettings = field(default_factory=AlignmentEstimationSettings)
     stochastics: AlignmentStochastics = field(default_factory=AlignmentStochastics)
     metric_threshold: float = METRIC_THRESHOLD
     time_threshold: float = TIME_THRESHOLD
 
     def __str__(self) -> str:
-        return str(self.preprocessing) + str(self.estimation_of) + str(self.stochastics)
+        return str(self.preprocessing) + str(self.estimation_settings) + str(self.stochastics)
 
 
 if __name__ == "__main__":
