@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import numpy as np
 
 from trajectopy_core.alignment.parameters import HelmertTransformation, Parameter
@@ -15,6 +16,14 @@ def direct_helmert_transformation(
     xyz_from: np.ndarray, xyz_to: np.ndarray, weights: np.ndarray = np.zeros(0)
 ) -> HelmertTransformation:
     """
+    Args:
+        xyz_from (np.ndarray): n x 3 source point set.
+        xyz_to (np.ndarray): n x 3 target point set.
+        weights (np.ndarray, optional): Weights for the point sets. Defaults to np.zeros(0).
+
+    Returns:
+        HelmertTransformation: Helmert transformation parameters.
+
     Computes helmert transformation between two point sets
 
     Foerstner-Wrobel (2016) Photogrammetric Computer Vision pp. 406 - 411
