@@ -4,9 +4,10 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import copy
 import logging
-from typing import List, Union
+from typing import List, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -14,8 +15,15 @@ from pointset import PointSet
 from scipy.spatial.transform import Slerp
 
 import trajectopy_core.io.trajectory_io as trajectory_io
+from trajectopy_core.alignment.ghm.functional_model.equations import leverarm_time_component
+from trajectopy_core.alignment.parameters import AlignmentParameters
+from trajectopy_core.alignment.result import AlignmentResult
+from trajectopy_core.approximation.cubic_approximation import piecewise_cubic
+from trajectopy_core.approximation.rot_approximation import rot_average_window
 from trajectopy_core.rotationset import RotationSet
-from trajectopy_core.spatialsorter import Sorting
+from trajectopy_core.settings.approximation import ApproximationSettings
+from trajectopy_core.settings.sorting import SortingSettings
+from trajectopy_core.spatialsorter import Sorting, sort_mls
 from trajectopy_core.utils import common_time_span, gradient_3d, lengths_from_xyz
 
 # logger configuration
@@ -609,3 +617,225 @@ class Trajectory:
         traj_self = self if inplace else self.copy()
         traj_self.se3 = [np.dot(transformation, p) for p in traj_self.se3]
         return traj_self
+
+    def apply_alignment(self, alignment_result: AlignmentResult, inplace: bool = True) -> "Trajectory":
+        """Transforms trajectory using alignment parameters.
+
+        After computing the alignment parameters needed to align
+        two trajectories, they can be applied to arbitrary trajectories.
+
+        Args:
+            alignment_result (AlignmentResult)
+            inplace (bool, optional): Perform in-place. Defaults to True.
+
+        Returns:
+            Trajectory: Aligned trajectory
+        """
+
+        def _prepare_alignment_application(
+            trajectory: Trajectory, alignment_parameters: AlignmentParameters
+        ) -> Tuple[float, ...]:
+            if trajectory.rot is not None:
+                rpy = trajectory.rot.as_euler("xyz", degrees=False)
+                euler_x, euler_y, euler_z = rpy[:, 0], rpy[:, 1], rpy[:, 2]
+                lever_x, lever_y, lever_z = (
+                    alignment_parameters.lever_x.value,
+                    alignment_parameters.lever_y.value,
+                    alignment_parameters.lever_z.value,
+                )
+            else:
+                logger.error("Trajectory has no orientations. Cannot apply leverarm.")
+                euler_x, euler_y, euler_z = 0, 0, 0
+                lever_x, lever_y, lever_z = 0, 0, 0
+
+            return euler_x, euler_y, euler_z, lever_x, lever_y, lever_z
+
+        trajectory = trajectory if inplace else self.copy()
+
+        # leverarm and time
+        (
+            euler_x,
+            euler_y,
+            euler_z,
+            lever_x,
+            lever_y,
+            lever_z,
+        ) = _prepare_alignment_application(trajectory, alignment_result.position_parameters)
+
+        speed_3d = trajectory.speed_3d
+        speed_x, speed_y, speed_z = speed_3d[:, 0], speed_3d[:, 1], speed_3d[:, 2]
+
+        trafo_x, trafo_y, trafo_z = leverarm_time_component(
+            euler_x=euler_x,
+            euler_y=euler_y,
+            euler_z=euler_z,
+            lever_x=lever_x,
+            lever_y=lever_y,
+            lever_z=lever_z,
+            time_shift=alignment_result.position_parameters.time_shift.value,
+            speed_x=speed_x,
+            speed_y=speed_y,
+            speed_z=speed_z,
+        )
+        trajectory.pos.xyz += np.c_[trafo_x, trafo_y, trafo_z]
+
+        # similiarity transformation
+        trajectory.apply_transformation(alignment_result.position_parameters.sim3_matrix)
+
+        logger.info("Applied alignment parameters to positions.")
+
+        # sensor orientation
+        if trajectory.rot is not None:
+            trajectory.rot = alignment_result.rotation_parameters.rotation_set * trajectory.rot
+            logger.info("Applied alignment parameters to orientations.")
+
+        return trajectory
+
+    def sort_spatially(
+        self, sorting_settings: SortingSettings = SortingSettings(), inplace: bool = True
+    ) -> "Trajectory":
+        """
+        Sorts the trajectory spatially.
+
+        Args:
+            sorting_settings (SortingSettings): Sorting settings.
+            inplace (bool, optional): Whether to sort the trajectory in-place. Defaults to True.
+
+        Returns:
+            Trajectory: Sorted trajectory.
+
+        """
+        sort_idx, arc_lengths = sort_mls(xyz_unsorted=self.pos.xyz, settings=sorting_settings)
+        arg_sort_sort_idx = np.argsort(sort_idx)
+        trajectory = self.apply_index(sorted(sort_idx), inplace=inplace)
+        trajectory.arc_lengths = arc_lengths[arg_sort_sort_idx]
+        trajectory.sorting = Sorting.ARC_LENGTH
+        return trajectory
+
+    def approximate(
+        self, approximation_settings: ApproximationSettings = ApproximationSettings(), inplace: bool = True
+    ) -> "Trajectory":
+        """
+        Approximates the trajectory using piecewise cubic polynomial.
+
+        Args:
+            approximation_settings (ApproximationSettings): Approximation settings.
+
+        Returns:
+            Trajectory: Approximated trajectory.
+
+        """
+        xyz_approx = piecewise_cubic(
+            function_of=self.function_of,
+            values=self.xyz,
+            int_size=approximation_settings.fe_int_size,
+            min_obs=approximation_settings.fe_min_obs,
+        )
+
+        traj_approx = self if inplace else self.copy()
+        traj_approx.pos.xyz = xyz_approx[self.sort_switching_index, :]
+
+        if not traj_approx.has_orientation:
+            return traj_approx
+
+        quat_approx = rot_average_window(
+            function_of=self.function_of,
+            quat=self.quat,
+            win_size=approximation_settings.rot_approx_win_size,
+        )
+        traj_approx.rot = RotationSet.from_quat(quat_approx[self.sort_switching_index, :])
+
+        return traj_approx
+
+    def adopt_first_pose(self, trajectory: "Trajectory", inplace: bool = True) -> "Trajectory":
+        """Transform trajectory so that the first pose is identical in both
+
+        Args:
+            trajectory (Trajectory): Target Trajectory
+            inplace (bool, optional): Perform in-place. Defaults to True.
+
+        Returns:
+            Trajectory: Transformed trajectory
+        """
+        trajectory = self if inplace else self.copy()
+        trajectory.adopt_first_position(trajectory)
+        trajectory.adopt_first_orientation(trajectory)
+        return trajectory
+
+    def adopt_first_position(self, trajectory: "Trajectory", inplace: bool = True) -> "Trajectory":
+        """Transform trajectory so that the first position is identical in both
+
+        Args:
+            trajectory (Trajectory): Target Trajectory
+            inplace (bool, optional): Perform in-place. Defaults to True.
+
+        Returns:
+            Trajectory: Transformed trajectory
+        """
+        trajectory = self if inplace else self.copy()
+        position_difference = trajectory.pos.xyz[0, :] - trajectory.pos.xyz[0, :]
+        trajectory.pos.xyz += position_difference
+        return trajectory
+
+    def adopt_first_orientation(self, trajectory: "Trajectory", inplace: bool = True) -> "Trajectory":
+        """Transform trajectory so that the first orientation is identical in both
+
+        Args:
+            trajectory (Trajectory): Target Trajectory
+            inplace (bool, optional): Perform in-place. Defaults to True.
+
+        Returns:
+            Trajectory: Transformed trajectory
+        """
+        trajectory = self if inplace else self.copy()
+        if self.rot is not None and trajectory.rot is not None:
+            rpy_from = trajectory.rot.as_euler(seq="xyz")
+            rotation_difference = trajectory.rot.as_euler(seq="xyz")[0, :] - rpy_from[0, :]
+
+            trajectory.rot = RotationSet.from_euler(seq="xyz", angles=rpy_from + rotation_difference)
+
+        return trajectory
+
+
+def merge_trajectories(trajectories: List["Trajectory"]) -> "Trajectory":
+    """
+    Merges a list of trajectories into one trajectory.
+
+    This function ignores EPSG codes and merges the
+    trajectories based on their timestamps.
+
+    Args:
+        list[Trajectory]: List of trajectories to merge.
+
+    Returns:
+        Trajectory: Merged trajectory.
+
+    """
+    epsg_set = {t.pos.epsg for t in trajectories}
+
+    if len(epsg_set) > 1:
+        logger.warning(
+            "Merging trajectories with different EPSG codes. "
+            "This may lead to unexpected results. "
+            "Consider reprojecting the trajectories to the same EPSG code."
+        )
+
+    epsg = epsg_set.pop()
+
+    merged_xyz = np.concatenate([t.pos.xyz for t in trajectories], axis=0)
+    merged_quat = np.concatenate(
+        [t.rot.as_quat() if t.has_orientation else RotationSet.identity(len(t)).as_quat() for t in trajectories],
+        axis=0,
+    )
+    has_rot = [t.has_orientation for t in trajectories]
+    merged_timestamps = np.concatenate([t.tstamps for t in trajectories], axis=0)
+
+    merged = Trajectory(
+        name="Merged",
+        tstamps=merged_timestamps,
+        pos=PointSet(xyz=merged_xyz, epsg=epsg),
+        rot=RotationSet.from_quat(merged_quat) if any(has_rot) else None,
+    )
+
+    merged.apply_index(np.argsort(merged.tstamps), inplace=True)
+    return merged

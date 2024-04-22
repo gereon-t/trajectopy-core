@@ -4,11 +4,11 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import logging
 from typing import List, Tuple
 
 from trajectopy_core.spatialsorter import Sorting
-from trajectopy_core.trajectory import Trajectory
 
 logger = logging.getLogger("root")
 
@@ -24,7 +24,7 @@ def derive_xlabel_from_sortings(sort_by_list: List[str]) -> str:
     return "time [s] / trajectory length [m]"
 
 
-def get_axis_label(trajectories: List[Trajectory]) -> Tuple[str, str, str]:
+def get_axis_label(trajectories: List) -> Tuple[str, str, str]:
     """Returns the unit of the axis"""
     if all(traj.pos.epsg == 0 for traj in trajectories):
         return "x [m]", "y [m]", "z [m]"

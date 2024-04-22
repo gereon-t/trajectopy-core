@@ -6,11 +6,11 @@ mail@gtombrink.de
 """
 
 import logging
-from typing import Dict, Union
+from typing import Dict
 
 import numpy as np
 from numpy import matlib
-from scipy.sparse import csc_matrix, spdiags
+from scipy.sparse import csc_matrix
 from scipy.sparse.linalg import spsolve
 from scipy.stats.distributions import chi2
 
@@ -22,7 +22,7 @@ from trajectopy_core.alignment.ghm.functional_model.interface import FunctionalR
 from trajectopy_core.alignment.parameters import AlignmentParameters, HelmertTransformation, Leverarm, Parameter
 from trajectopy_core.alignment.utils import dict2table
 from trajectopy_core.definitions import Unit
-from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings
+from trajectopy_core.settings.alignment import AlignmentSettings
 
 logger = logging.getLogger("root")
 
@@ -64,7 +64,6 @@ class Alignment:
         self.data = alignment_data
 
         self._est_params = self.init_parameters()
-        self._reestimation_required = True
         self._has_results = False
         self._converged = False
         self._group_redundancies = {}
@@ -74,105 +73,6 @@ class Alignment:
 
     def __str__(self) -> str:
         return settings_str(self)
-
-    @property
-    def settings(self) -> AlignmentSettings:
-        return self.data.alignment_settings
-
-    def update_estimation_settings(self) -> Union[AlignmentEstimationSettings, None]:
-        """Checks if enabled parameters are actually needed and returns the updated settings"""
-
-        def default_check(parameter: Parameter) -> bool:
-            return abs(parameter.value) <= 3 * np.sqrt(parameter.variance)
-
-        def scale_check(parameter: Parameter) -> bool:
-            return abs(parameter.value - 1) <= 3 * np.sqrt(parameter.variance)
-
-        if not self.has_results:
-            logger.warning("No results available. Returning None.")
-            return None
-
-        logger.info("Checking if enabled parameters are needed...")
-
-        check_mapping = {Unit.SCALE: scale_check}
-
-        settings_changed = False
-        for parameter in self.est_params:
-            if not parameter.enabled:
-                continue
-
-            if check_mapping.get(parameter.unit, default_check)(parameter):
-                logger.info("Parameter %s is enabled but not needed. Disabling.", parameter.name)
-                parameter.enabled = False
-                settings_changed = True
-
-        if not settings_changed:
-            logger.info("No settings changed.")
-            return None
-
-        return self.est_params.to_estimation_settings()
-
-    def estimate(self) -> AlignmentParameters:
-        """Handles the estimation of the parameters
-
-        Calls either robust reweighting or variance
-        estimation methods.
-        """
-        logger.info("Performing alignment...")
-        if self.settings.estimation_settings.all_lq_disabled:
-            logger.warning("Nothing to estimate since all parameters are disabled")
-            return AlignmentParameters()
-
-        max_recomputations = 5
-        cnt = 0
-        while self._reestimation_required:
-            if cnt > max_recomputations:
-                logger.warning("Maximum number of recomputations reached. Aborting.")
-                break
-
-            self._reestimation_required = False
-            self._estimate_parameters()
-
-            if self.data.alignment_settings.stochastics.variance_component_estimation:
-                self.variance_component_estimation()
-
-            # after adjusting the group variances, the parameters need to be re-estimated before performing the global test
-            # we only want to change one thing at a time
-            if self._reestimation_required:
-                self._estimate_parameters()
-
-            self.variance_estimation()
-
-            cnt += 1
-
-        if not self._converged:
-            logger.info("Adjustment did not converge. Returning initial parameters.")
-            return self.init_parameters()
-
-        self._has_results = True
-        print_summary(self)
-
-        return self._est_params
-
-    @property
-    def has_results(self) -> bool:
-        return self._has_results
-
-    @property
-    def est_params(self) -> AlignmentParameters:
-        return self._est_params
-
-    @property
-    def group_redundancies(self) -> Dict[str, bool]:
-        return self._group_redundancies
-
-    @property
-    def num_of_equations(self) -> int:
-        return self.data.number_of_epochs * 3
-
-    @property
-    def redundancy(self) -> int:
-        return self.num_of_equations - self._est_params.num_enabled
 
     def init_parameters(self) -> AlignmentParameters:
         """This method computes initial parameters
@@ -236,6 +136,83 @@ class Alignment:
         logger.debug("Applied settings: %s \n", str(self.settings.estimation_settings))
         return alignparams
 
+    def estimate_parameters(self) -> AlignmentParameters:
+        """Handles the estimation of the parameters"""
+
+        logger.info("Performing alignment...")
+        if self.settings.estimation_settings.all_lq_disabled:
+            logger.warning("Nothing to estimate since all parameters are disabled")
+            return AlignmentParameters()
+
+        max_recomputations = 5
+        cnt = 0
+        reestimation_required = True
+        while reestimation_required:
+            reestimation_required = False
+            if cnt > max_recomputations:
+                logger.warning("Maximum number of recomputations reached. Aborting.")
+                break
+
+            self._estimate_parameters()
+            self._global_test(variance_factor=self.variance_factor, redundancy=self.redundancy)
+
+            if self.data.alignment_settings.stochastics.variance_estimation:
+                self.apply_variance_factor()
+                reestimation_required = True
+
+            cnt += 1
+
+        if not self._converged:
+            logger.info("Adjustment did not converge. Returning initial parameters.")
+            return self.init_parameters()
+
+        self._has_results = True
+        print_summary(self)
+
+        return self._est_params
+
+    def apply_variance_factor(self) -> None:
+        """
+        Tests the consistency of the functional and stochastic model and
+        adjusts the variance vector if necessary.
+        """
+        logger.info("Adjusting variance vector by factor %.3f", self.variance_factor)
+
+        if np.allclose(self.variance_factor, 0):
+            logger.warning("Variance factor is 0. Aborting.")
+            return
+
+        if abs(self.variance_factor - 1) > 0.1:
+            logger.info("Variance component is different from 1, re-estimation required.")
+        else:
+            logger.info("Finished with variance estimation. Re-estimation not required.")
+
+        self.data._var_vector *= self.variance_factor
+
+    @property
+    def settings(self) -> AlignmentSettings:
+        return self.data.alignment_settings
+
+    @property
+    def has_results(self) -> bool:
+        return self._has_results
+
+    @property
+    def est_params(self) -> AlignmentParameters:
+        return self._est_params
+
+    @property
+    def group_redundancies(self) -> Dict[str, bool]:
+        return self._group_redundancies
+
+    @property
+    def num_of_equations(self) -> int:
+        return self.data.number_of_epochs * 3
+
+    @property
+    def redundancy(self) -> int:
+        return self.num_of_equations - self._est_params.num_enabled
+
     @property
     def variance_factor(self) -> float:
         return (
@@ -266,79 +243,6 @@ class Alignment:
             ],
         ]
 
-    def variance_component_estimation(self) -> Dict[str, bool]:
-        """Performs an estimation of the variances for different observation groups
-
-        The observations groups are:
-            - x and y components of xyz_from
-            - z component of xyz_from
-            - x and y components of xyz_to
-            - z component of xyz_to
-            - roll / pitch components of rpy_body
-            - yaw component of rpy_body
-            - speed (at target positions)
-
-        """
-        group_global_tests: Dict[str, bool] = {}
-        group_variance_factors = []
-
-        for group_key in self.data.variance_groups:
-            group_variances = np.c_[self.data.get_var_group(key=group_key)]
-            group_residuals = np.c_[self.data.get_res_group(key=group_key)]
-
-            group_redundancy = self.group_redundancies[group_key]
-            group_variance_factor = (
-                np.sum(group_residuals * np.reciprocal(group_variances) * group_residuals) / group_redundancy
-            )
-
-            if np.allclose(group_variance_factor, 0):
-                logger.warning("Variance factor is 0 for group %s. Skipping.", group_key)
-                continue
-
-            group_global_test = self._global_test(
-                variance_factor=group_variance_factor, redundancy=group_redundancy, description=group_key
-            )
-
-            # global test for group
-            self.data.set_var_group(values=group_variances * group_variance_factor, key=group_key)
-            logger.info("Adjusted variance for group %s by factor %.3f", group_key, group_variance_factor)
-
-            group_global_tests[group_key] = group_global_test
-            group_variance_factors.append(group_variance_factor)
-
-        if any((abs(factor - 1)) > 0.1 for factor in group_variance_factors):
-            logger.info("Group variance components are different from 1, re-estimation required.")
-            self._reestimation_required = True
-        else:
-            logger.info("Finished with variance component estimation. Re-estimation not required.")
-
-        logging.info(dict2table(group_global_tests, title="Group Stochastic Test Results"))
-        return group_global_tests
-
-    def variance_estimation(self) -> None:
-        """
-        Tests the consistency of the functional and stochastic model and
-        adjusts the variance vector if necessary.
-        """
-        self._global_test(variance_factor=self.variance_factor, redundancy=self.redundancy)
-
-        if not self.data.alignment_settings.stochastics.variance_estimation:
-            return
-
-        logger.info("Adjusting variance vector by factor %.3f", self.variance_factor)
-
-        if np.allclose(self.variance_factor, 0):
-            logger.warning("Variance factor is 0. Aborting.")
-            return
-
-        if abs(self.variance_factor - 1) > 0.1:
-            logger.info("Variance component is different from 1, re-estimation required.")
-            self._reestimation_required = True
-        else:
-            logger.info("Finished with variance estimation. Re-estimation not required.")
-
-        self.data._var_vector *= self.variance_factor
-
     def _global_test(self, variance_factor: float, redundancy: int, description: str = "global") -> bool:
         tau = variance_factor * redundancy
         quantile = chi2.ppf(1 - self.settings.stochastics.error_probability, redundancy)
@@ -366,7 +270,7 @@ class Alignment:
         delta_params = np.ones((len(self._est_params),)) * np.Inf
         self.data.res_vector = np.zeros_like(self.data.obs_vector)
 
-        contradiction_w = self._auto_functional_relationship()
+        contradiction_w = self._eval_functional_relationship()
 
         it_counter = 0
         max_iterations = 15
@@ -381,11 +285,11 @@ class Alignment:
                 self._converged = False
                 break
 
-            a_design = self.auto_design_matrix()
+            a_design = self._get_design_matrix()
 
             # filter design matrix
             a_design = a_design[:, self.settings.estimation_settings.lq_parameter_filter]
-            b_cond = self._condition_matrix()
+            b_cond = self._get_condition_matrix()
 
             bbt = b_cond @ self.data.sigma_ll @ b_cond.T
 
@@ -396,52 +300,13 @@ class Alignment:
 
             # update
             self._est_params.values_enabled += delta_params
-            contradiction_w = self._auto_functional_relationship() - b_cond @ self.data.res_vector.ravel()
+            contradiction_w = self._eval_functional_relationship() - b_cond @ self.data.res_vector.ravel()
             it_counter += 1
 
         if self._converged:
             logger.info("Adjustment did converge after %i iterations", it_counter)
 
         self._compute_parameter_variances(a_design, bbt)
-
-        if self.data.alignment_settings.stochastics.variance_component_estimation:
-            self._compute_group_redundancies(a_design, b_cond, bbt)
-
-    def _compute_group_redundancies(self, a_design: csc_matrix, b_cond: csc_matrix, bbt: csc_matrix) -> None:
-        q_22 = -self.est_params.get_covariance_matrix()
-        q_12 = -spsolve(bbt, a_design @ q_22)
-        q_21 = q_12.T if q_12.ndim == 2 else q_12[None, :]
-        q_11 = spsolve(
-            bbt, spdiags(np.ones(a_design.shape[0]), 0, a_design.shape[0], a_design.shape[0]) - a_design @ q_21
-        )
-        red_components = (
-            self.data.sigma_ll @ b_cond.T @ q_11 @ b_cond @ self.data.sigma_ll
-        ).diagonal() * np.reciprocal(self.data.var_vector)
-
-        group_redundancies = {
-            "XY_FROM": (
-                sum(red_components[0 :: self.data.num_obs_per_epoch])
-                + sum(red_components[1 :: self.data.num_obs_per_epoch])
-            ),
-            "Z_FROM": sum(red_components[2 :: self.data.num_obs_per_epoch]),
-            "XY_TO": (
-                sum(red_components[3 :: self.data.num_obs_per_epoch])
-                + sum(red_components[4 :: self.data.num_obs_per_epoch])
-            ),
-            "Z_TO": sum(red_components[5 :: self.data.num_obs_per_epoch]),
-            "ROLL_PITCH": (
-                sum(red_components[6 :: self.data.num_obs_per_epoch])
-                + sum(red_components[7 :: self.data.num_obs_per_epoch])
-            ),
-            "YAW": sum(red_components[8 :: self.data.num_obs_per_epoch]),
-            "SPEED": (
-                sum(red_components[9 :: self.data.num_obs_per_epoch])
-                + sum(red_components[10 :: self.data.num_obs_per_epoch])
-                + sum(red_components[11 :: self.data.num_obs_per_epoch])
-            ),
-        }
-
-        self._group_redundancies = group_redundancies
 
     def _compute_parameter_variances(self, a_design: csc_matrix, bbt: csc_matrix) -> None:
         sigma_xx_inv: csc_matrix = a_design.T @ spsolve(bbt, a_design)
@@ -463,14 +328,14 @@ class Alignment:
             a_design.T @ spsolve(bbt, contradiction_w),
         )
 
-    def auto_design_matrix(self) -> csc_matrix:
+    def _get_design_matrix(self) -> csc_matrix:
         a_design = np.zeros((self.data.number_of_epochs * 3, 11))
-        a_design[0::3, :] = self._auto_design_x()
-        a_design[1::3, :] = self._auto_design_y()
-        a_design[2::3, :] = self._auto_design_z()
+        a_design[0::3, :] = self._get_design_x()
+        a_design[1::3, :] = self._get_design_y()
+        a_design[2::3, :] = self._get_design_z()
         return csc_matrix(a_design)
 
-    def _auto_design_z(self) -> np.ndarray:
+    def _get_design_z(self) -> np.ndarray:
         return np.c_[
             np.zeros((self.data.number_of_epochs, 1)),
             np.zeros((self.data.number_of_epochs, 1)),
@@ -517,7 +382,7 @@ class Alignment:
             ),
         ]
 
-    def _auto_design_y(self) -> np.ndarray:
+    def _get_design_y(self) -> np.ndarray:
         return np.c_[
             np.zeros((self.data.number_of_epochs, 1)),
             self.funcrel.eval(
@@ -568,7 +433,7 @@ class Alignment:
             ),
         ]
 
-    def _auto_design_x(self) -> np.ndarray:
+    def _get_design_x(self) -> np.ndarray:
         return np.c_[
             self.funcrel.eval(
                 func=self.funcrel.dx_dsim_trans_x,
@@ -619,7 +484,7 @@ class Alignment:
             ),
         ]
 
-    def _auto_functional_relationship(self) -> np.ndarray:
+    def _eval_functional_relationship(self) -> np.ndarray:
         # accounting for the time shift not by using the velocity model but by shifting the time stamps and re-interpolating
         func_xyz = np.zeros((self.data.number_of_epochs * 3,))
         func_xyz[::3] = self.funcrel.eval(func=self.funcrel.x, parameters=self.est_params, observations=self.data)
@@ -627,7 +492,7 @@ class Alignment:
         func_xyz[2::3] = self.funcrel.eval(func=self.funcrel.z, parameters=self.est_params, observations=self.data)
         return func_xyz
 
-    def _condition_matrix(self) -> csc_matrix:
+    def _get_condition_matrix(self) -> csc_matrix:
         """Computes the condition-matrix for the Gauß-Helmert-Model
 
         The matrix contains the derivatives of the
@@ -689,14 +554,14 @@ class Alignment:
         Returns:
             np.ndarray: condition matrix data
         """
-        xyz_from_component = self._auto_condition_xyz_from()
+        xyz_from_component = self._get_condition_xyz_from()
 
         rpy_body_component = (
-            self._auto_condition_rpy_body() if self.settings.estimation_settings.leverarm_enabled else None
+            self._get_condition_rpy_body() if self.settings.estimation_settings.leverarm_enabled else None
         )
 
         speed_to_component = (
-            self._auto_condition_speed_to() if self.settings.estimation_settings.time_shift_enabled else None
+            self._get_condition_speed_to() if self.settings.estimation_settings.time_shift_enabled else None
         )
 
         if (
@@ -759,7 +624,7 @@ class Alignment:
             ]
         )
 
-    def _auto_condition_rpy_body(self) -> list:
+    def _get_condition_rpy_body(self) -> list:
         return [
             np.c_[
                 self.funcrel.eval(
@@ -814,7 +679,7 @@ class Alignment:
             ],
         ]
 
-    def _auto_condition_xyz_from(self) -> list:
+    def _get_condition_xyz_from(self) -> list:
         return [
             np.c_[
                 self.funcrel.eval(
@@ -869,7 +734,7 @@ class Alignment:
             ],
         ]
 
-    def _auto_condition_speed_to(self) -> list:
+    def _get_condition_speed_to(self) -> list:
         return [
             np.c_[
                 self.funcrel.eval(

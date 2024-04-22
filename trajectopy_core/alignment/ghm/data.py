@@ -507,6 +507,24 @@ class AlignmentData:
         return thresholds
 
     def get_variance_estimation_subset(self, num_obs: int = 200) -> "AlignmentData":
+        """Returns a subset of the alignment data for variance estimation
+
+        This method will return a subset of the alignment data
+        that contains 'num_obs' observations. The subset is selected
+        by finding the epoch with the highest standard deviation of
+        the observations. The idea is that a higher variance in the
+        observations will lead to a better estimation of the variances.
+
+        The motivation behind this is that the variance estimation
+        is memory and time consuming. Therefore, a subset of the
+        observations is used for the estimation.
+
+        Args:
+            num_obs (int, optional): Subet size. Defaults to 200.
+
+        Returns:
+            AlignmentData: Cropped alignment data
+        """
         obs_matrix = np.reshape(self.obs_vector, (len(self), self.num_obs_per_epoch))
         if len(obs_matrix) <= num_obs:
             return copy.deepcopy(self)

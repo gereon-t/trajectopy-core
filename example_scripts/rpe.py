@@ -1,7 +1,7 @@
 from rich.console import Console
 from rich.table import Table
 
-from trajectopy_core.pipelines import rpe
+from trajectopy_core.evaluation import rpe
 from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.trajectory import Trajectory
 

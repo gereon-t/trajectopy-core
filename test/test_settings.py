@@ -1,8 +1,8 @@
-from dataclasses import field, dataclass
-from enum import Enum
-from typing import Any
 import unittest
+from dataclasses import dataclass, field
+from enum import Enum
 from pathlib import Path
+from typing import Any
 
 from trajectopy_core.settings.base import Settings
 
@@ -23,15 +23,11 @@ class DeeplyNestedSettings(Settings):
 
     @staticmethod
     def encoder(name: str, value: Any) -> Any:
-        if name == "setting_5":
-            return value.value
-        return value
+        return value.value if name == "setting_5" else value
 
     @staticmethod
     def decoder(name: str, value: Any) -> Any:
-        if name == "setting_5":
-            return SettingsEnum(value)
-        return value
+        return SettingsEnum(value) if name == "setting_5" else value
 
 
 @dataclass
@@ -54,15 +50,11 @@ class AllSettings(Settings):
 
     @staticmethod
     def encoder(name: str, value: Any) -> Any:
-        if name == "setting_5":
-            return value.value
-        return value
+        return value.value if name == "setting_5" else value
 
     @staticmethod
     def decoder(name: str, value: Any) -> Any:
-        if name == "setting_5":
-            return SettingsEnum(value)
-        return value
+        return SettingsEnum(value) if name == "setting_5" else value
 
 
 class TestSettings(unittest.TestCase):

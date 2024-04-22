@@ -4,7 +4,6 @@ from test.util import random_number
 
 import numpy as np
 
-from trajectopy_core.alignment.actions import apply_alignment
 from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.definitions import Unit
@@ -50,8 +49,7 @@ class TestComparison(unittest.TestCase):
             lever_y=Parameter(value=random_number(lower_bound=-1, upper_bound=1), unit=Unit.METER),
             lever_z=Parameter(value=random_number(lower_bound=-1, upper_bound=1), unit=Unit.METER),
         )
-        transformed = apply_alignment(
-            trajectory=generated_trajectory,
+        transformed = generated_trajectory.apply_alignment(
             alignment_result=AlignmentResult(position_parameters=parameters),
             inplace=False,
         )
@@ -70,8 +68,7 @@ class TestComparison(unittest.TestCase):
             sim_trans_y=Parameter(value=random_number(lower_bound=-1, upper_bound=1), unit=Unit.METER),
             sim_trans_z=Parameter(value=random_number(lower_bound=-1, upper_bound=1), unit=Unit.METER),
         )
-        transformed = apply_alignment(
-            trajectory=generated_trajectory,
+        transformed = generated_trajectory.apply_alignment(
             alignment_result=AlignmentResult(position_parameters=parameters),
             inplace=False,
         )

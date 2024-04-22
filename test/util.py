@@ -3,7 +3,6 @@ from typing import Tuple
 import numpy as np
 from pointset import PointSet
 
-from trajectopy_core.alignment import apply_alignment
 from trajectopy_core.alignment.parameters import AlignmentParameters, Parameter
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.definitions import Unit
@@ -128,7 +127,7 @@ def transform_randomly(
     parameters = generate_transformation(
         similarity_enabled=similarity_enabled, time_shift_enabled=time_shift_enabled, lever_enabled=lever_enabled
     )
-    transformed = apply_alignment(
-        trajectory=trajectory, alignment_result=AlignmentResult(position_parameters=parameters), inplace=False
+    transformed = trajectory.apply_alignment(
+        alignment_result=AlignmentResult(position_parameters=parameters), inplace=False
     )
     return transformed, parameters

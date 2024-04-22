@@ -4,6 +4,7 @@ spatialsorter
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import logging
 from enum import Enum
 from typing import List, Tuple

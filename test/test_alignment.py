@@ -4,7 +4,7 @@ from test.util import transform_randomly
 
 import numpy as np
 
-from trajectopy_core.alignment.actions import align_trajectories
+from trajectopy_core.alignment.estimation import align_trajectories
 from trajectopy_core.alignment.parameters import AlignmentParameters
 from trajectopy_core.alignment.rotation_alignment import align_rotations
 from trajectopy_core.rotationset import RotationSet

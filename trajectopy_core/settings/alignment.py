@@ -230,7 +230,6 @@ class AlignmentStochastics(Settings):
     error_probability: float = 0.05
     variance_estimation: bool = False
     variance_component_estimation: bool = False
-    variance_component_estimation_subset_size: int = 200
 
     @property
     def var_xy_from(self) -> float:
