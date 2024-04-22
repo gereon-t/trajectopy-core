@@ -344,12 +344,13 @@ class Alignment:
         quantile = chi2.ppf(1 - self.settings.stochastics.error_probability, redundancy)
 
         logger.info(
-            "Stochastic test passed (%s): %s, quantile: %.3f, test value: %.3f, variance factor: %.3f",
+            "Stochastic test passed (%s): %s, quantile: %.3f, test value: %.3f, variance factor: %.3f, redundancy: %i",
             description,
             str(tau <= quantile),
             quantile,
             tau,
             variance_factor,
+            redundancy,
         )
         return tau <= quantile
 
