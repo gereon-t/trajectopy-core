@@ -216,21 +216,27 @@ class AlignmentEstimation:
             logger.warning("Nothing to estimate since all parameters are disabled")
             return AlignmentParameters()
 
-        max_recomputations = 5
         cnt = 0
-        reestimation_required = True
-        while reestimation_required:
-            reestimation_required = False
-            if cnt > max_recomputations:
-                logger.warning("Maximum number of recomputations reached. Aborting.")
-                break
+        max_recomputations = 5
+        var_fac_diff = float("inf")
+        var_fac_tol = 1e-3
 
+        while var_fac_diff > var_fac_tol and cnt < max_recomputations:
             self._estimate_parameters()
             self._global_test(variance_factor=self.variance_factor, redundancy=self.redundancy)
 
-            if self.data.alignment_settings.stochastics.variance_estimation:
-                self.apply_variance_factor()
-                reestimation_required = True
+            if not self.data.alignment_settings.stochastics.variance_estimation:
+                break
+
+            var_fac_diff = abs(self.variance_factor - 1)
+
+            logger.info("Adjusting variance vector by factor %.3f", self.variance_factor)
+            self.data._var_vector *= self.variance_factor
+
+            if var_fac_diff > var_fac_tol:
+                logger.info("Variance component is different from 1, re-estimation required.")
+            else:
+                logger.info("Finished with variance estimation. Re-estimation not required.")
 
             cnt += 1
 
@@ -242,24 +248,6 @@ class AlignmentEstimation:
         print_summary(self)
 
         return self._est_params
-
-    def apply_variance_factor(self) -> None:
-        """
-        Tests the consistency of the functional and stochastic model and
-        adjusts the variance vector if necessary.
-        """
-        logger.info("Adjusting variance vector by factor %.3f", self.variance_factor)
-
-        if np.allclose(self.variance_factor, 0):
-            logger.warning("Variance factor is 0. Aborting.")
-            return
-
-        if abs(self.variance_factor - 1) > 0.1:
-            logger.info("Variance component is different from 1, re-estimation required.")
-        else:
-            logger.info("Finished with variance estimation. Re-estimation not required.")
-
-        self.data._var_vector *= self.variance_factor
 
     @property
     def settings(self) -> AlignmentSettings:
@@ -290,45 +278,6 @@ class AlignmentEstimation:
         return (
             self.data.res_vector.T @ spsolve(csc_matrix(self.data.sigma_ll), self.data.res_vector)
         ) / self.redundancy
-
-    @property
-    def _condition_xyz_to(self) -> list:
-        """
-        Helper function returning the constant xyz_to component of
-        the condition matrix
-        """
-        return [
-            np.c_[
-                -np.ones((self.data.number_of_epochs, 1)),
-                np.zeros((self.data.number_of_epochs, 1)),
-                np.zeros((self.data.number_of_epochs, 1)),
-            ],
-            np.c_[
-                np.zeros((self.data.number_of_epochs, 1)),
-                -np.ones((self.data.number_of_epochs, 1)),
-                np.zeros((self.data.number_of_epochs, 1)),
-            ],
-            np.c_[
-                np.zeros((self.data.number_of_epochs, 1)),
-                np.zeros((self.data.number_of_epochs, 1)),
-                -np.ones((self.data.number_of_epochs, 1)),
-            ],
-        ]
-
-    def _global_test(self, variance_factor: float, redundancy: int, description: str = "global") -> bool:
-        tau = variance_factor * redundancy
-        quantile = chi2.ppf(1 - self.settings.stochastics.error_probability, redundancy)
-
-        logger.info(
-            "Stochastic test passed (%s): %s, quantile: %.3f, test value: %.3f, variance factor: %.3f, redundancy: %i",
-            description,
-            str(tau <= quantile),
-            quantile,
-            tau,
-            variance_factor,
-            redundancy,
-        )
-        return tau <= quantile
 
     def _estimate_parameters(self) -> None:
         """Helmert-Leverarm-Time Transformation using the Gauß-Helmert-Model
@@ -399,6 +348,21 @@ class AlignmentEstimation:
             a_design.T @ spsolve(bbt, a_design),
             a_design.T @ spsolve(bbt, contradiction_w),
         )
+
+    def _global_test(self, variance_factor: float, redundancy: int, description: str = "global") -> bool:
+        tau = variance_factor * redundancy
+        quantile = chi2.ppf(1 - self.settings.stochastics.error_probability, redundancy)
+
+        logger.info(
+            "Stochastic test passed (%s): %s, quantile: %.3f, test value: %.3f, variance factor: %.3f, redundancy: %i",
+            description,
+            str(tau <= quantile),
+            quantile,
+            tau,
+            variance_factor,
+            redundancy,
+        )
+        return tau <= quantile
 
     def _get_design_matrix(self) -> csc_matrix:
         a_design = np.zeros((self.data.number_of_epochs * 3, 11))
@@ -803,6 +767,30 @@ class AlignmentEstimation:
                     parameters=self.est_params,
                     observations=self.data,
                 ),
+            ],
+        ]
+
+    @property
+    def _condition_xyz_to(self) -> list:
+        """
+        Helper function returning the constant xyz_to component of
+        the condition matrix
+        """
+        return [
+            np.c_[
+                -np.ones((self.data.number_of_epochs, 1)),
+                np.zeros((self.data.number_of_epochs, 1)),
+                np.zeros((self.data.number_of_epochs, 1)),
+            ],
+            np.c_[
+                np.zeros((self.data.number_of_epochs, 1)),
+                -np.ones((self.data.number_of_epochs, 1)),
+                np.zeros((self.data.number_of_epochs, 1)),
+            ],
+            np.c_[
+                np.zeros((self.data.number_of_epochs, 1)),
+                np.zeros((self.data.number_of_epochs, 1)),
+                -np.ones((self.data.number_of_epochs, 1)),
             ],
         ]
 
