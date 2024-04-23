@@ -1,4 +1,4 @@
-from trajectopy_core.evaluation import ate, rpe
+from trajectopy_core.evaluation.metrics import ate, rpe
 from trajectopy_core.report.single import render_single_report
 from trajectopy_core.report.utils import show_report
 from trajectopy_core.settings.processing import ProcessingSettings

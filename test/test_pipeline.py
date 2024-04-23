@@ -1,6 +1,6 @@
 import unittest
 
-from trajectopy_core.evaluation import ate, rpe
+from trajectopy_core.evaluation.metrics import ate, rpe
 from trajectopy_core.trajectory import Trajectory
 
 

@@ -14,8 +14,8 @@ import pandas as pd
 from pointset import PointSet
 from scipy.spatial.transform import Slerp
 
-import trajectopy_core.io.trajectory_io as trajectory_io
-from trajectopy_core.alignment.ghm.functional_model.equations import leverarm_time_component
+import trajectopy_core.input_output.trajectory_io as trajectory_io
+from trajectopy_core.alignment.equations import leverarm_time_component
 from trajectopy_core.alignment.parameters import AlignmentParameters
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.approximation.cubic_approximation import piecewise_cubic
@@ -23,7 +23,7 @@ from trajectopy_core.approximation.rot_approximation import rot_average_window
 from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.settings.approximation import ApproximationSettings
 from trajectopy_core.settings.sorting import SortingSettings
-from trajectopy_core.spatialsorter import Sorting, sort_mls
+from trajectopy_core.sorting import Sorting, sort_mls
 from trajectopy_core.utils import common_time_span, gradient_3d, lengths_from_xyz
 
 # logger configuration
@@ -795,47 +795,3 @@ class Trajectory:
             trajectory.rot = RotationSet.from_euler(seq="xyz", angles=rpy_from + rotation_difference)
 
         return trajectory
-
-
-def merge_trajectories(trajectories: List["Trajectory"]) -> "Trajectory":
-    """
-    Merges a list of trajectories into one trajectory.
-
-    This function ignores EPSG codes and merges the
-    trajectories based on their timestamps.
-
-    Args:
-        list[Trajectory]: List of trajectories to merge.
-
-    Returns:
-        Trajectory: Merged trajectory.
-
-    """
-    epsg_set = {t.pos.epsg for t in trajectories}
-
-    if len(epsg_set) > 1:
-        logger.warning(
-            "Merging trajectories with different EPSG codes. "
-            "This may lead to unexpected results. "
-            "Consider reprojecting the trajectories to the same EPSG code."
-        )
-
-    epsg = epsg_set.pop()
-
-    merged_xyz = np.concatenate([t.pos.xyz for t in trajectories], axis=0)
-    merged_quat = np.concatenate(
-        [t.rot.as_quat() if t.has_orientation else RotationSet.identity(len(t)).as_quat() for t in trajectories],
-        axis=0,
-    )
-    has_rot = [t.has_orientation for t in trajectories]
-    merged_timestamps = np.concatenate([t.tstamps for t in trajectories], axis=0)
-
-    merged = Trajectory(
-        name="Merged",
-        tstamps=merged_timestamps,
-        pos=PointSet(xyz=merged_xyz, epsg=epsg),
-        rot=RotationSet.from_quat(merged_quat) if any(has_rot) else None,
-    )
-
-    merged.apply_index(np.argsort(merged.tstamps), inplace=True)
-    return merged

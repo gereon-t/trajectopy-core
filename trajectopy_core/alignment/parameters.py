@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 from abc import ABC
 from dataclasses import dataclass, field, fields
 from typing import Dict, List

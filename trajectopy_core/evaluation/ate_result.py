@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 from functools import cached_property
 from typing import Dict, List
 
@@ -13,7 +14,7 @@ from pointset import PointSet
 
 from trajectopy_core.evaluation.deviations import AbsoluteTrajectoryDeviations
 from trajectopy_core.evaluation.utils import rms
-from trajectopy_core.io.header import HeaderData
+from trajectopy_core.input_output.header import HeaderData
 from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.trajectory import Trajectory
 
@@ -62,18 +63,18 @@ class ATEResult:
             "RMS Along-Track [m]": f"{self.pos_rms_along:.4f}",
             "RMS Horizontal Cross-Track [m]": f"{self.pos_rms_cross_h:.4f}",
             "RMS Vertical Cross-Track [m]": f"{self.pos_rms_cross_v:.4f}",
-            "Maximum rotation deviation [°]": f"{np.rad2deg(self.rot_dev_max):.4f}"
-            if self.abs_dev.rot_dev is not None
-            else "-",
-            "Mean rotation deviation [°]": f"{np.rad2deg(self.rot_ate):.4f}"
-            if self.abs_dev.rot_dev is not None
-            else "-",
-            "Median rotation deviation [°]": f"{np.rad2deg(self.rot_dev_median):.4f}"
-            if self.abs_dev.rot_dev is not None
-            else "-",
-            "Minimum rotation deviation [°]": f"{np.rad2deg(self.rot_dev_min):.4f}"
-            if self.abs_dev.rot_dev is not None
-            else "-",
+            "Maximum rotation deviation [°]": (
+                f"{np.rad2deg(self.rot_dev_max):.4f}" if self.abs_dev.rot_dev is not None else "-"
+            ),
+            "Mean rotation deviation [°]": (
+                f"{np.rad2deg(self.rot_ate):.4f}" if self.abs_dev.rot_dev is not None else "-"
+            ),
+            "Median rotation deviation [°]": (
+                f"{np.rad2deg(self.rot_dev_median):.4f}" if self.abs_dev.rot_dev is not None else "-"
+            ),
+            "Minimum rotation deviation [°]": (
+                f"{np.rad2deg(self.rot_dev_min):.4f}" if self.abs_dev.rot_dev is not None else "-"
+            ),
             "RMS Rotation [°]": f"{np.rad2deg(self.rot_dev_rms):.4f}" if self.abs_dev.rot_dev is not None else "-",
             "STD Rotation [°]": f"{np.rad2deg(self.rot_dev_std):.4f}" if self.abs_dev.rot_dev is not None else "-",
             "RMS Roll [°]": f"{np.rad2deg(self.rot_rms_x):.4f}" if self.abs_dev.rot_dev is not None else "-",

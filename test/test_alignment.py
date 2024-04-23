@@ -4,9 +4,9 @@ from test.util import transform_randomly
 
 import numpy as np
 
-from trajectopy_core.alignment.estimation import align_trajectories
+from trajectopy_core.alignment.direct import align_rotations
+from trajectopy_core.alignment.estimation import compute_alignment
 from trajectopy_core.alignment.parameters import AlignmentParameters
-from trajectopy_core.alignment.rotation_alignment import align_rotations
 from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings, AlignmentStochastics
 from trajectopy_core.settings.matching import MatchingSettings
@@ -23,7 +23,7 @@ class TestAlignment(unittest.TestCase):
             lever_enabled=lever_enabled,
         )
 
-        alignment_result = align_trajectories(
+        alignment_result = compute_alignment(
             traj_from=open_loop_trajectory.copy(),
             traj_to=transformed,
             alignment_settings=AlignmentSettings(
@@ -34,7 +34,7 @@ class TestAlignment(unittest.TestCase):
                     sensor_rotation=False,
                     auto_update=False,
                 ),
-                stochastics=AlignmentStochastics(variance_component_estimation=False),
+                stochastics=AlignmentStochastics(),
             ),
             matching_settings=MatchingSettings(),
         )

@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import csv
 from typing import Any, Callable, Dict, List
 
@@ -12,7 +13,7 @@ import pandas as pd
 
 from trajectopy_core.definitions import Unit
 from trajectopy_core.evaluation.deviations import RelativeTrajectoryDeviations
-from trajectopy_core.io.header import HeaderData
+from trajectopy_core.input_output.header import HeaderData
 
 
 class RPEResult:

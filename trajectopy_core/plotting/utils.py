@@ -8,7 +8,7 @@ mail@gtombrink.de
 import logging
 from typing import List, Tuple
 
-from trajectopy_core.spatialsorter import Sorting
+from trajectopy_core.sorting import Sorting
 
 logger = logging.getLogger("root")
 

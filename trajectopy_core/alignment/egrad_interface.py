@@ -4,13 +4,14 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 from typing import Callable
 
 import autograd.numpy as np
 from autograd import elementwise_grad as egrad
 
-from trajectopy_core.alignment.ghm.data import AlignmentData
-from trajectopy_core.alignment.ghm.functional_model.equations import (
+from trajectopy_core.alignment.data import AlignmentData
+from trajectopy_core.alignment.equations import (
     functional_relationship_x,
     functional_relationship_y,
     functional_relationship_z,

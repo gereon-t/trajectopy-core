@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import logging
 from io import StringIO
 from typing import List, Tuple, Union
@@ -13,8 +14,8 @@ import pandas as pd
 from pointset import PointSet
 
 from trajectopy_core.definitions import GPS_LEAP_SECONDS, GPS_WEEK_ZERO, TimeFormat
-from trajectopy_core.io.header import HeaderData
-from trajectopy_core.io.utils import get_rot_matrix
+from trajectopy_core.input_output.header import HeaderData
+from trajectopy_core.input_output.utils import get_rot_matrix
 from trajectopy_core.rotationset import RotationSet
 
 logger = logging.getLogger("root")

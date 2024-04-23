@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 import logging
 from pathlib import Path
 from typing import Any, Dict, List
@@ -12,7 +13,7 @@ import numpy as np
 from pointset import PointSet
 from rosbags.highlevel import AnyReader
 
-from trajectopy_core.io.rosmsg import geometry_pose_stamped_handler
+from trajectopy_core.input_output.rosmsg import geometry_pose_stamped_handler
 from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.trajectory import Trajectory
 

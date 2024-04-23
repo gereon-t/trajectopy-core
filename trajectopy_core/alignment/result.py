@@ -4,12 +4,13 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 from dataclasses import dataclass, field
 
 import numpy as np
 
 from trajectopy_core.alignment.parameters import AlignmentParameters, SensorRotationParameters
-from trajectopy_core.io.header import HeaderData
+from trajectopy_core.input_output.header import HeaderData
 from trajectopy_core.settings.alignment import AlignmentEstimationSettings
 
 
