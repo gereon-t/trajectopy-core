@@ -85,7 +85,7 @@ This section shows how to use trajectopy to evaluate two trajectories. The examp
 
     
 ```python
-from trajectopy_core.pipelines import ate
+from trajectopy_core.evaluation.metrics import ate
 from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.trajectory import Trajectory
 
@@ -103,7 +103,7 @@ ate_result = ate(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settin
 ### Relative Pose Error (RPE)
 
 ```python
-from trajectopy_core.pipelines import rpe
+from trajectopy_core.evaluation.metrics import rpe
 from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.trajectory import Trajectory
 
@@ -183,7 +183,6 @@ Trajectopy offers a range of processing options that can be applied to the impor
 - `lever_y` (boolean): Enable or disable estimation of lever arm in the Y-axis.
 - `lever_z` (boolean): Enable or disable estimation of lever arm in the Z-axis.
 - `sensor_rotation` (boolean): Enable or disable estimation of sensor rotation. Independent of the least squares adjustment, a constant rotational offset can be computed between the rotations of both trajectories after the alignment.
-- `auto_update` (boolean): If set to `True`, the estimation settings are automatically updated and parameters are disabled if they are not significant (experimental).
 
 ### Stochastics Settings
 
@@ -195,6 +194,7 @@ Trajectopy offers a range of processing options that can be applied to the impor
 - `std_yaw` (float): Standard deviation of yaw in radians.
 - `std_speed_to` (float): Standard deviation of platform speed in (meters per second).
 - `error_probability` (float): Probability of error used for stochastic testing.
+- `variance_estimation` (boolean): Enable or disable the estimation of the variance factor for a-posteriori variance computation.
 
 ### Threshold Settings
 
