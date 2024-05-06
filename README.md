@@ -273,9 +273,9 @@ Furthermore, the user can choose to either use consecutive pose pairs (non-overl
 
 #### Visualization Settings
 
- - `single_plot_height` (int): The height of a single plot. Default value is 450.
-  - `two_subplots_height` (int): The height of two subplots. Default value is 540.
-  - `three_subplots_height` (int): The height of three subplots. Default value is 750.
+- `single_plot_height` (int): The height of a single plot. Default value is 450.
+- `two_subplots_height` (int): The height of two subplots. Default value is 540.
+- `three_subplots_height` (int): The height of three subplots. Default value is 750.
 - `scatter_max_std` (float): The upper colorbar limit is set to the mean plus this value times the standard deviation of the data. This is useful to prevent outliers from dominating the colorbar. Default value is 4.0.
 - `ate_unit_is_mm` (bool): Indicates whether the unit of Absolute Trajectory Error (ATE) is millimeters. Default value is False.
 - `directed_ate` (bool): Indicates whether the ATE is split into along-, horizontal-cross- and vertical-cross-track direction. Default value is True.
