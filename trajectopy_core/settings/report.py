@@ -4,6 +4,7 @@ Trajectopy - Trajectory Evaluation in Python
 Gereon Tombrink, 2023
 mail@gtombrink.de
 """
+
 from dataclasses import dataclass, field
 
 from trajectopy_core.settings.base import Settings
@@ -57,6 +58,9 @@ class ReportSettings(Settings):
     - `pos_x_unit` (str): The unit of the x-coordinate in position data. Default value is "m".
     - `pos_y_unit` (str): The unit of the y-coordinate in position data. Default value is "m".
     - `pos_z_unit` (str): The unit of the z-coordinate in position data. Default value is "m".
+    - `pos_dir_dev_x_name` (str): The name of the along-track direction deviation in position data. Default value is "along".
+    - `pos_dir_dev_y_name` (str): The name of the horizontal-cross-track direction deviation in position data. Default value is "cross-h".
+    - `pos_dir_dev_z_name` (str): The name of the vertical-cross-track direction deviation in position data. Default value is "cross-v".
     - `rot_x_name` (str): The name of the roll angle in rotation data. Default value is "roll".
     - `rot_y_name` (str): The name of the pitch angle in rotation data. Default value is "pitch".
     - `rot_z_name` (str): The name of the yaw angle in rotation data. Default value is "yaw".

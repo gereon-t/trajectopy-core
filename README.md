@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>Trajectopy - Trajectory Evaluation in Python</h1>
+    <h1>Trajectopy Core - Library for Trajectory Evaluation in Python</h1>
     <a href="https://github.com/gereon-t/trajectopy-core/releases"><img src="https://img.shields.io/github/v/release/gereon-t/trajectopy-core?label=version" /></a>
     <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.8.2+-blue.svg" /></a>
     <a href="https://github.com/gereon-t/trajectopy-core/blob/main/LICENSE"><img src="https://img.shields.io/github/license/gereon-t/trajectopy-core" /></a>
@@ -8,14 +8,13 @@
     <a href="https://github.com/gereon-t/trajectopy-core"><img src="https://img.shields.io/badge/Windows-0078D6?st&logo=windows&logoColor=white" /></a>
     <a href="https://github.com/gereon-t/trajectopy-core"><img src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black" /></a>
     <a href="https://github.com/gereon-t/trajectopy-core"><img src="https://img.shields.io/badge/mac%20os-000000?&logo=apple&logoColor=white" /></a>
-
-#### Trajectopy is a toolbox for empirical trajectory evaluation.     
+   
 </div>
 
 
 ## Key Features
 
-Trajectopy offers a range of features, including:
+Trajectopy core offers a range of features, including:
 
 - Absolute Trajectory Error (__ATE__) computation
 
@@ -89,14 +88,10 @@ from trajectopy_core.evaluation.metrics import ate
 from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.trajectory import Trajectory
 
-# Import
 gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
 est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
 
-# default settings
-settings = ProcessingSettings()
-
-ate_result = ate(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
+ate_result = ate(trajectory_gt=gt_traj, trajectory_est=est_traj)
 
 ```
 
@@ -107,14 +102,10 @@ from trajectopy_core.evaluation.metrics import rpe
 from trajectopy_core.settings.processing import ProcessingSettings
 from trajectopy_core.trajectory import Trajectory
 
-# Import
 gt_traj = Trajectory.from_file("./example_data/KITTI_gt.traj")
 est_traj = Trajectory.from_file("./example_data/KITTI_ORB.traj")
 
-# default settings
-settings = ProcessingSettings()
-
-rpe_result = rpe(trajectory_gt=gt_traj, trajectory_est=est_traj, settings=settings)
+rpe_result = rpe(trajectory_gt=gt_traj, trajectory_est=est_traj)
 
 ```
 
@@ -155,7 +146,7 @@ Trajectopy offers a range of processing options that can be applied to the impor
 | Option     | Description                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Alignment  | Alignment of two trajectories using least squares adjustment. The implemented approach can handle a similarity transformation (translation, rotation, scale), a lever arm (3d vector), and a time shift (scalar). Each parameter can be included or exluded from the adjustment depending on the individual sensor modalities using the `AlignmentSettings`. In addition, preprocessing steps and stochastics can also be configured. |
-| Matching   | Matching of two trajectories to establish pose-to-pose correspondencies. After matching both trajectories will have the same number of poses. You can choose from different matching methods in the `MatchingSettings`.                                                                                                                                                                                                               |
+| Matching   | Matching of two trajectories to establish pose-to-pose correspondencies. After matching, both trajectories will have the same number of poses. You can choose from different matching methods in the `MatchingSettings`.                                                                                                                                                                                                              |
 | Comparison | Comparison of two trajectories using absolute (ATE) and relative (RPE) metrics. The relative comparison can be configured using the `RelativeComparisonSettings`.                                                                                                                                                                                                                                                                     |
 
 ## Alignment Settings
@@ -179,9 +170,9 @@ Trajectopy offers a range of processing options that can be applied to the impor
 - `use_x_speed` (boolean): Enable or disable the use of X-axis speed for time shift estimation.
 - `use_y_speed` (boolean): Enable or disable the use of Y-axis speed for time shift estimation.
 - `use_z_speed` (boolean): Enable or disable the use of Z-axis speed for time shift estimation.
-- `lever_x` (boolean): Enable or disable estimation of lever arm in the X-axis.
-- `lever_y` (boolean): Enable or disable estimation of lever arm in the Y-axis.
-- `lever_z` (boolean): Enable or disable estimation of lever arm in the Z-axis.
+- `lever_x` (boolean): Enable or disable estimation of lever arm in the X-axis of the body frame.
+- `lever_y` (boolean): Enable or disable estimation of lever arm in the Y-axis of the body frame.
+- `lever_z` (boolean): Enable or disable estimation of lever arm in the Z-axis of the body frame.
 - `sensor_rotation` (boolean): Enable or disable estimation of sensor rotation. Independent of the least squares adjustment, a constant rotational offset can be computed between the rotations of both trajectories after the alignment.
 
 ### Stochastics Settings
@@ -276,10 +267,15 @@ Results in pose distances: [100 m, 200 m, 300 m, 400 m, 500 m, 600 m, 700 m, 800
 
 Furthermore, the user can choose to either use consecutive pose pairs (non-overlapping) or all posible pairs (overlapping).
 
+
+
 ### Report Settings
 
 #### Visualization Settings
 
+ - `single_plot_height` (int): The height of a single plot. Default value is 450.
+  - `two_subplots_height` (int): The height of two subplots. Default value is 540.
+  - `three_subplots_height` (int): The height of three subplots. Default value is 750.
 - `scatter_max_std` (float): The upper colorbar limit is set to the mean plus this value times the standard deviation of the data. This is useful to prevent outliers from dominating the colorbar. Default value is 4.0.
 - `ate_unit_is_mm` (bool): Indicates whether the unit of Absolute Trajectory Error (ATE) is millimeters. Default value is False.
 - `directed_ate` (bool): Indicates whether the ATE is split into along-, horizontal-cross- and vertical-cross-track direction. Default value is True.
@@ -293,6 +289,12 @@ Furthermore, the user can choose to either use consecutive pose pairs (non-overl
 - `scatter_axis_order` (str): The order of the axes in scatter plots. Default value is "xy". If 3d plotting is desired, also specify "z".
 - `scatter_marker_size` (int): The size of markers in scatter plots. Default value is 5.
 - `scatter_detailed` (bool): Indicates whether to show scatter plots for each degree of freedom. Default value is False.
+
+##### ATE Frame Definition
+
+By default, the ATE is split into along-, horizontal-cross- and vertical-cross-track directions. The along-track direction is defined as positive in the direction of travel. The horizontal cross-track direction is defined as positive to the right of the along-track direction. The vertical cross-track direction is defined as positive upwards. The following image illustrates the frame definition.
+<img src=".images/along_cross_devs.png" alt="ate_frames" width="400"/>
+
 
 #### Mapbox Settings
 
@@ -329,9 +331,6 @@ The mapbox token can be obtained from [https://www.mapbox.com/](https://www.mapb
 - `single_plot_export` (ExportSettings): The export settings for single plots. Default value is an instance of ExportSettings with width=800 and height=450.
 - `two_subplots_export` (ExportSettings): The export settings for two subplots. Default value is an instance of ExportSettings with width=800 and height=540.
 - `three_subplots_export` (ExportSettings): The export settings for three subplots. Default value is an instance of ExportSettings with width=800 and height=750.
-- `single_plot_height` (int): The height of a single plot. Default value is 450.
-- `two_subplots_height` (int): The height of two subplots. Default value is 540.
-- `three_subplots_height` (int): The height of three subplots. Default value is 750.
 
 
 #### Export Settings
