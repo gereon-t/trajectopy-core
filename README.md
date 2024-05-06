@@ -28,6 +28,7 @@ Trajectopy core offers a range of features, including:
 - [Installation](#installation)
 - [Exemplary Evaluation](#exemplary-evaluation)
 - [Importing Trajectories](#importing-trajectories)
+- [Report Settings](#report-settings)
 - [Processing Settings](#processing-settings)
 
 
