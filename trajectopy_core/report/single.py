@@ -13,7 +13,7 @@ import numpy as np
 
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.plotting import bar_plots, histograms, line_plots, scatter_plots
+from trajectopy_core.plotting.plotly import bar_plots, histograms, line_plots, scatter_plots
 from trajectopy_core.report.data import ATEReportData, RPEReportData
 from trajectopy_core.report.utils import TEMPLATES_PATH, convert_icon_to_base64, number_to_string
 from trajectopy_core.settings.report import ReportSettings

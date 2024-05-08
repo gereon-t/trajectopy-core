@@ -11,7 +11,8 @@ from typing import FrozenSet, Tuple, Union
 
 import numpy as np
 
-from .math_utils import Line3D
+from trajectopy_core.utils import Line3D
+
 from .voxelizer import Voxelizer
 
 # logger configuration

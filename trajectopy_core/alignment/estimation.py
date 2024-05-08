@@ -39,7 +39,7 @@ from trajectopy_core.trajectory import Trajectory
 logger = logging.getLogger("root")
 
 
-def compute_alignment(
+def estimate_alignment(
     traj_from: Trajectory,
     traj_to: Trajectory,
     alignment_settings: AlignmentSettings = AlignmentSettings(),

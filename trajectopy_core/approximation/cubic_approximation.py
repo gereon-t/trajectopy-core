@@ -12,7 +12,7 @@ import numpy as np
 import numpy.matlib as npm
 from scipy.sparse import csr_matrix
 
-from .math_utils import sparse_least_squares
+from trajectopy_core.utils import sparse_least_squares
 
 # logger configuration
 logger = logging.getLogger("root")

@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 
 from trajectopy_core.alignment.parameters import AlignmentParameters
-from trajectopy_core.plotting import heatmaps, tables
+from trajectopy_core.plotting.plotly import heatmaps, tables
 from trajectopy_core.report.utils import TEMPLATES_PATH, convert_icon_to_base64
 from trajectopy_core.settings.report import ReportSettings
 

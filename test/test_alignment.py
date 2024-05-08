@@ -5,7 +5,7 @@ from test.util import transform_randomly
 import numpy as np
 
 from trajectopy_core.alignment.direct import align_rotations
-from trajectopy_core.alignment.estimation import compute_alignment
+from trajectopy_core.alignment.estimation import estimate_alignment
 from trajectopy_core.alignment.parameters import AlignmentParameters
 from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.settings.alignment import AlignmentEstimationSettings, AlignmentSettings, AlignmentStochastics
@@ -23,7 +23,7 @@ class TestAlignment(unittest.TestCase):
             lever_enabled=lever_enabled,
         )
 
-        alignment_result = compute_alignment(
+        alignment_result = estimate_alignment(
             traj_from=open_loop_trajectory.copy(),
             traj_to=transformed,
             alignment_settings=AlignmentSettings(

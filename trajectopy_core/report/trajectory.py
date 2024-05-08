@@ -10,7 +10,7 @@ from typing import List
 
 import jinja2
 
-from trajectopy_core.plotting import multi_line_plots, scatter_plots
+from trajectopy_core.plotting.plotly import multi_line_plots, scatter_plots
 from trajectopy_core.report.utils import TEMPLATES_PATH, convert_icon_to_base64
 from trajectopy_core.settings.report import ReportSettings
 from trajectopy_core.trajectory import Trajectory

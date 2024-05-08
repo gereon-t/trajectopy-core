@@ -12,7 +12,7 @@ import jinja2
 
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.rpe_result import RPEResult
-from trajectopy_core.plotting import bar_plots, multi_line_plots
+from trajectopy_core.plotting.plotly import bar_plots, multi_line_plots
 from trajectopy_core.report.data import ATEReportData, ATEReportDataCollection, RPEReportData, RPEReportDataCollection
 from trajectopy_core.report.utils import TEMPLATES_PATH, convert_icon_to_base64
 from trajectopy_core.settings.report import ReportSettings

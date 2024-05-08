@@ -1,6 +1,6 @@
 from typing import Tuple, Union
 
-from trajectopy_core.alignment.estimation import compute_alignment
+from trajectopy_core.alignment.estimation import estimate_alignment
 from trajectopy_core.alignment.result import AlignmentResult
 from trajectopy_core.evaluation.ate_result import ATEResult
 from trajectopy_core.evaluation.comparison import compare_trajectories_absolute, compare_trajectories_relative
@@ -29,7 +29,7 @@ def ate(
 
     """
     match_trajectories(traj_from=trajectory_est, traj_to=trajectory_gt, settings=settings.matching)
-    alignment = compute_alignment(
+    alignment = estimate_alignment(
         traj_from=trajectory_est,
         traj_to=trajectory_gt,
         alignment_settings=settings.alignment,
