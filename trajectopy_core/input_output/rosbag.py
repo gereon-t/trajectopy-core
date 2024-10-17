@@ -12,13 +12,11 @@ from typing import Any, Dict, List
 import numpy as np
 from pointset import PointSet
 from rosbags.highlevel import AnyReader
-from rosbags.typesys import Stores, get_typestore
 
 from trajectopy_core.input_output.rosmsg import geometry_pose_stamped_handler
 from trajectopy_core.rotationset import RotationSet
 from trajectopy_core.trajectory import Trajectory
 
-typestore = get_typestore(Stores.LATEST)
 ROS_MESSAGE_HANDLERS = {"geometry_msgs/msg/PoseStamped": geometry_pose_stamped_handler}
 
 logger = logging.getLogger("root")
@@ -64,7 +62,7 @@ def read_ros_bag(filename: str) -> Dict[str, Dict[str, List[Any]]]:
         Tuple[HeaderData, np.ndarray]: Header data and data
     """
     data: Dict[str, Dict[str, List[Any]]] = {}
-    with AnyReader([Path(filename)], default_typestore=typestore) as reader:
+    with AnyReader([Path(filename)]) as reader:
         for connection, _, rawdata in reader.messages(connections=reader.connections):
             msg = reader.deserialize(rawdata, connection.msgtype)
 
